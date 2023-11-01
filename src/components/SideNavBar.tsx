@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 interface SectionTitleProps {
@@ -55,7 +53,7 @@ const ListItem = ({ children }: ListItemProps) => {
 
 const SideNavBar = () => {
   return (
-    <NavBlock className="fixed h-full w-64 bg-indigo-500 bg-opacity-40 px-8 py-10">
+    <NavBlock className="h-full w-64 bg-indigo-500 bg-opacity-40 px-8 py-10">
       <section>
         <SectionTitle>탐색</SectionTitle>
         <Line />
