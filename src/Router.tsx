@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Layout from './components/Layout';
+import Overview from './pages/Overview';
 
 const Router = () => {
   return (
@@ -9,6 +10,7 @@ const Router = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/overview" element={<Overview />} />
         </Routes>
       </Layout>
     </BrowserRouter>

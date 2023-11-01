@@ -20,12 +20,6 @@ const NavBlock = styled.nav`
   }
 `;
 
-const ListBlock = styled.ul`
-  li + li {
-    margin-top: 1rem;
-  }
-`;
-
 const SectionTitle = ({ hasPlus, children }: SectionTitleProps) => {
   if (hasPlus) {
     return (
@@ -43,6 +37,12 @@ const SectionTitle = ({ hasPlus, children }: SectionTitleProps) => {
 const Line = () => {
   return <div className="mt-3 h-[5px] w-full rounded-[42px] bg-indigo-100" />;
 };
+
+const ListBlock = styled.ul`
+  li + li {
+    margin-top: 1rem;
+  }
+`;
 
 const List = ({ children }: ListProps) => {
   return <ListBlock className="mt-4">{children}</ListBlock>;
