@@ -9,9 +9,9 @@ const Layout = ({ children }: Props) => {
   return (
     <div className="flex h-screen flex-col">
       <TopNavBar />
-      <div className="flex flex-1 bg-[#F5F6FE]">
+      <div className="flex flex-1">
         <SideNavBar />
-        {children}
+        <div className="flex-1 bg-indigo-100">{children}</div>
       </div>
     </div>
   );
