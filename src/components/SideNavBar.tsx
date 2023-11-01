@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface SectionTitleProps {
@@ -48,7 +49,11 @@ const List = ({ children }: ListProps) => {
 };
 
 const ListItem = ({ children }: ListItemProps) => {
-  return <li className="text-xl font-medium text-gray-600">{children}</li>;
+  return (
+    <li className="text-xl font-medium text-gray-600">
+      <Link to="#">{children}</Link>
+    </li>
+  );
 };
 
 const SideNavBar = () => {
