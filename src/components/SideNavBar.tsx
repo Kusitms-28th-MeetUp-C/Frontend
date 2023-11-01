@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface SectionTitleProps {
@@ -11,6 +12,7 @@ interface ListProps {
 }
 
 interface ListItemProps {
+  to?: string;
   children: React.ReactNode;
 }
 
@@ -20,48 +22,61 @@ const NavBlock = styled.nav`
   }
 `;
 
-const ListBlock = styled.ul`
-  li + li {
-    margin-top: 1rem;
-  }
-`;
-
 const SectionTitle = ({ hasPlus, children }: SectionTitleProps) => {
   if (hasPlus) {
     return (
-      <h3 className="flex items-center justify-between">
-        <span className="text-2xl font-extrabold text-slate-800">
-          {children}
-        </span>
-        <img src="/icons/plus.svg" alt="plus-icon" className="h-4" />
-      </h3>
+      <div className="px-8">
+        <h3 className="flex items-center justify-between">
+          <span className="text-2xl font-extrabold text-slate-800">
+            {children}
+          </span>
+          <img src="/icons/plus.svg" alt="plus-icon" className="h-4" />
+        </h3>
+        <div className="mt-3 h-[5px] w-full rounded-[42px] bg-indigo-100" />
+      </div>
     );
   }
-  return <h3 className="text-2xl font-extrabold text-slate-800">{children}</h3>;
-};
 
-const Line = () => {
-  return <div className="mt-3 h-[5px] w-full rounded-[42px] bg-indigo-100" />;
+  return (
+    <div className="px-8">
+      <h3 className="text-2xl font-extrabold text-slate-800">{children}</h3>
+      <div className="mt-3 h-[5px] w-full rounded-[42px] bg-indigo-100" />
+    </div>
+  );
 };
 
 const List = ({ children }: ListProps) => {
-  return <ListBlock className="mt-4">{children}</ListBlock>;
+  return <div className="mt-2">{children}</div>;
 };
 
-const ListItem = ({ children }: ListItemProps) => {
+const ListItem = ({ to, children }: ListItemProps) => {
+  const location = useLocation();
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (to) {
+      const pathname = location.pathname;
+      setIsActive(pathname === to);
+    }
+  }, [to, location, isActive]);
+
   return (
-    <li className="text-xl font-medium text-gray-600">
-      <Link to="#">{children}</Link>
-    </li>
+    <Link
+      to={to ? to : '#'}
+      className={`block w-full cursor-pointer px-8 py-2 text-lg text-gray-600 ${
+        isActive ? 'bg-[#E2E9FF] font-bold' : 'font-medium hover:bg-[#cbd5fa]'
+      }`}
+    >
+      {children}
+    </Link>
   );
 };
 
 const SideNavBar = () => {
   return (
-    <NavBlock className="h-full w-64 bg-indigo-500 bg-opacity-40 px-8 py-10">
+    <NavBlock className="h-full w-64 bg-indigo-500 bg-opacity-40 py-10">
       <section>
         <SectionTitle>탐색</SectionTitle>
-        <Line />
         <List>
           <ListItem>회의록 템플릿</ListItem>
           <ListItem>회의 로드맵</ListItem>
@@ -69,11 +84,14 @@ const SideNavBar = () => {
       </section>
       <section>
         <SectionTitle>나의 회의 관리</SectionTitle>
-        <Line />
+        <List>
+          <ListItem to="/overview">Overview</ListItem>
+          <ListItem>내 회의록, 로드맵 관리</ListItem>
+          <ListItem>원본 데이터 보기</ListItem>
+        </List>
       </section>
       <section>
         <SectionTitle hasPlus>팀 스페이스</SectionTitle>
-        <Line />
         <List>
           <ListItem>경영 정보 시스템</ListItem>
           <ListItem>미팅 남녀</ListItem>
