@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface SectionTitleProps {
@@ -50,12 +49,16 @@ const List = ({ children }: ListProps) => {
 };
 
 const ListItem = ({ children }: ListItemProps) => {
-  return <li className="text-xl font-medium text-gray-600">{children}</li>;
+  return (
+    <li className="text-xl font-medium text-gray-600">
+      <Link to="#">{children}</Link>
+    </li>
+  );
 };
 
 const SideNavBar = () => {
   return (
-    <NavBlock className="fixed h-full w-64 bg-indigo-500 bg-opacity-40 px-8 py-10">
+    <NavBlock className="h-full w-64 bg-indigo-500 bg-opacity-40 px-8 py-10">
       <section>
         <SectionTitle>탐색</SectionTitle>
         <Line />
