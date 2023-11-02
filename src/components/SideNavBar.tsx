@@ -63,7 +63,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
   return (
     <Link
       to={to ? to : '#'}
-      className={`block w-full cursor-pointer px-8 py-2 text-lg text-gray-600 ${
+      className={`block w-full cursor-pointer px-8 py-2 text-lg text-gray-600 duration-300 ${
         isActive ? 'bg-[#E2E9FF] font-bold' : 'font-medium hover:bg-[#cbd5fa]'
       }`}
     >
