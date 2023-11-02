@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { TbLogout } from 'react-icons/tb';
 
 interface SectionTitleProps {
   hasPlus?: boolean;
@@ -103,12 +104,22 @@ const SideNavBar = () => {
       <div className="px-4">
         <Link
           to="/mypage"
-          className="flex w-full cursor-pointer items-center rounded-lg bg-white px-4 py-4 duration-200 hover:-translate-y-1"
+          className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-white px-4 py-4"
         >
-          <div className="h-10 w-10 rounded-full bg-zinc-300" />
-          <span className="ml-2 text-xl font-extrabold text-slate-800">
-            신민선
-          </span>
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-full bg-zinc-300" />
+            <span className="ml-3 text-xl font-extrabold text-slate-800">
+              신민선
+            </span>
+          </div>
+          <Link
+            to="/logout"
+            className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-200"
+          >
+            <i className="translate-x-[0.5px] text-xl text-[#495565]">
+              <TbLogout />
+            </i>
+          </Link>
         </Link>
       </div>
     </NavBlock>
