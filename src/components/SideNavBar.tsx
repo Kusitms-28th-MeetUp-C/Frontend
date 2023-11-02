@@ -74,30 +74,43 @@ const ListItem = ({ to, children }: ListItemProps) => {
 
 const SideNavBar = () => {
   return (
-    <NavBlock className="h-full w-64 bg-indigo-500 bg-opacity-40 py-10">
-      <section>
-        <SectionTitle>탐색</SectionTitle>
-        <List>
-          <ListItem>회의록 템플릿</ListItem>
-          <ListItem>회의 로드맵</ListItem>
-        </List>
-      </section>
-      <section>
-        <SectionTitle>나의 회의 관리</SectionTitle>
-        <List>
-          <ListItem to="/overview">Overview</ListItem>
-          <ListItem>내 회의록, 로드맵 관리</ListItem>
-          <ListItem>원본 데이터 보기</ListItem>
-        </List>
-      </section>
-      <section>
-        <SectionTitle hasPlus>팀 스페이스</SectionTitle>
-        <List>
-          <ListItem>경영 정보 시스템</ListItem>
-          <ListItem>미팅 남녀</ListItem>
-          <ListItem>대외홍보팀</ListItem>
-        </List>
-      </section>
+    <NavBlock className="flex h-full w-64 flex-col justify-between bg-indigo-500 bg-opacity-40 pb-5 pt-7">
+      <div>
+        <div>
+          <SectionTitle>탐색</SectionTitle>
+          <List>
+            <ListItem>회의록 템플릿</ListItem>
+            <ListItem>회의 로드맵</ListItem>
+          </List>
+        </div>
+        <div>
+          <SectionTitle>나의 회의 관리</SectionTitle>
+          <List>
+            <ListItem to="/overview">Overview</ListItem>
+            <ListItem>내 회의록, 로드맵 관리</ListItem>
+            <ListItem>원본 데이터 보기</ListItem>
+          </List>
+        </div>
+        <div>
+          <SectionTitle hasPlus>팀 스페이스</SectionTitle>
+          <List>
+            <ListItem>경영 정보 시스템</ListItem>
+            <ListItem>미팅 남녀</ListItem>
+            <ListItem>대외홍보팀</ListItem>
+          </List>
+        </div>
+      </div>
+      <div className="px-4">
+        <Link
+          to="/mypage"
+          className="flex w-full cursor-pointer items-center rounded-lg bg-white px-4 py-4 duration-200 hover:-translate-y-1"
+        >
+          <div className="h-10 w-10 rounded-full bg-zinc-300" />
+          <span className="ml-2 text-xl font-extrabold text-slate-800">
+            신민선
+          </span>
+        </Link>
+      </div>
     </NavBlock>
   );
 };
