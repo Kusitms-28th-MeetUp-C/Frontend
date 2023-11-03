@@ -24,7 +24,7 @@ const StepNameBox = ({ color = 'blue1', children }: StepNameBoxProps) => {
 
   return (
     <StepNameBoxBlock
-      className={`${colors[color][0]} ${colors[color][1]} cursor-pointer rounded-lg px-4 py-2 text-center text-lg font-medium`}
+      className={`cursor-pointer rounded-lg px-4 py-2 text-center text-lg font-medium duration-200 hover:-translate-y-1 ${colors[color][0]} ${colors[color][1]}`}
     >
       {children}
     </StepNameBoxBlock>
@@ -43,7 +43,7 @@ const StepDetailBoxBlock = styled.li`
 
 const StepDetailBox = ({ children }: StepDetailBoxProps) => {
   return (
-    <StepDetailBoxBlock className="cursor-pointer rounded-lg bg-white py-2 text-center">
+    <StepDetailBoxBlock className="cursor-pointer rounded-lg bg-white py-2 text-center duration-200 hover:-translate-y-1">
       {children}
     </StepDetailBoxBlock>
   );
@@ -62,7 +62,7 @@ const Overview = () => {
             설문 조사 및 데이터 분석
           </span>
         </div>
-        <button className="rounded-xl bg-zinc-200 px-12 py-2 text-lg font-medium text-neutral-800">
+        <button className="rounded-xl bg-zinc-200 px-12 py-2 text-lg font-medium text-neutral-800 duration-300 hover:bg-zinc-300">
           스페이스 바로가기
         </button>
       </div>

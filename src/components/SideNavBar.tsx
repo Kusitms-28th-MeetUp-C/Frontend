@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { TbLogout } from 'react-icons/tb';
 
 interface SectionTitleProps {
   hasPlus?: boolean;
@@ -63,7 +64,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
   return (
     <Link
       to={to ? to : '#'}
-      className={`block w-full cursor-pointer px-8 py-2 text-lg text-gray-600 ${
+      className={`block w-full cursor-pointer px-8 py-2 text-lg text-gray-600 duration-300 ${
         isActive ? 'bg-[#E2E9FF] font-bold' : 'font-medium hover:bg-[#cbd5fa]'
       }`}
     >
@@ -74,30 +75,53 @@ const ListItem = ({ to, children }: ListItemProps) => {
 
 const SideNavBar = () => {
   return (
-    <NavBlock className="h-full w-64 bg-indigo-500 bg-opacity-40 py-10">
-      <section>
-        <SectionTitle>탐색</SectionTitle>
-        <List>
-          <ListItem>회의록 템플릿</ListItem>
-          <ListItem>회의 로드맵</ListItem>
-        </List>
-      </section>
-      <section>
-        <SectionTitle>나의 회의 관리</SectionTitle>
-        <List>
-          <ListItem to="/overview">Overview</ListItem>
-          <ListItem>내 회의록, 로드맵 관리</ListItem>
-          <ListItem>원본 데이터 보기</ListItem>
-        </List>
-      </section>
-      <section>
-        <SectionTitle hasPlus>팀 스페이스</SectionTitle>
-        <List>
-          <ListItem>경영 정보 시스템</ListItem>
-          <ListItem>미팅 남녀</ListItem>
-          <ListItem>대외홍보팀</ListItem>
-        </List>
-      </section>
+    <NavBlock className="flex h-full w-64 flex-col justify-between bg-indigo-500 bg-opacity-40 pb-5 pt-7">
+      <div>
+        <div>
+          <SectionTitle>탐색</SectionTitle>
+          <List>
+            <ListItem>회의록 템플릿</ListItem>
+            <ListItem>회의 로드맵</ListItem>
+          </List>
+        </div>
+        <div>
+          <SectionTitle>나의 회의 관리</SectionTitle>
+          <List>
+            <ListItem to="/overview">Overview</ListItem>
+            <ListItem>내 회의록, 로드맵 관리</ListItem>
+            <ListItem>원본 데이터 보기</ListItem>
+          </List>
+        </div>
+        <div>
+          <SectionTitle hasPlus>팀 스페이스</SectionTitle>
+          <List>
+            <ListItem>경영 정보 시스템</ListItem>
+            <ListItem>미팅 남녀</ListItem>
+            <ListItem>대외홍보팀</ListItem>
+          </List>
+        </div>
+      </div>
+      <div className="px-4">
+        <Link
+          to="/mypage"
+          className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-white px-4 py-4"
+        >
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-full bg-zinc-300" />
+            <span className="ml-3 text-xl font-extrabold text-slate-800">
+              신민선
+            </span>
+          </div>
+          <Link
+            to="/logout"
+            className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-200"
+          >
+            <i className="translate-x-[0.5px] text-xl text-[#495565]">
+              <TbLogout />
+            </i>
+          </Link>
+        </Link>
+      </div>
     </NavBlock>
   );
 };
