@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const TopNavBar = () => {
   return (
-    <div className="flex h-16 items-center justify-between px-8">
+    <div className="flex items-center justify-between px-8 py-2">
       <div className="flex items-center">
         <Link to="/">
           <img src="/logo/logo.svg" alt="logo" className="h-6" />
