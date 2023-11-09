@@ -47,7 +47,7 @@ const RoadmapDetail = () => {
           className="bg-blue1 rounded-[15px] px-12 py-3 font-semibold text-white"
           onClick={() => setIsOpenTeamModal(true)}
         >
-          템플릿 사용하기
+          로드맵 사용하기
         </button>
       </div>
 
