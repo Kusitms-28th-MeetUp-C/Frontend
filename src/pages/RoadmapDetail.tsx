@@ -34,7 +34,7 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-[1300px] px-10 py-9">
+    <div className="w-full px-10 py-9">
       <div className="mb-5 text-[15px] font-medium text-black">
         회의록 {'>'} IT사이드프로젝트
       </div>
@@ -44,7 +44,7 @@ const RoadmapDetail = () => {
           웹 서비스 기획-개발-디자인 온보딩 템플릿
         </div>
         <button
-          className="bg-blue1 rounded-[15px] px-12 py-3 font-semibold text-white"
+          className="bg-blue1 rounded-[15px] px-12 py-3 font-semibold text-white text-xl"
           onClick={() => setIsOpenTeamModal(true)}
         >
           로드맵 사용하기

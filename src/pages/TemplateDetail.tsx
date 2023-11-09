@@ -27,7 +27,7 @@ const TemplateDetail = () => {
           웹 서비스 기획-개발-디자인 온보딩 템플릿
         </div>
         <button
-          className="bg-blue1 rounded-[15px] px-12 py-3 font-semibold text-white"
+          className="bg-blue1 rounded-[15px] px-12 py-3 text-xl font-semibold text-white"
           onClick={() => setIsOpenAlertModal(true)}
         >
           템플릿 사용하기
