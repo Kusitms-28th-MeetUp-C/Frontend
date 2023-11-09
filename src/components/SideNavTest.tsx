@@ -54,7 +54,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
   useEffect(() => {
     if (to) {
       const pathname = location.pathname;
-      setIsActive(pathname === to);
+      setIsActive(pathname.includes(to));
     }
   }, [to, location, isActive]);
 
@@ -81,43 +81,20 @@ const ListItem = ({ to, children }: ListItemProps) => {
 
 const SideNavTest = () => {
   return (
-    <NavBlock className="w-54 flex h-[calc(100vh-65px)] flex-col justify-between rounded-tr-[20px] bg-[#5257D6] pb-5 pt-7">
-      <div>
-        <div className="mb-[50px]">
-          <SectionTitle isSearch>탐색</SectionTitle>
-          <List>
-            <ListItem to="/template">회의록 템플릿</ListItem>
-            <ListItem>회의 로드맵</ListItem>
-          </List>
-        </div>
-        <div>
-          <SectionTitle>관리</SectionTitle>
-          <List>
-            <ListItem to="/overview">나의 회의 관리</ListItem>
-            <ListItem>내 회의록, 로드맵 관리</ListItem>
-          </List>
-        </div>
+    <NavBlock className="w-[216px] flex h-[calc(100vh-65px)] flex-col rounded-tr-[20px] bg-[#5257D6] pb-5 pt-7">
+      <div className="mb-[50px]">
+        <SectionTitle isSearch>탐색</SectionTitle>
+        <List>
+          <ListItem to="/template">회의록 템플릿</ListItem>
+          <ListItem to="/roadmap">회의 로드맵</ListItem>
+        </List>
       </div>
-      <div className="px-4">
-        <Link
-          to="/mypage"
-          className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-white px-4 py-4"
-        >
-          <div className="flex items-center">
-            <div className="h-10 w-10 rounded-full bg-zinc-300" />
-            <span className="ml-3 text-xl font-extrabold text-slate-800">
-              신민선
-            </span>
-          </div>
-          <Link
-            to="/logout"
-            className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-200"
-          >
-            <i className="translate-x-[0.5px] text-xl text-[#495565]">
-              <TbLogout />
-            </i>
-          </Link>
-        </Link>
+      <div>
+        <SectionTitle>관리</SectionTitle>
+        <List>
+          <ListItem to="/overview">나의 회의 관리</ListItem>
+          <ListItem to='/my-items'>내 회의록, 로드맵 관리</ListItem>
+        </List>
       </div>
     </NavBlock>
   );

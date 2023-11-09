@@ -1,4 +1,3 @@
-import SideNavBar from './SideNavBar';
 import SideNavTest from './SideNavTest';
 import TopNavBar from './TopNavBar';
 
