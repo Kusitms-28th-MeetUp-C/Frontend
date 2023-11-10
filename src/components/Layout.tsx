@@ -1,4 +1,3 @@
-import SideNavBar from './SideNavBar';
 import SideNavTest from './SideNavTest';
 import TopNavBar from './TopNavBar';
 
@@ -8,11 +7,11 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex flex-col overflow-auto bg-[#EEEEFB]">
       <TopNavBar />
-      <div className="flex flex-1">
+      <div className="flex max-h-[calc(100vh-65px)] h-screen flex-1">
         <SideNavTest />
-        <div className="flex-1 bg-[#EEEEFB]">{children}</div>
+        <div className="flex-1 overflow-y-auto bg-[#EEEEFB]">{children}</div>
       </div>
     </div>
   );
