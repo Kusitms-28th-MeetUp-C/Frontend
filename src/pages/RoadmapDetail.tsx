@@ -4,12 +4,37 @@ import Agenda from '../components/SearchDetail/Agenda';
 import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
 import Maker from '../components/SearchDetail/Maker';
 import Modal from '../components/Modal/Modal';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
+import UseBtn from '../components/SearchDetail/UseBtn';
+import Axios from '../assets/apis';
+import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
+  const { roadmapId } = useParams();
+  const [mainData, setMainData] = useState<RoadmapMainData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+
+  const fetchData = async () => {
+    await Axios.get('roadmap/detail', {
+      params: {
+        roadmapId,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.data);
+        const response = res.data.data;
+        setMainData({ ...response });
+        setUserData({ ...response.user });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const teamData = [
     '조직행위론 c팀',
@@ -33,19 +58,22 @@ const RoadmapDetail = () => {
     navigate('/my-items');
   };
 
+  const onClickUseBtn = ()=> {
+    setIsOpenTeamModal(true)
+  }
+
   return (
     <div className="w-full px-10 py-9">
       <div className="mb-5 text-[15px] font-medium text-black">
-        회의록 {'>'} IT사이드프로젝트
+        회의록 {'>'} {mainData?.roadmapType}
       </div>
 
       <div className="mb-11 flex items-center justify-between">
         <div className="text-[28px] font-extrabold text-black">
-          웹 서비스 기획-개발-디자인 온보딩 템플릿
+          {mainData?.title}
         </div>
         <button
-          className="bg-blue1 rounded-[15px] px-12 py-3 font-semibold text-white text-xl"
-          onClick={() => setIsOpenTeamModal(true)}
+          className="bg-blue1 rounded-[15px] px-12 py-3 text-xl font-semibold text-white"
         >
           로드맵 사용하기
         </button>
@@ -58,8 +86,9 @@ const RoadmapDetail = () => {
           <MoreTemplate />
         </div>
         <div className="w-[22%]">
+          <UseBtn onClickBtn={onClickUseBtn}>로드맵 사용하기</UseBtn>
           <LinkedRoadmap />
-          <Maker />
+          <Maker data={userData}/>
         </div>
       </div>
       {isOpenTeamModal && (
@@ -72,7 +101,7 @@ const RoadmapDetail = () => {
         >
           <div className="relative w-full">
             <div
-              className={`flex cursor-pointer items-center duration-300 justify-between rounded-[10px] bg-[#ECEBFE] px-7 py-3 ${
+              className={`flex cursor-pointer items-center justify-between rounded-[10px] bg-[#ECEBFE] px-7 py-3 duration-300 ${
                 isOpenCmbBox ? 'bg-blue4' : ''
               }`}
               onClick={() => setIsOpenCmbBox((prev) => !prev)}

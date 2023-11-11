@@ -42,7 +42,7 @@ const MoreTemplate = () => {
       </div>
       <div className="flex flex-wrap justify-between gap-4">
         {data.map((el, idx) => (
-          <div className="w-[48%] rounded-[20px] bg-[#EBEEF9] p-5">
+          <div className="w-[48%] rounded-[20px] bg-[#EBEEF9] p-5" key={idx}>
             <div className="flex items-center justify-between">
               <div className="text-gray2 text-sm font-bold">{el.title}</div>
               <MdExpandMore className="text-gray4" />
