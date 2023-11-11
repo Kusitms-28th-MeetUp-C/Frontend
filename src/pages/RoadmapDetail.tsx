@@ -1,15 +1,41 @@
-import MoreTemplate from '../components/SearchDetail/MoreTemplate';
+import MoreItems from '../components/SearchDetail/MoreItems';
 import Info from '../components/SearchDetail/Info';
 import Agenda from '../components/SearchDetail/Agenda';
 import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
 import Maker from '../components/SearchDetail/Maker';
 import Modal from '../components/Modal/Modal';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
+import UseBtn from '../components/SearchDetail/UseBtn';
+import Axios from '../assets/apis';
+import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
+import Process from '../components/SearchDetail/Process';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
+  const { roadmapId } = useParams();
+  const [mainData, setMainData] = useState<RoadmapMainData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+
+  const fetchData = async () => {
+    await Axios.get('roadmap/detail', {
+      params: {
+        roadmapId,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.data);
+        const response = res.data.data;
+        setMainData({ ...response });
+        setUserData({ ...response.user });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const teamData = [
     '조직행위론 c팀',
@@ -33,33 +59,35 @@ const RoadmapDetail = () => {
     navigate('/my-items');
   };
 
+  const onClickUseBtn = () => {
+    setIsOpenTeamModal(true);
+  };
+
   return (
     <div className="w-full px-10 py-9">
       <div className="mb-5 text-[15px] font-medium text-black">
-        회의록 {'>'} IT사이드프로젝트
+        회의록 {'>'} {mainData?.roadmapType}
       </div>
 
-      <div className="mb-11 flex items-center justify-between">
-        <div className="text-[28px] font-extrabold text-black">
-          웹 서비스 기획-개발-디자인 온보딩 템플릿
-        </div>
-        <button
-          className="bg-blue1 rounded-[15px] px-12 py-3 font-semibold text-white text-xl"
-          onClick={() => setIsOpenTeamModal(true)}
-        >
-          로드맵 사용하기
-        </button>
+      <div className="mb-11 text-[28px] font-extrabold text-black">
+        기획-디자인-개발 프로젝트 로드맵
       </div>
 
       <div className="flex justify-between">
-        <Info />
-        <div className="w-[49%]">
-          <Agenda />
-          <MoreTemplate />
+        <div className="flex w-[74.5%] flex-col gap-7">
+          <Process />
+          <div className="flex justify-between">
+            <div className="w-[29.53%]">
+              <Info isRoadmap />
+            </div>
+            <div className="w-[65.77%]">
+              <MoreItems isRoadmap />
+            </div>
+          </div>
         </div>
         <div className="w-[22%]">
-          <LinkedRoadmap />
-          <Maker />
+          <UseBtn onClickBtn={onClickUseBtn}>로드맵 사용하기</UseBtn>
+          <Maker data={userData} />
         </div>
       </div>
       {isOpenTeamModal && (
@@ -72,7 +100,7 @@ const RoadmapDetail = () => {
         >
           <div className="relative w-full">
             <div
-              className={`flex cursor-pointer items-center duration-300 justify-between rounded-[10px] bg-[#ECEBFE] px-7 py-3 ${
+              className={`flex cursor-pointer items-center justify-between rounded-[10px] bg-[#ECEBFE] px-7 py-3 duration-300 ${
                 isOpenCmbBox ? 'bg-blue4' : ''
               }`}
               onClick={() => setIsOpenCmbBox((prev) => !prev)}
