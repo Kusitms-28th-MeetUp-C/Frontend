@@ -1,4 +1,4 @@
-import MoreTemplate from '../components/SearchDetail/MoreTemplate';
+import MoreItems from '../components/SearchDetail/MoreItems';
 import Info from '../components/SearchDetail/Info';
 import Agenda from '../components/SearchDetail/Agenda';
 import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
@@ -65,10 +65,6 @@ interface ApiResponse {
   ratingAndReviews: RatingAndReviews;
   teamCount: number;
 }
-
-
-
-
 
 const TemplateDetail = () => {
   const navigate = useNavigate();
@@ -140,10 +136,12 @@ const TemplateDetail = () => {
       </div>
 
       <div className="flex justify-between">
-        <Info />
+        <div className="w-[22%]">
+          <Info />
+        </div>
         <div className="w-[49%]">
           <Agenda />
-          <MoreTemplate />
+          <MoreItems />
         </div>
         <div className="w-[22%]">
           <UseBtn onClickBtn={onClickUseBtn}>템플릿 사용하기</UseBtn>

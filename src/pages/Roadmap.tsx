@@ -1,9 +1,8 @@
-import { AiOutlineSearch } from 'react-icons/ai';
 import Filter from '../components/Search/Filter';
-import SearchItems from '../components/Search/SearchItems';
 import Axios from '../assets/apis';
 import { useState, useEffect } from 'react';
 import Search from '../components/Search/Search';
+import RoadmapItems from '../components/Search/RoadmapItems';
 
 const Roadmap = () => {
   const [templateType, setTemplateType] = useState('ALL');
@@ -30,7 +29,7 @@ const Roadmap = () => {
     <div className="px-[56px] py-[45px]">
       <Search />
       <Filter />
-      {/* <SearchItems data={data} /> */}
+      <RoadmapItems data={data} />
     </div>
   );
 };

@@ -16,19 +16,11 @@ interface Template {
   connectedRoadmap: ConnectedRoadmap[];
 }
 
-interface Roadmap {
-  roadmapId: number;
-  roadmapType: string;
-  title: string;
-  count: number;
-  step: number;
-}
-
-interface SearchItemsProps {
+interface TemplateItemsProps {
   data?: Template[];
 }
 
-const SearchItems = ({ data }: SearchItemsProps) => {
+const TemplateItems = ({ data }: TemplateItemsProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -67,7 +59,7 @@ const SearchItems = ({ data }: SearchItemsProps) => {
             {el.title}
           </div>
           <div className="mb-6 flex w-fit items-center gap-1 rounded-full bg-[#EEEEFB] px-2.5 py-[3px] text-[12px] font-semibold text-[#495565]">
-            <img src="/icons/category.svg" />
+            <img src="/icons/category-purple.svg" />
             <div>{el?.connectedRoadmap[0]?.title}</div>
           </div>
           <div className="flex items-center justify-between">
@@ -98,4 +90,4 @@ const SearchItems = ({ data }: SearchItemsProps) => {
   );
 };
 
-export default SearchItems;
+export default TemplateItems;

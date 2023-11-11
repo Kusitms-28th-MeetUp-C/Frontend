@@ -1,4 +1,4 @@
-import MoreTemplate from '../components/SearchDetail/MoreTemplate';
+import MoreItems from '../components/SearchDetail/MoreItems';
 import Info from '../components/SearchDetail/Info';
 import Agenda from '../components/SearchDetail/Agenda';
 import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
@@ -10,6 +10,7 @@ import { MdExpandMore } from 'react-icons/md';
 import UseBtn from '../components/SearchDetail/UseBtn';
 import Axios from '../assets/apis';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
+import Process from '../components/SearchDetail/Process';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
@@ -58,9 +59,9 @@ const RoadmapDetail = () => {
     navigate('/my-items');
   };
 
-  const onClickUseBtn = ()=> {
-    setIsOpenTeamModal(true)
-  }
+  const onClickUseBtn = () => {
+    setIsOpenTeamModal(true);
+  };
 
   return (
     <div className="w-full px-10 py-9">
@@ -68,27 +69,25 @@ const RoadmapDetail = () => {
         회의록 {'>'} {mainData?.roadmapType}
       </div>
 
-      <div className="mb-11 flex items-center justify-between">
-        <div className="text-[28px] font-extrabold text-black">
-          {mainData?.title}
-        </div>
-        <button
-          className="bg-blue1 rounded-[15px] px-12 py-3 text-xl font-semibold text-white"
-        >
-          로드맵 사용하기
-        </button>
+      <div className="mb-11 text-[28px] font-extrabold text-black">
+        기획-디자인-개발 프로젝트 로드맵
       </div>
 
       <div className="flex justify-between">
-        <Info />
-        <div className="w-[49%]">
-          <Agenda />
-          <MoreTemplate />
+        <div className="flex w-[74.5%] flex-col gap-7">
+          <Process />
+          <div className="flex justify-between">
+            <div className="w-[29.53%]">
+              <Info isRoadmap />
+            </div>
+            <div className="w-[65.77%]">
+              <MoreItems isRoadmap />
+            </div>
+          </div>
         </div>
         <div className="w-[22%]">
           <UseBtn onClickBtn={onClickUseBtn}>로드맵 사용하기</UseBtn>
-          <LinkedRoadmap />
-          <Maker data={userData}/>
+          <Maker data={userData} />
         </div>
       </div>
       {isOpenTeamModal && (

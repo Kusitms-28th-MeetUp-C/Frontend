@@ -1,6 +1,6 @@
 import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
-import SearchItems from '../components/Search/SearchItems';
+import TemplateItems from '../components/Search/TemplateItems';
 import { useState, useEffect } from 'react';
 import Axios from '../assets/apis';
 
@@ -29,7 +29,7 @@ const Template = () => {
     <div className="px-[56px] py-[45px]">
       <Search />
       <Filter />
-      <SearchItems data={data} />
+      <TemplateItems data={data} />
     </div>
   );
 };
