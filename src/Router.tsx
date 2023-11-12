@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import Overview from './pages/Overview';
+import Meeting from './pages/Meeting';
+import MeetingDetail from './pages/MeetingDetail';
 import MyPage from './pages/MyPage';
 import Template from './pages/Template';
 import TemplateDetail from './pages/TemplateDetail';
@@ -16,7 +17,10 @@ const Router = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/overview" element={<Overview />} />
+          <Route path="/meeting">
+            <Route path="" element={<Meeting />} />
+            <Route path=":meetingId" element={<MeetingDetail />} />
+          </Route>
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/template" element={<Template />} />
           <Route path="/template/:templateId" element={<TemplateDetail />} />
