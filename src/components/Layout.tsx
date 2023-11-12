@@ -9,7 +9,7 @@ const Layout = ({ children }: Props) => {
   return (
     <div className="flex flex-col overflow-auto bg-[#EEEEFB]">
       <TopNavBar />
-      <div className="flex max-h-[calc(100vh-65px)] h-screen flex-1">
+      <div className="flex h-screen max-h-[calc(100vh-65px)] flex-1">
         <SideNavTest />
         <div className="flex-1 overflow-y-auto bg-[#EEEEFB]">{children}</div>
       </div>
