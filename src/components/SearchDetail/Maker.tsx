@@ -26,7 +26,9 @@ const Maker = ({ data }: MakerProps) => {
               {data?.name}
             </div>
           </div>
-          <div className="text-[11px] font-medium text-gray3">{data?.email}</div>
+          <div className="text-[11px] font-medium text-gray3">
+            {data?.email}
+          </div>
           <button className="flex w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#ECEBFE] py-1.5">
             <BsFillChatFill className="h-3 w-3 text-blue1" />
             <div className="text-xs font-semibold text-blue1">커피챗</div>
