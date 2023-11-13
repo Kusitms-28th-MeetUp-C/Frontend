@@ -1,49 +1,18 @@
 import { FaPeopleGroup, FaStar } from 'react-icons/fa6';
 import { MdNavigateNext } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
-import { GiStairs } from 'react-icons/gi';
-
-interface ConnectedRoadmap {
-  title: string;
-}
-
-interface Roadmap {
-  roadmapId: number;
-  roadmapType: string;
-  title: string;
-  count: number;
-  step: number;
-}
+import { typeFilter } from '../../assets/utils/filter';
 
 interface RoadmapItemsProps {
-  data?: Roadmap[];
+  data: any[];
 }
 
 const RoadmapItems = ({ data }: RoadmapItemsProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const typeFilter = (type: string) => {
-    switch (type) {
-      case 'ALL':
-        return '전체';
-      case 'IT':
-        return 'IT프로젝트';
-      case 'ANALYSIS':
-        return '설문 및 데이터 분석';
-      case 'CORPORATE_ANALYSIS':
-        return '기업 분석';
-      case 'PT':
-        return '자유주제PT';
-      case 'MARKETING':
-        return '마케팅';
-      case 'DESIGN':
-        return '디자인 프로젝트';
-    }
-  };
-
   return (
-    <div className="flex flex-wrap gap-9">
+    <div className="mb-14 flex flex-wrap gap-9">
       {data?.map((el, idx) => (
         <Link
           to={`${currentPath}/${el.roadmapId}`}

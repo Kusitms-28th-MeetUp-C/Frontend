@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { typeFilter } from '../../assets/utils/filter';
 
 interface TemplateItemsProps {
-  data?: any[];
+  data: any[];
 }
 
 const TemplateItems = ({ data }: TemplateItemsProps) => {
