@@ -21,17 +21,6 @@ const TopNavBar = () => {
           <div className="text-lg font-semibold text-[#232326]">김밋플</div>
         </div>
 
-        <div className="flex h-10 w-80 items-center rounded-full bg-[#EBEEF9] px-4">
-          <input type="text" className="flex-1 bg-[#00000000] outline-none" />
-          <FiSearch />
-        </div>
-
-        <Link
-          to="#"
-          className="flex h-10 items-center rounded-full bg-[#EBEEF9] px-10 text-[14px] font-semibold text-[#495565]"
-        >
-          밋플에 공유하기
-        </Link>
         <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]">
           <GoHomeFill className="h-6 w-6 text-[#495565]" />
         </div>

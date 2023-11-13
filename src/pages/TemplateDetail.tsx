@@ -54,7 +54,7 @@ const TemplateDetail = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [templateId]);
 
   return (
     <div className="w-[1300px] px-10 py-9">

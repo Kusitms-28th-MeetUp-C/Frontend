@@ -11,14 +11,17 @@ import UseBtn from '../components/SearchDetail/UseBtn';
 import Axios from '../assets/api';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
 import Process from '../components/SearchDetail/Process';
+import BackBtn from '../components/SearchDetail/BackBtn';
+import Title from '../components/Common/Title';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
   const { roadmapId } = useParams();
-  const [mainData, setMainData] = useState<RoadmapMainData | null>(null);
+  const [mainData, setMainData] = useState<any>({});
+  const [processData, setProcessData] = useState<any>({});
   const [infoData, setInfoData] = useState<any>({});
   const [roadmapData, setRoadmapData] = useState<any>([]);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<any>({});
 
   const fetchData = async () => {
     await Axios.get('roadmap/detail', {
@@ -29,7 +32,10 @@ const RoadmapDetail = () => {
       .then((res) => {
         console.log(res.data.data);
         const response = res.data.data;
-        setMainData({ ...response });
+        setMainData({ title: response.title });
+        setInfoData({ ...response.roadmapIntro });
+        setProcessData({ ...response.roadmapData });
+        setRoadmapData([...response.relatedRoadmap]);
         setUserData({ ...response.user });
       })
       .catch((err) => console.error(err));
@@ -37,7 +43,7 @@ const RoadmapDetail = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [roadmapId]);
 
   const teamData = [
     '조직행위론 c팀',
@@ -66,18 +72,14 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-full px-10 py-9">
-      <div className="mb-5 text-[15px] font-medium text-black">
-        회의록 {'>'} {mainData?.roadmapType}
-      </div>
+    <div className="w-[1250px] px-10 py-9">
+      <BackBtn>전체 로드맵 보기</BackBtn>
 
-      <div className="mb-11 text-[28px] font-extrabold text-black">
-        기획-디자인-개발 프로젝트 로드맵
-      </div>
+      <Title>{mainData.title}</Title>
 
       <div className="flex justify-between">
         <div className="flex w-[74.5%] flex-col gap-7">
-          <Process />
+          <Process data={processData} />
           <div className="flex justify-between">
             <div className="w-[29.53%]">
               <Info isRoadmap data={infoData} />
