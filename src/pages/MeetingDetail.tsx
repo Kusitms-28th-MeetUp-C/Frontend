@@ -94,7 +94,7 @@ const MeetingDetail = () => {
       {/* 회의 관리 상세 */}
       <div className="px-14 py-12">
         {/* 제목 섹션 */}
-        <PageHeading />
+        <PageHeading title="나의 회의 관리" previous="관리" hasFilter />
         <div className="flex flex-col space-y-5">
           {/* 헤딩 섹션 */}
           <SectionHeading
