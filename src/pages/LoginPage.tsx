@@ -1,5 +1,5 @@
-import LoginBtn from '../components/login/LoginBtn';
-import Logo from '../components/login/Logo';
+import LoginBtn from '../components/Login/LoginBtn';
+import Logo from '../components/Login/Logo';
 
 const LoginPage = () => {
   return (

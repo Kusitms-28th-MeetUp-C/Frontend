@@ -1,8 +1,8 @@
-import Filter from '../components/search/Filter';
+import Filter from '../components/Search/Filter';
 import Axios from '../assets/api';
 import { useState, useEffect } from 'react';
-import Search from '../components/search/Search';
-import RoadmapItems from '../components/search/RoadmapItems';
+import Search from '../components/Search/Search';
+import RoadmapItems from '../components/Search/RoadmapItems';
 
 const Roadmap = () => {
   const [roadmapType, setRaodmapType] = useState('all');

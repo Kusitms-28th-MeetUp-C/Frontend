@@ -1,16 +1,16 @@
-import MoreItems from '../components/searchDetail/MoreItems';
-import Info from '../components/searchDetail/Info';
-import Agenda from '../components/searchDetail/Agenda';
-import LinkedRoadmap from '../components/searchDetail/LinkedRoadmap';
-import Maker from '../components/searchDetail/Maker';
-import Modal from '../components/modal/Modal';
+import MoreItems from '../components/SearchDetail/MoreItems';
+import Info from '../components/SearchDetail/Info';
+import Agenda from '../components/SearchDetail/Agenda';
+import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
+import Maker from '../components/SearchDetail/Maker';
+import Modal from '../components/Modal/Modal';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
-import UseBtn from '../components/searchDetail/UseBtn';
+import UseBtn from '../components/SearchDetail/UseBtn';
 import Axios from '../assets/api';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
-import Process from '../components/searchDetail/Process';
+import Process from '../components/SearchDetail/Process';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
@@ -105,16 +105,16 @@ const RoadmapDetail = () => {
               }`}
               onClick={() => setIsOpenCmbBox((prev) => !prev)}
             >
-              <div className="text-gray2 text-base font-bold">
+              <div className="text-base font-bold text-gray2">
                 {selectedTeam}
               </div>
-              <MdExpandMore className="text-blue1 h-8 w-8" />
+              <MdExpandMore className="h-8 w-8 text-blue1" />
             </div>
             {isOpenCmbBox && (
-              <div className="bg-blue5 absolute flex w-full flex-col rounded-[10px]">
+              <div className="absolute flex w-full flex-col rounded-[10px] bg-blue5">
                 {teamData.map((el, idx) => (
                   <div
-                    className="text-gray2 hover:bg-blue4 cursor-pointer overflow-hidden px-7 py-3 text-base font-medium duration-300 hover:rounded-[10px]"
+                    className="cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray2 duration-300 hover:rounded-[10px] hover:bg-blue4"
                     key={idx}
                     onClick={() => {
                       setSelectedTeam(el);

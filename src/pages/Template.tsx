@@ -1,9 +1,9 @@
-import Filter from '../components/search/Filter';
-import Search from '../components/search/Search';
-import TemplateItems from '../components/search/TemplateItems';
+import Filter from '../components/Search/Filter';
+import Search from '../components/Search/Search';
+import TemplateItems from '../components/Search/TemplateItems';
 import { useState, useEffect } from 'react';
 import Axios from '../assets/api';
-import Pagination from '../components/search/Pagination';
+import Pagination from '../components/Search/Pagination';
 
 const Template = () => {
   const [templateType, setTemplateType] = useState('all');

@@ -1,14 +1,14 @@
-import MoreItems from '../components/searchDetail/MoreItems';
-import Info from '../components/searchDetail/Info';
-import Agenda from '../components/searchDetail/Agenda';
-import LinkedRoadmap from '../components/searchDetail/LinkedRoadmap';
-import Maker from '../components/searchDetail/Maker';
-import UseBtn from '../components/searchDetail/UseBtn';
+import MoreItems from '../components/SearchDetail/MoreItems';
+import Info from '../components/SearchDetail/Info';
+import Agenda from '../components/SearchDetail/Agenda';
+import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
+import Maker from '../components/SearchDetail/Maker';
+import UseBtn from '../components/SearchDetail/UseBtn';
 import { useState, useEffect } from 'react';
-import Modal from '../components/modal/Modal';
 import { useNavigate, useParams } from 'react-router-dom';
 import Axios from '../assets/api';
 import { UserData, MainData } from '../interfaces/TemplateDetail';
+import Modal from '../components/Modal/Modal';
 
 interface AgendaItem {
   agendaNum: string;
