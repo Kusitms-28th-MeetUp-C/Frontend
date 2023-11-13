@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Layout from './components/Layout';
+import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import Meeting from './pages/Meeting';
 import MeetingDetail from './pages/MeetingDetail';
@@ -10,6 +10,9 @@ import TemplateDetail from './pages/TemplateDetail';
 import Roadmap from './pages/Roadmap';
 import RoadmapDetail from './pages/RoadmapDetail';
 import MyItems from './pages/MyItems';
+import LoginPage from './pages/LoginPage';
+import GoogleLogin from './pages/GoogleLogin';
+import KakaoLogin from './pages/KakaoLogin';
 
 const Router = () => {
   return (
@@ -17,15 +20,24 @@ const Router = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/oauth">
+            <Route path="google" element={<GoogleLogin />} />
+            <Route path="kakao" element={<KakaoLogin />} />
+          </Route>
           <Route path="/meeting">
             <Route path="" element={<Meeting />} />
             <Route path=":meetingId" element={<MeetingDetail />} />
           </Route>
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/template" element={<Template />} />
-          <Route path="/template/:templateId" element={<TemplateDetail />} />
-          <Route path="/roadmap" element={<Roadmap />} />
-          <Route path="/roadmap/:roadmapId" element={<RoadmapDetail />} />
+          <Route path="/template">
+            <Route path="" element={<Template />} />
+            <Route path=":templateId" element={<TemplateDetail />} />
+          </Route>
+          <Route path="roadmap">
+            <Route path="" element={<Roadmap />} />
+            <Route path=":roadmapId" element={<RoadmapDetail />} />
+          </Route>
           <Route path="/my-items" element={<MyItems />} />
         </Routes>
       </Layout>

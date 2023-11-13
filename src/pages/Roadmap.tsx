@@ -1,17 +1,17 @@
 import Filter from '../components/Search/Filter';
-import Axios from '../assets/apis';
+import Axios from '../assets/api';
 import { useState, useEffect } from 'react';
 import Search from '../components/Search/Search';
 import RoadmapItems from '../components/Search/RoadmapItems';
 
 const Roadmap = () => {
-  const [templateType, setTemplateType] = useState('ALL');
+  const [roadmapType, setRaodmapType] = useState('all');
   const [title, setTitle] = useState('');
   const [data, setData] = useState<any[]>([]);
 
   const fetchTemplate = async () => {
     await Axios.post(`/roadmap/get`, {
-      templateType,
+      roadmapType,
       title,
     })
       .then((res) => {
@@ -23,12 +23,12 @@ const Roadmap = () => {
 
   useEffect(() => {
     fetchTemplate();
-  }, [templateType]);
+  }, [roadmapType]);
 
   return (
     <div className="px-[56px] py-[45px]">
-      <Search />
-      <Filter />
+      <Search setTitle={setTitle} />
+      <Filter type={roadmapType} setType={setRaodmapType} />
       <RoadmapItems data={data} />
     </div>
   );

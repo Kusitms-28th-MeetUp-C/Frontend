@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
 import UseBtn from '../components/SearchDetail/UseBtn';
-import Axios from '../assets/apis';
+import Axios from '../assets/api';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
 import Process from '../components/SearchDetail/Process';
 
@@ -105,16 +105,16 @@ const RoadmapDetail = () => {
               }`}
               onClick={() => setIsOpenCmbBox((prev) => !prev)}
             >
-              <div className="text-gray2 text-base font-bold">
+              <div className="text-base font-bold text-gray2">
                 {selectedTeam}
               </div>
-              <MdExpandMore className="text-blue1 h-8 w-8" />
+              <MdExpandMore className="h-8 w-8 text-blue1" />
             </div>
             {isOpenCmbBox && (
-              <div className="bg-blue5 absolute flex w-full flex-col rounded-[10px]">
+              <div className="absolute flex w-full flex-col rounded-[10px] bg-blue5">
                 {teamData.map((el, idx) => (
                   <div
-                    className="text-gray2 hover:bg-blue4 cursor-pointer overflow-hidden px-7 py-3 text-base font-medium duration-300 hover:rounded-[10px]"
+                    className="cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray2 duration-300 hover:rounded-[10px] hover:bg-blue4"
                     key={idx}
                     onClick={() => {
                       setSelectedTeam(el);
