@@ -81,37 +81,46 @@ const Info = ({ isRoadmap, data }: InfoProps) => {
         <div className="text-[14px] font-semibold text-gray3">{data.date}</div>
       </div>
       <li className="mb-6 flex flex-wrap justify-between gap-2">
-        <InfoItem category="rate">{data?.simpleInfo?.rating}</InfoItem>
+        {!isRoadmap && (
+          <InfoItem category="rate">{data?.simpleInfo?.rating}</InfoItem>
+        )}
         {isRoadmap ? (
-          <InfoItem category="step">{data?.simpleInfo?.steps}</InfoItem>
+          <InfoItem category="step">{data?.simpleInfo?.step}</InfoItem>
         ) : (
           <InfoItem category="time">{data?.simpleInfo?.estimatedTime}</InfoItem>
         )}
         <InfoItem category="team">{data?.simpleInfo?.teamCount}</InfoItem>
-        <InfoItem category="review">{data?.simpleInfo?.reviewCount}</InfoItem>
+        {!isRoadmap && (
+          <InfoItem category="review">{data?.simpleInfo?.reviewCount}</InfoItem>
+        )}
       </li>
 
       <div className="mb-5 text-[15px] font-medium leading-6 text-black">
         {data.introduction}
       </div>
 
-      <button className="mb-10 w-full rounded-[10px] bg-[#ECEBFE] py-2.5 text-sm font-semibold text-blue1">
+      <button className="w-full rounded-[10px] bg-[#ECEBFE] py-2.5 text-sm font-semibold text-blue1">
         사용 예시 보러가기
       </button>
 
-      <div className="mb-4 flex items-center justify-between">
-        <div className="text-base font-bold text-gray2">리뷰 미리보기</div>
-        <Link to="/" className="flex items-center">
-          <div className="text-[13px] font-medium text-[#4F4949]">더보기</div>
-          <MdNavigateNext className="text-[#4F4949]" />
-        </Link>
-      </div>
-
-      <li className="flex flex-col gap-4">
-        {data?.reviews?.map((el: any, idx: number) => (
-          <Review key={idx}>{el.content}</Review>
-        ))}
-      </li>
+      {!isRoadmap && (
+        <>
+          <div className="mb-4 mt-10 flex items-center justify-between">
+            <div className="text-base font-bold text-gray2">리뷰 미리보기</div>
+            <Link to="/" className="flex items-center">
+              <div className="text-[13px] font-medium text-[#4F4949]">
+                더보기
+              </div>
+              <MdNavigateNext className="text-[#4F4949]" />
+            </Link>
+          </div>
+          <li className="flex flex-col gap-4">
+            {data?.reviews?.map((el: any, idx: number) => (
+              <Review key={idx}>{el.content}</Review>
+            ))}
+          </li>
+        </>
+      )}
     </div>
   );
 };
