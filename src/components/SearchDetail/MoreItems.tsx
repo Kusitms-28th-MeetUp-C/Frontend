@@ -6,44 +6,10 @@ import { Link } from 'react-router-dom';
 
 interface MoreItemsProps {
   isRoadmap?: boolean;
+  data: any;
 }
 
-const MoreItems = ({ isRoadmap }: MoreItemsProps) => {
-  const data = [
-    {
-      title: '플로우 설계 회의 템플릿',
-      team: '66',
-      time: '60',
-      rate: '9.0',
-      tag: '기획-디자인-개발 프로젝트 로드맵',
-      steps: '7',
-    },
-    {
-      title: '아이디어 발제 회의 템플릿',
-      team: '38',
-      time: '40',
-      rate: '9.5',
-      tag: '기획-디자인-개발 프로젝트 로드맵',
-      steps: '10',
-    },
-    {
-      title: '기획-디자인-개발 백로그 템플릿',
-      team: '95',
-      time: '40',
-      rate: '9.5',
-      tag: '기획-디자인-개발 프로젝트 로드맵',
-      steps: '7',
-    },
-    {
-      title: '데스크 리서치 템플릿',
-      team: '38',
-      time: '30',
-      rate: '9.0',
-      tag: '기획-디자인-개발 프로젝트 로드맵',
-      steps: '5',
-    },
-  ];
-
+const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
   return (
     <div className="rounded-[20px] bg-white px-8 py-8">
       <div className="mb-[30px] text-xl font-bold text-black">
@@ -52,14 +18,14 @@ const MoreItems = ({ isRoadmap }: MoreItemsProps) => {
           : 'IT프로젝트 다른 템플릿 모아보기'}
       </div>
       <div className="flex flex-wrap justify-between gap-4">
-        {data.map((el, idx) => (
+        {data?.map((el: any, idx: number) => (
           <Link
-            to="/"
+            to={`/${isRoadmap? "roadmap/" + el.roadmapId : "template/" + el.templateId}`}
             className="w-[48%] rounded-[20px] bg-[#EBEEF9] p-5"
-            key={idx}
+            key={el.templateId}
           >
             <div className="flex items-center justify-between">
-              <div className="text-gray2 text-sm font-bold">{el.title}</div>
+              <div className="text-sm font-bold text-gray2">{el.title}</div>
               <MdExpandMore className="text-gray4" />
             </div>
             <div
@@ -69,22 +35,22 @@ const MoreItems = ({ isRoadmap }: MoreItemsProps) => {
             >
               <div className="flex items-center gap-1">
                 <FaPeopleGroup className="text-tagSkyblue1" />
-                <div className="text-gray3 text-xs font-semibold">
-                  {el.team}팀 사용 중
+                <div className="text-xs font-semibold text-gray3">
+                  {el.teamCount}팀 사용 중
                 </div>
               </div>
               {!isRoadmap && (
                 <div className="flex items-center gap-1">
                   <BiSolidTimeFive className="text-tagPurple1" />
-                  <div className="text-gray3 text-xs font-semibold">
-                    {el.time}m
+                  <div className="text-xs font-semibold text-gray3">
+                    {el.estimatedTime}m
                   </div>
                 </div>
               )}
               <div className="flex items-center gap-1">
                 <FaStar className="text-[#F8D20C]" />
-                <div className="text-gray3 text-xs font-semibold">
-                  {el.rate}
+                <div className="text-xs font-semibold text-gray3">
+                  {el.rating}
                 </div>
               </div>
             </div>
@@ -94,8 +60,8 @@ const MoreItems = ({ isRoadmap }: MoreItemsProps) => {
               ) : (
                 <img src="/icons/category-purple.svg" />
               )}
-              <div className="text-gray3 text-[10px] font-semibold">
-                {isRoadmap ? `${el.steps} steps` : `${el.tag}`}
+              <div className="text-[10px] font-semibold text-gray3">
+                {isRoadmap ? `${el?.steps} steps` : `${el?.connectedRoadmap}`}
               </div>
             </div>
           </Link>

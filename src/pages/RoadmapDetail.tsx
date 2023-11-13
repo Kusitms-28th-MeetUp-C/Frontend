@@ -16,6 +16,8 @@ const RoadmapDetail = () => {
   const navigate = useNavigate();
   const { roadmapId } = useParams();
   const [mainData, setMainData] = useState<RoadmapMainData | null>(null);
+  const [infoData, setInfoData] = useState<any>({});
+  const [roadmapData, setRoadmapData] = useState<any>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
 
   const fetchData = async () => {
@@ -78,10 +80,10 @@ const RoadmapDetail = () => {
           <Process />
           <div className="flex justify-between">
             <div className="w-[29.53%]">
-              <Info isRoadmap />
+              <Info isRoadmap data={infoData} />
             </div>
             <div className="w-[65.77%]">
-              <MoreItems isRoadmap />
+              <MoreItems isRoadmap data={roadmapData} />
             </div>
           </div>
         </div>

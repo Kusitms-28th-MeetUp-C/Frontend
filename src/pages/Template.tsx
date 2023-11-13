@@ -35,10 +35,8 @@ const Template = () => {
 
   return (
     <div className="px-[56px] py-[45px]">
-      <div className="mb-7 flex w-[74.5%] items-center justify-between">
-        <div className="text-[28px] font-extrabold text-black">
-          {'회의 템플릿'}
-        </div>
+      <div className="text-[28px] font-extrabold text-black">
+        {'회의록 템플릿'}
       </div>
       <Search setTitle={setTitle} />
       <Filter type={templateType} setType={setTemplateType} />
