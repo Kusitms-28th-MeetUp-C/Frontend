@@ -1,13 +1,13 @@
-import MoreItems from '../components/SearchDetail/MoreItems';
-import Info from '../components/SearchDetail/Info';
-import Agenda from '../components/SearchDetail/Agenda';
-import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
-import Maker from '../components/SearchDetail/Maker';
-import UseBtn from '../components/SearchDetail/UseBtn';
+import MoreItems from '../components/searchDetail/MoreItems';
+import Info from '../components/searchDetail/Info';
+import Agenda from '../components/searchDetail/Agenda';
+import LinkedRoadmap from '../components/searchDetail/LinkedRoadmap';
+import Maker from '../components/searchDetail/Maker';
+import UseBtn from '../components/searchDetail/UseBtn';
 import { useState, useEffect } from 'react';
-import Modal from '../components/Modal/Modal';
+import Modal from '../components/modal/Modal';
 import { useNavigate, useParams } from 'react-router-dom';
-import Axios from '../assets/apis';
+import Axios from '../assets/api';
 import { UserData, MainData } from '../interfaces/TemplateDetail';
 
 interface AgendaItem {
@@ -101,32 +101,13 @@ const TemplateDetail = () => {
     fetchData();
   }, []);
 
-  const typeFilter = (type: string | undefined) => {
-    switch (type) {
-      case 'ALL':
-        return '전체';
-      case 'IT':
-        return 'IT프로젝트';
-      case 'ANALYSIS':
-        return '설문 및 데이터 분석';
-      case 'CORPORATE_ANALYSIS':
-        return '기업 분석';
-      case 'PT':
-        return '자유주제PT';
-      case 'MARKETING':
-        return '마케팅';
-      case 'DESIGN':
-        return '디자인 프로젝트';
-    }
-  };
-
   return (
     <div className="w-[1300px] px-10 py-9">
       <div
         className="mb-5 text-[15px] font-medium text-black"
         onClick={() => console.log(userData)}
       >
-        회의록 {'>'} {typeFilter(mainData?.templateType)}
+        회의록 {'>'} {mainData?.templateType}
       </div>
 
       <div className="mb-11 flex w-[74.5%] items-center justify-between">

@@ -1,16 +1,16 @@
-import MoreItems from '../components/SearchDetail/MoreItems';
-import Info from '../components/SearchDetail/Info';
-import Agenda from '../components/SearchDetail/Agenda';
-import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
-import Maker from '../components/SearchDetail/Maker';
-import Modal from '../components/Modal/Modal';
+import MoreItems from '../components/searchDetail/MoreItems';
+import Info from '../components/searchDetail/Info';
+import Agenda from '../components/searchDetail/Agenda';
+import LinkedRoadmap from '../components/searchDetail/LinkedRoadmap';
+import Maker from '../components/searchDetail/Maker';
+import Modal from '../components/modal/Modal';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
-import UseBtn from '../components/SearchDetail/UseBtn';
-import Axios from '../assets/apis';
+import UseBtn from '../components/searchDetail/UseBtn';
+import Axios from '../assets/api';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
-import Process from '../components/SearchDetail/Process';
+import Process from '../components/searchDetail/Process';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
