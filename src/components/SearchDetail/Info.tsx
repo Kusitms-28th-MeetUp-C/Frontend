@@ -6,6 +6,7 @@ import { MdNavigateNext, MdExpandMore } from 'react-icons/md';
 
 interface InfoProps {
   isRoadmap?: boolean;
+  data: any;
 }
 
 interface InfoItemProps {
@@ -40,7 +41,7 @@ const InfoItem = ({ children, category }: InfoItemProps) => {
         ) : (
           <BiSolidCommentDetail className="text-tagGreen1" />
         )}
-        <div className="text-gray1 text-xs font-bold">
+        <div className="text-xs font-bold text-gray1">
           {category === 'rate'
             ? '평점'
             : category === 'time'
@@ -53,8 +54,8 @@ const InfoItem = ({ children, category }: InfoItemProps) => {
         </div>
       </div>
       <div className="pl-4">
-        <span className="text-gray2 mr-1 text-2xl font-bold">{children}</span>
-        <span className="text-gray4 text-xs font-extrabold">
+        <span className="mr-1 text-2xl font-bold text-gray2">{children}</span>
+        <span className="text-xs font-extrabold text-gray4">
           {category === 'rate'
             ? '/10'
             : category === 'time'
@@ -70,37 +71,36 @@ const InfoItem = ({ children, category }: InfoItemProps) => {
   );
 };
 
-const Info = ({ isRoadmap }: InfoProps) => {
+const Info = ({ isRoadmap, data }: InfoProps) => {
   return (
-    <div className="bg-gray9 w-full rounded-[20px] p-6">
+    <div className="w-full rounded-[20px] bg-gray9 p-6">
       <div className="mb-7 flex items-center justify-between">
-        <div className="text-gray1 text-xl font-bold">
+        <div className="text-xl font-bold text-gray1">
           {isRoadmap ? '로드맵 소개' : '템플릿 소개'}
         </div>
-        <div className="text-gray3 text-[14px] font-semibold">2023-11-14</div>
+        <div className="text-[14px] font-semibold text-gray3">{data.date}</div>
       </div>
       <li className="mb-6 flex flex-wrap justify-between gap-2">
-        <InfoItem category="rate">8.0</InfoItem>
+        <InfoItem category="rate">{data?.simpleInfo?.rating}</InfoItem>
         {isRoadmap ? (
-          <InfoItem category="step">5</InfoItem>
+          <InfoItem category="step">{data?.simpleInfo?.steps}</InfoItem>
         ) : (
-          <InfoItem category="time">80</InfoItem>
+          <InfoItem category="time">{data?.simpleInfo?.estimatedTime}</InfoItem>
         )}
-        <InfoItem category="team">72</InfoItem>
-        <InfoItem category="review">25</InfoItem>
+        <InfoItem category="team">{data?.simpleInfo?.teamCount}</InfoItem>
+        <InfoItem category="review">{data?.simpleInfo?.reviewCount}</InfoItem>
       </li>
 
       <div className="mb-5 text-[15px] font-medium leading-6 text-black">
-        8년차 PM이 기획-개발-디자인 웹 서비스 제작 프로젝트에서 필수적인 요소를
-        놓치지 않고 순차적으로 진행하도록 가이드하기위해 제작하였습니다.
+        {data.introduction}
       </div>
 
-      <button className="text-blue1 mb-10 w-full rounded-[10px] bg-[#ECEBFE] py-2.5 text-sm font-semibold">
+      <button className="mb-10 w-full rounded-[10px] bg-[#ECEBFE] py-2.5 text-sm font-semibold text-blue1">
         사용 예시 보러가기
       </button>
 
       <div className="mb-4 flex items-center justify-between">
-        <div className="text-gray2 text-base font-bold">리뷰 미리보기</div>
+        <div className="text-base font-bold text-gray2">리뷰 미리보기</div>
         <Link to="/" className="flex items-center">
           <div className="text-[13px] font-medium text-[#4F4949]">더보기</div>
           <MdNavigateNext className="text-[#4F4949]" />
@@ -108,12 +108,9 @@ const Info = ({ isRoadmap }: InfoProps) => {
       </div>
 
       <li className="flex flex-col gap-4">
-        <Review>
-          웹서비스 기획이 막막했는데 템플릿에 자세히 나와있어서 좋았어요. 제가
-          처음진행하는지 아무도 몰랐다고 하네요^^
-        </Review>
-        <Review>리뷰2</Review>
-        <Review>리뷰3</Review>
+        {data?.reviews?.map((el: any, idx: number) => (
+          <Review key={idx}>{el.content}</Review>
+        ))}
       </li>
     </div>
   );

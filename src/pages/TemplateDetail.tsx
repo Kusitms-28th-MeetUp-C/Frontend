@@ -9,69 +9,21 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Axios from '../assets/api';
 import { UserData, MainData } from '../interfaces/TemplateDetail';
 import Modal from '../components/Modal/Modal';
+import Title from '../components/Common/Title';
+import BackBtn from '../components/SearchDetail/BackBtn';
 
-interface AgendaItem {
-  agendaNum: string;
-  agenda: string;
-  content: string;
-}
-
-interface TemplateContentResponseDtoList {
-  [key: string]: AgendaItem[];
-}
-
-interface TemplateContentListResponseDto {
-  introduction: string;
-  templateContentResponseDtoList: TemplateContentResponseDtoList;
-}
-
-interface ConnectedRoadmap {
-  title: string;
-}
-
-interface RelatedTemplate {
-  templateList: Template[];
-}
-
-interface Review {
-  content: string;
-}
-
-interface RatingAndReviews {
-  ratingAverage: number;
-  reviews: Review[];
-}
-
-interface Template {
-  templateId: number;
-  templateType: string;
-  title: string;
-  estimatedTime: number;
-  connectedRoadmap: ConnectedRoadmap[];
-  date: string;
-  templateContentListResponseDto: TemplateContentListResponseDto;
-  relatedTemplate: RelatedTemplate;
-  ratingAndReviews: RatingAndReviews;
-  teamCount: number;
-}
-
-interface ApiResponse {
-  templateId: number;
-  estimatedTime: number;
-  connectedRoadmap: ConnectedRoadmap[];
-  date: string;
-  templateContentListResponseDto: TemplateContentListResponseDto;
-  relatedTemplate: RelatedTemplate;
-  ratingAndReviews: RatingAndReviews;
-  teamCount: number;
-}
+interface ApiResponse {}
 
 const TemplateDetail = () => {
   const navigate = useNavigate();
   const { templateId } = useParams();
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
-  const [mainData, setMainData] = useState<MainData | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [mainData, setMainData] = useState<any>({});
+  const [infoData, setInfoData] = useState<any>({});
+  const [agendaData, setAgendaData] = useState<any>([]);
+  const [templateData, setTemplateData] = useState<any>([]);
+  const [roadmapData, setRoadmapData] = useState('');
+  const [userData, setUserData] = useState<any>({});
 
   const onSubmitAlertModal = () => {
     setIsOpenAlertModal(false);
@@ -87,7 +39,10 @@ const TemplateDetail = () => {
       .then((res) => {
         console.log(res.data.data);
         const response = res.data.data;
-        setMainData({ ...response });
+        setMainData({ title: response.title });
+        setInfoData({ ...response.templateIntro });
+        setTemplateData([...response.relatedTemplate]);
+        setRoadmapData(response.connectedRoadmap);
         setUserData({ ...response.user });
       })
       .catch((err) => console.error(err));
@@ -103,30 +58,19 @@ const TemplateDetail = () => {
 
   return (
     <div className="w-[1300px] px-10 py-9">
-      <div
-        className="mb-5 text-[15px] font-medium text-black"
-        onClick={() => console.log(userData)}
-      >
-        회의록 {'>'} {mainData?.templateType}
-      </div>
-
-      <div className="mb-11 flex w-[74.5%] items-center justify-between">
-        <div className="text-[28px] font-extrabold text-black">
-          {mainData?.title}
-        </div>
-      </div>
-
+      <BackBtn>전체 템플릿 보기</BackBtn>
+      <Title>{mainData.title}</Title>
       <div className="flex justify-between">
         <div className="w-[22%]">
-          <Info />
+          <Info data={infoData} />
         </div>
         <div className="w-[49%]">
-          <Agenda />
-          <MoreItems />
+          <Agenda data={agendaData}/>
+          <MoreItems data={templateData}/>
         </div>
         <div className="w-[22%]">
           <UseBtn onClickBtn={onClickUseBtn}>템플릿 사용하기</UseBtn>
-          <LinkedRoadmap />
+          <LinkedRoadmap/>
           <Maker data={userData} />
         </div>
       </div>
