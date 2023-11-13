@@ -1,10 +1,14 @@
-import { FiSearch } from 'react-icons/fi';
-import { BsFillPersonFill } from 'react-icons/bs';
+import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
 import { GoHomeFill } from 'react-icons/go';
-import { TbLogout } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
+import ChatList from '../Chat/ChatList';
+import ChatRoom from '../Chat/ChatRoom';
+import { useState } from 'react';
 
 const TopNavBar = () => {
+  const [isOpenChat, setIsOpenChat] = useState(false);
+  const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
+
   return (
     <div className="flex h-[65px] items-center justify-between bg-white px-8">
       <div className="flex items-center">
@@ -14,20 +18,48 @@ const TopNavBar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-3">
-        <div className="mr-1 flex items-center  gap-2">
-          <div className="flex h-[30px] w-[30px] items-center justify-center overflow-hidden rounded-full bg-[#DDE1EA]">
+        <Link
+          to="/"
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
+        >
+          <GoHomeFill className="text-2xl text-[#495565]" />
+        </Link>
+
+        <button
+          className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
+            isOpenChat
+              ? 'bg-[#606DE9] text-white'
+              : 'bg-[#EBEEF9] text-[#495565]'
+          }`}
+          onClick={() => setIsOpenChat((prev) => !prev)}
+        >
+          <BsFillChatFill className="text-xl" />
+        </button>
+
+        <Link
+          to="/"
+          className="flex h-10 w-[96px] items-center justify-center gap-2 rounded-[10px] bg-[#EBEEF9]"
+        >
+          <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
             <BsFillPersonFill className="h-[18px] w-[18px] text-[#5A5A5A]" />
           </div>
-          <div className="text-lg font-semibold text-[#232326]">김밋플</div>
-        </div>
-
-        <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]">
-          <GoHomeFill className="h-6 w-6 text-[#495565]" />
-        </div>
-        <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]">
-          <TbLogout className="h-6 w-6 text-[#495565]" />
-        </div>
+          <div className="text-base font-semibold text-[#232326]">김밋플</div>
+        </Link>
       </div>
+      {isOpenChat && (
+        <div className="absolute right-10 top-24 h-[608px] w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
+          {!isOpenChatRoom ? (
+            <ChatList
+              setIsOpenChatRoom={setIsOpenChatRoom}
+            />
+          ) : (
+            <ChatRoom
+              isOpenChatRoom={isOpenChatRoom}
+              setIsOpenChatRoom={setIsOpenChatRoom}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };
