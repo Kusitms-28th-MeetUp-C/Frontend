@@ -61,7 +61,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
   return (
     <Link
       to={to ? to : '#'}
-      className={`block flex w-full cursor-pointer items-center justify-between rounded-l-full py-2 pl-6 pr-1 text-[14px]  duration-300 ${
+      className={`flex w-full cursor-pointer items-center justify-between rounded-l-full py-2 pl-6 pr-1 text-[14px]  duration-300 ${
         isActive
           ? 'bg-[#EEEEFB] font-bold text-[#5257D6]'
           : 'font-semibold text-white hover:bg-[#EEEEFB] hover:text-[#5257D6]'
@@ -81,7 +81,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
 
 const SideNavTest = () => {
   return (
-    <NavBlock className="w-[216px] flex h-[calc(100vh-65px)] flex-col rounded-tr-[20px] bg-[#5257D6] pb-5 pt-7">
+    <NavBlock className="flex h-[calc(100vh-65px)] w-[216px] flex-col rounded-tr-[20px] bg-[#5257D6] pb-5 pt-7">
       <div className="mb-[50px]">
         <SectionTitle isSearch>탐색</SectionTitle>
         <List>
@@ -92,8 +92,8 @@ const SideNavTest = () => {
       <div>
         <SectionTitle>관리</SectionTitle>
         <List>
-          <ListItem to="/overview">나의 회의 관리</ListItem>
-          <ListItem to='/my-items'>내 회의록, 로드맵 관리</ListItem>
+          <ListItem to="/meeting">나의 회의 관리</ListItem>
+          <ListItem to="/my-items">내 회의록, 로드맵 관리</ListItem>
         </List>
       </div>
     </NavBlock>
