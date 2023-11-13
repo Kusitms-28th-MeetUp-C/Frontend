@@ -72,7 +72,7 @@ const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
             </div>
 
             {!isRoadmap && (
-              <div className="flex items-center gap-1 rounded-full bg-white px-[11px] py-[3px]">
+              <div className="mt-5 flex items-center gap-1 rounded-full bg-white px-[11px] py-[3px]">
                 <img src="/icons/category-purple.svg" />
                 <div className="text-[10px] font-semibold text-gray3">
                   {el?.connectedRoadmap}
