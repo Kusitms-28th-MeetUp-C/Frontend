@@ -8,15 +8,20 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
 import UseBtn from '../components/SearchDetail/UseBtn';
-import Axios from '../assets/apis';
+import Axios from '../assets/api';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
 import Process from '../components/SearchDetail/Process';
+import BackBtn from '../components/SearchDetail/BackBtn';
+import Title from '../components/Common/Title';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
   const { roadmapId } = useParams();
-  const [mainData, setMainData] = useState<RoadmapMainData | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [mainData, setMainData] = useState<any>({});
+  const [processData, setProcessData] = useState<any>({});
+  const [infoData, setInfoData] = useState<any>({});
+  const [roadmapData, setRoadmapData] = useState<any>([]);
+  const [userData, setUserData] = useState<any>({});
 
   const fetchData = async () => {
     await Axios.get('roadmap/detail', {
@@ -27,7 +32,10 @@ const RoadmapDetail = () => {
       .then((res) => {
         console.log(res.data.data);
         const response = res.data.data;
-        setMainData({ ...response });
+        setMainData({ title: response.title });
+        setInfoData({ ...response.roadmapIntro });
+        setProcessData({ ...response.roadmapData });
+        setRoadmapData([...response.relatedRoadmap]);
         setUserData({ ...response.user });
       })
       .catch((err) => console.error(err));
@@ -35,7 +43,7 @@ const RoadmapDetail = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [roadmapId]);
 
   const teamData = [
     '조직행위론 c팀',
@@ -64,24 +72,20 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-full px-10 py-9">
-      <div className="mb-5 text-[15px] font-medium text-black">
-        회의록 {'>'} {mainData?.roadmapType}
-      </div>
+    <div className="w-[1250px] px-10 py-9">
+      <BackBtn>전체 로드맵 보기</BackBtn>
 
-      <div className="mb-11 text-[28px] font-extrabold text-black">
-        기획-디자인-개발 프로젝트 로드맵
-      </div>
+      <Title>{mainData.title}</Title>
 
       <div className="flex justify-between">
         <div className="flex w-[74.5%] flex-col gap-7">
-          <Process />
+          <Process data={processData} />
           <div className="flex justify-between">
             <div className="w-[29.53%]">
-              <Info isRoadmap />
+              <Info isRoadmap data={infoData} />
             </div>
             <div className="w-[65.77%]">
-              <MoreItems isRoadmap />
+              <MoreItems isRoadmap data={roadmapData} />
             </div>
           </div>
         </div>
@@ -105,16 +109,16 @@ const RoadmapDetail = () => {
               }`}
               onClick={() => setIsOpenCmbBox((prev) => !prev)}
             >
-              <div className="text-gray2 text-base font-bold">
+              <div className="text-base font-bold text-gray2">
                 {selectedTeam}
               </div>
-              <MdExpandMore className="text-blue1 h-8 w-8" />
+              <MdExpandMore className="h-8 w-8 text-blue1" />
             </div>
             {isOpenCmbBox && (
-              <div className="bg-blue5 absolute flex w-full flex-col rounded-[10px]">
+              <div className="absolute flex w-full flex-col rounded-[10px] bg-blue5">
                 {teamData.map((el, idx) => (
                   <div
-                    className="text-gray2 hover:bg-blue4 cursor-pointer overflow-hidden px-7 py-3 text-base font-medium duration-300 hover:rounded-[10px]"
+                    className="cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray2 duration-300 hover:rounded-[10px] hover:bg-blue4"
                     key={idx}
                     onClick={() => {
                       setSelectedTeam(el);

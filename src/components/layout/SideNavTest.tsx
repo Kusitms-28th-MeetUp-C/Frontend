@@ -93,7 +93,7 @@ const SideNavTest = () => {
         <SectionTitle>관리</SectionTitle>
         <List>
           <ListItem to="/meeting">나의 회의 관리</ListItem>
-          <ListItem to="/my-items">내 회의록, 로드맵 관리</ListItem>
+          <ListItem to="/management">내 회의록, 로드맵 관리</ListItem>
         </List>
       </div>
     </NavBlock>
