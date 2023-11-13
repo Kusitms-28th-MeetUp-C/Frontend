@@ -12,8 +12,6 @@ import Modal from '../components/Modal/Modal';
 import Title from '../components/Common/Title';
 import BackBtn from '../components/SearchDetail/BackBtn';
 
-interface ApiResponse {}
-
 const TemplateDetail = () => {
   const navigate = useNavigate();
   const { templateId } = useParams();
@@ -22,7 +20,7 @@ const TemplateDetail = () => {
   const [infoData, setInfoData] = useState<any>({});
   const [agendaData, setAgendaData] = useState<any>([]);
   const [templateData, setTemplateData] = useState<any>([]);
-  const [roadmapData, setRoadmapData] = useState('');
+  const [roadmapData, setRoadmapData] = useState({});
   const [userData, setUserData] = useState<any>({});
 
   const onSubmitAlertModal = () => {
@@ -42,7 +40,7 @@ const TemplateDetail = () => {
         setMainData({ title: response.title });
         setInfoData({ ...response.templateIntro });
         setTemplateData([...response.relatedTemplate]);
-        setRoadmapData(response.connectedRoadmap);
+        setRoadmapData({ ...response.roadmapIdAndConnectRoadmap });
         setUserData({ ...response.user });
       })
       .catch((err) => console.error(err));
@@ -65,12 +63,12 @@ const TemplateDetail = () => {
           <Info data={infoData} />
         </div>
         <div className="w-[49%]">
-          <Agenda data={agendaData}/>
-          <MoreItems data={templateData}/>
+          <Agenda data={agendaData} />
+          <MoreItems data={templateData} />
         </div>
         <div className="w-[22%]">
           <UseBtn onClickBtn={onClickUseBtn}>템플릿 사용하기</UseBtn>
-          <LinkedRoadmap/>
+          <LinkedRoadmap data={roadmapData} />
           <Maker data={userData} />
         </div>
       </div>
