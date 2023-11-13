@@ -47,11 +47,9 @@ const TopNavBar = () => {
         </Link>
       </div>
       {isOpenChat && (
-        <div className="absolute right-10 top-24 h-[608px] w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
+        <div className="absolute right-10 top-24 z-[100] h-[82%] min-w-[360px] w-[20%] rounded-[20px] bg-white shadow-lg duration-300">
           {!isOpenChatRoom ? (
-            <ChatList
-              setIsOpenChatRoom={setIsOpenChatRoom}
-            />
+            <ChatList setIsOpenChatRoom={setIsOpenChatRoom} />
           ) : (
             <ChatRoom
               isOpenChatRoom={isOpenChatRoom}

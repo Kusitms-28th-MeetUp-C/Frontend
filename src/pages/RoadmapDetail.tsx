@@ -72,7 +72,7 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-[1250px] px-10 py-9">
+    <div className="w-full px-10 py-9">
       <BackBtn>전체 로드맵 보기</BackBtn>
 
       <Title>{mainData.title}</Title>
