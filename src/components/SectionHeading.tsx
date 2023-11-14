@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+import SectionHeadingContent from './SectionHeadingContent';
+
 interface SectionHeadingProps {
   title: string;
   subtitle: string;
@@ -16,11 +18,7 @@ const SectionHeading = ({
   return (
     <section className="mt-6 rounded-2xl bg-white px-6 py-4">
       <div className="flex justify-between">
-        <div className="flex items-center gap-4">
-          <img src="/icons/circle-chart.svg" alt="원형 차트" />
-          <span className="text-xl font-bold">{title}</span>
-          <span className="text-neutral-400">{subtitle}</span>
-        </div>
+        <SectionHeadingContent title={title} subtitle={subtitle} />
         {type === 'list' ? (
           <Link
             to="/meeting/1"

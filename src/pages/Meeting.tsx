@@ -26,7 +26,7 @@ const Meeting = () => {
   return (
     <div className="px-14 py-12">
       {/* 제목 섹션 */}
-      <PageHeading />
+      <PageHeading title="나의 회의 관리" previous="관리" hasFilter />
       {/* 로드맵 1 */}
       <div>
         {/* 헤딩 섹션 */}

@@ -10,7 +10,7 @@ import Template from './pages/Template';
 import TemplateDetail from './pages/TemplateDetail';
 import Roadmap from './pages/Roadmap';
 import RoadmapDetail from './pages/RoadmapDetail';
-import MyItems from './pages/MyItems';
+import Management from './pages/Management';
 import LoginPage from './pages/Login';
 import GoogleLogin from './pages/GoogleLogin';
 import KakaoLogin from './pages/KakaoLogin';
@@ -46,7 +46,7 @@ const Router = () => {
             <Route path="" element={<Roadmap MoveToTop={MoveToTop} />} />
             <Route path=":roadmapId" element={<RoadmapDetail />} />
           </Route>
-          <Route path="/my-items" element={<MyItems />} />
+          <Route path="/management" element={<Management />} />
         </Routes>
       </Layout>
     </BrowserRouter>
