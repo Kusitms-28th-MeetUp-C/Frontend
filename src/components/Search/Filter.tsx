@@ -1,4 +1,4 @@
-import { typeFilter } from '../../assets/utils/filter';
+import { typeFilter } from '../../libs/utils/filter';
 
 interface FilterProps {
   type: string;

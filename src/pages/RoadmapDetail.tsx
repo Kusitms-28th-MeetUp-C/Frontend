@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
 import UseBtn from '../components/SearchDetail/UseBtn';
-import Axios from '../assets/api';
+import Axios from '../libs/api';
 import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
 import Process from '../components/SearchDetail/Process';
 import BackBtn from '../components/SearchDetail/BackBtn';
@@ -72,7 +72,7 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-[1250px] px-10 py-9">
+    <div className="w-full px-10 py-9">
       <BackBtn>전체 로드맵 보기</BackBtn>
 
       <Title>{mainData.title}</Title>

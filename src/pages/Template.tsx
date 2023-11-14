@@ -1,16 +1,22 @@
 import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
 import TemplateItems from '../components/Search/TemplateItems';
-import { useState, useEffect } from 'react';
-import Axios from '../assets/api';
+import { useState, useEffect, useRef } from 'react';
+import Axios from '../libs/api';
 import Pagination from '../components/Search/Pagination';
+import Title from '../components/Common/Title';
 
-const Template = () => {
+interface TemplateProps {
+  MoveToTop: () => void;
+}
+
+const Template = ({ MoveToTop }: TemplateProps) => {
   const [templateType, setTemplateType] = useState('all');
   const [title, setTitle] = useState('');
   const [listData, setListData] = useState<any[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchTemplate = async () => {
     await Axios.post(`/template/get?page=${page}`, {
@@ -25,6 +31,11 @@ const Template = () => {
       .catch((err) => console.error(err));
   };
 
+  // const MoveToTop = () => {
+  //   containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  //   console.log('실행');
+  // };
+
   useEffect(() => {
     fetchTemplate();
   }, [templateType, page, title]);
@@ -34,14 +45,17 @@ const Template = () => {
   }, [templateType, title]);
 
   return (
-    <div className="px-[56px] py-[45px]">
-      <div className="text-[28px] font-extrabold text-black">
-        {'회의록 템플릿'}
-      </div>
+    <div ref={containerRef} className="px-[56px] py-[45px]">
+      <Title>회의록 템플릿</Title>
       <Search setTitle={setTitle} />
       <Filter type={templateType} setType={setTemplateType} />
       <TemplateItems data={listData} />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        MoveToTop={MoveToTop}
+      />
     </div>
   );
 };
