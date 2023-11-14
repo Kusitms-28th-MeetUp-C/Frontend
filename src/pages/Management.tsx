@@ -11,7 +11,7 @@ import SectionHeadingContent from '../components/SectionHeadingContent';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import axios from '../assets/api';
+import axios from '../libs/api';
 
 interface HeadingButtonProps {
   children: React.ReactNode;

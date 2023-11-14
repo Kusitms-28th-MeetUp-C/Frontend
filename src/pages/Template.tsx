@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import axios from '../assets/api';
+import { useState, useEffect, useRef } from 'react';
+import axios from '../libs/api';
 import { Link } from 'react-router-dom';
 
 import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
 import TemplateItems from '../components/Search/TemplateItems';
 import Pagination from '../components/Search/Pagination';
-import Title from '../components/Common/Title';
 
 interface TemplateProps {
   MoveToTop: () => void;
