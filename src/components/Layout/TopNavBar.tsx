@@ -4,25 +4,35 @@ import { Link } from 'react-router-dom';
 import ChatList from '../Chat/ChatList';
 import ChatRoom from '../Chat/ChatRoom';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../../states/LoginState';
 
 const TopNavBar = () => {
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
+
+  const [loginState, setLoginState] = useRecoilState(LoginState);
 
   return (
     <div className="flex h-[65px] items-center justify-between bg-white px-8">
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-4">
           <img src="/logo/logo.svg" alt="logo" className="h-6" />
-          <img src="/logo/logo-typo.svg" />
+          <img src="/logo/logo-typo-black.svg" />
         </Link>
       </div>
       <div className="flex items-center gap-3">
         <Link
-          to="/"
+          to="#"
           className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
+          // 임시로 로그아웃 버튼기능 추가
+          onClick={() => {
+            localStorage.setItem('access-token', '');
+            setLoginState({});
+            console.log(loginState);
+          }}
         >
-          <GoHomeFill className="text-2xl text-[#495565]" />
+          <GoHomeFill className="text-2xl text-gray3" />
         </Link>
 
         <button
@@ -37,21 +47,25 @@ const TopNavBar = () => {
         </button>
 
         <Link
-          to="/"
-          className="flex h-10 w-[96px] items-center justify-center gap-2 rounded-[10px] bg-[#EBEEF9]"
+          to={loginState.isLogin ? '/my-profile' : '/login'}
+          className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-[#EBEEF9] px-2"
         >
           <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
-            <BsFillPersonFill className="h-[18px] w-[18px] text-[#5A5A5A]" />
+            {loginState.profile ? (
+              <img src={loginState.profile} />
+            ) : (
+              <BsFillPersonFill className="text-xl text-gray3" />
+            )}
           </div>
-          <div className="text-base font-semibold text-[#232326]">김밋플</div>
+          <div className="text-base font-semibold text-gray2">
+            {loginState.isLogin ? `${loginState.name || '이름없음'}` : '로그인'}
+          </div>
         </Link>
       </div>
       {isOpenChat && (
-        <div className="absolute right-10 top-24 h-[608px] w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
+        <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
           {!isOpenChatRoom ? (
-            <ChatList
-              setIsOpenChatRoom={setIsOpenChatRoom}
-            />
+            <ChatList setIsOpenChatRoom={setIsOpenChatRoom} />
           ) : (
             <ChatRoom
               isOpenChatRoom={isOpenChatRoom}

@@ -1,7 +1,7 @@
 import { FaPeopleGroup, FaStar } from 'react-icons/fa6';
 import { MdNavigateNext } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
-import { typeFilter } from '../../assets/utils/filter';
+import { typeFilter } from '../../libs/utils/filter';
 
 interface RoadmapItemsProps {
   data: any[];

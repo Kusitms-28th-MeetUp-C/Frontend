@@ -1,11 +1,15 @@
 import Filter from '../components/Search/Filter';
-import Axios from '../assets/api';
+import Axios from '../libs/api';
 import { useState, useEffect } from 'react';
 import Search from '../components/Search/Search';
 import RoadmapItems from '../components/Search/RoadmapItems';
 import Pagination from '../components/Search/Pagination';
 
-const Roadmap = () => {
+interface RoadmapProps {
+  MoveToTop: () => void;
+}
+
+const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   const [roadmapType, setRaodmapType] = useState('all');
   const [title, setTitle] = useState('');
   const [listData, setListData] = useState<any[]>([]);
@@ -43,7 +47,12 @@ const Roadmap = () => {
       </div>
       <Filter type={roadmapType} setType={setRaodmapType} />
       <RoadmapItems data={listData} />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        MoveToTop={MoveToTop}
+      />
     </div>
   );
 };

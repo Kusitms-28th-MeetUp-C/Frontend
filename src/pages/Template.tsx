@@ -6,13 +6,19 @@ import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
 import TemplateItems from '../components/Search/TemplateItems';
 import Pagination from '../components/Search/Pagination';
+import Title from '../components/Common/Title';
 
-const Template = () => {
+interface TemplateProps {
+  MoveToTop: () => void;
+}
+
+const Template = ({ MoveToTop }: TemplateProps) => {
   const [templateType, setTemplateType] = useState('all');
   const [title, setTitle] = useState('');
   const [listData, setListData] = useState<any[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchTemplate = () => {
     axios
@@ -27,6 +33,11 @@ const Template = () => {
       })
       .catch((err) => console.error(err));
   };
+
+  // const MoveToTop = () => {
+  //   containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  //   console.log('실행');
+  // };
 
   useEffect(() => {
     fetchTemplate();
@@ -52,7 +63,12 @@ const Template = () => {
       </div>
       <Filter type={templateType} setType={setTemplateType} />
       <TemplateItems data={listData} />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        MoveToTop={MoveToTop}
+      />
     </div>
   );
 };
