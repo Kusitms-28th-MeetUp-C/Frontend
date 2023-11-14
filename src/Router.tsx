@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useRef } from 'react';
 
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
@@ -10,14 +11,22 @@ import TemplateDetail from './pages/TemplateDetail';
 import Roadmap from './pages/Roadmap';
 import RoadmapDetail from './pages/RoadmapDetail';
 import Management from './pages/Management';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/Login';
 import GoogleLogin from './pages/GoogleLogin';
 import KakaoLogin from './pages/KakaoLogin';
+import TemplateEditor from './pages/TemplateEditor';
 
 const Router = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const MoveToTop = () => {
+    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('실행');
+  };
+  
   return (
     <BrowserRouter>
-      <Layout>
+      <Layout containerRef={containerRef}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
@@ -31,11 +40,12 @@ const Router = () => {
           </Route>
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/template">
-            <Route path="" element={<Template />} />
+            <Route path="" element={<Template MoveToTop={MoveToTop} />} />
             <Route path=":templateId" element={<TemplateDetail />} />
+            <Route path="create" element={<TemplateEditor />} />
           </Route>
           <Route path="roadmap">
-            <Route path="" element={<Roadmap />} />
+            <Route path="" element={<Roadmap MoveToTop={MoveToTop} />} />
             <Route path=":roadmapId" element={<RoadmapDetail />} />
           </Route>
           <Route path="/management" element={<Management />} />

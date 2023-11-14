@@ -6,7 +6,7 @@ import Maker from '../components/SearchDetail/Maker';
 import UseBtn from '../components/SearchDetail/UseBtn';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Axios from '../assets/api';
+import Axios from '../libs/api';
 import { UserData, MainData } from '../interfaces/TemplateDetail';
 import Modal from '../components/Modal/Modal';
 import Title from '../components/Common/Title';

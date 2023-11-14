@@ -1,11 +1,5 @@
-interface Data {
-  num: number;
-  title: string;
-  contents: string[];
-}
-
 interface RoadmapProps {
-  data: Data[];
+  data: any[];
   className?: string;
 }
 
@@ -16,21 +10,21 @@ const Roadmap = ({ data, className }: RoadmapProps) => {
         <div className="flex justify-evenly">
           {data.map((el, idx) => (
             <div
-              key={el.num}
+              key={el.stepId}
               className="relative flex w-[14%] flex-col items-center"
             >
               <div className="mb-[14px] flex h-7 w-7 items-center justify-center rounded-full bg-[#5257D6] text-base font-bold text-white">
-                {el.num}
+                {el.step}
               </div>
               <div className="mb-8 text-center text-base font-semibold text-black">
                 {el.title}
               </div>
-              {el.contents.map((ele) => (
+              {el.templateList.map((ele: any) => (
                 <div
-                  key={ele}
+                  key={ele.templateId}
                   className="mb-3 flex w-full items-center justify-center rounded-full bg-gray7 py-1 text-[14px] font-semibold text-gray3"
                 >
-                  {ele}
+                  {ele.title}
                 </div>
               ))}
               {idx < data.length - 1 && (

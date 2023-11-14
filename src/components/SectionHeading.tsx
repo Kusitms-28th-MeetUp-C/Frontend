@@ -4,14 +4,14 @@ import SectionHeadingContent from './SectionHeadingContent';
 
 interface SectionHeadingProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   type?: string;
   onEdit?: () => void;
 }
 
 const SectionHeading = ({
   title,
-  subtitle,
+  subtitle = '',
   type,
   onEdit,
 }: SectionHeadingProps) => {
