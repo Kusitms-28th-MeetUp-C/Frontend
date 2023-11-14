@@ -8,43 +8,48 @@ interface PaginationProps {
   MoveToTop: () => void;
 }
 
-const Pagination = ({ page, setPage, totalPages, MoveToTop }: PaginationProps) => {
+const Pagination = ({
+  page,
+  setPage,
+  totalPages,
+  MoveToTop,
+}: PaginationProps) => {
   const pageCnt = 5;
   const [startPage, setStartPage] = useState(0);
 
   const onClickNext = () => {
     if (startPage >= 0) {
+      MoveToTop();
       setPage((prev) => prev - 1);
       if (page === startPage) {
         setStartPage((prev) => prev - pageCnt);
       }
-      MoveToTop();
     }
   };
 
   const onClickPrev = () => {
     if (page < totalPages - 1) {
+      MoveToTop();
       setPage((prev) => prev + 1);
       if (page === startPage + 4) {
         setStartPage((prev) => prev + pageCnt);
       }
-      MoveToTop();
     }
   };
 
   const onClickFirst = () => {
     if (page > 0) {
+      MoveToTop();
       setPage(0);
       setStartPage(0);
     }
-    MoveToTop();
   };
 
   const onClickLast = () => {
     if (page < totalPages - 1) {
+      MoveToTop();
       setPage(totalPages - 1);
       setStartPage((totalPages / pageCnt - 1) * 5);
-      MoveToTop();
     }
   };
 
@@ -66,8 +71,8 @@ const Pagination = ({ page, setPage, totalPages, MoveToTop }: PaginationProps) =
             key={el}
             id={el.toString()}
             onClick={() => {
-              setPage(el);
               MoveToTop();
+              setPage(el);
             }}
             className={`w-7 text-center text-xl font-semibold ${
               page === el ? 'text-gray2' : 'text-gray4'

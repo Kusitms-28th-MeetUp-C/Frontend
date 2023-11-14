@@ -14,7 +14,7 @@ const TopNavBar = () => {
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-4">
           <img src="/logo/logo.svg" alt="logo" className="h-6" />
-          <img src="/logo/logo-typo.svg" />
+          <img src="/logo/logo-typo-black.svg" />
         </Link>
       </div>
       <div className="flex items-center gap-3">
