@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useRef } from 'react';
 
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
@@ -15,9 +16,16 @@ import GoogleLogin from './pages/GoogleLogin';
 import KakaoLogin from './pages/KakaoLogin';
 
 const Router = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const MoveToTop = () => {
+    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('실행');
+  };
+  
   return (
     <BrowserRouter>
-      <Layout>
+      <Layout containerRef={containerRef}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
@@ -31,7 +39,7 @@ const Router = () => {
           </Route>
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/template">
-            <Route path="" element={<Template />} />
+            <Route path="" element={<Template MoveToTop={MoveToTop} />} />
             <Route path=":templateId" element={<TemplateDetail />} />
           </Route>
           <Route path="roadmap">

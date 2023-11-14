@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import {
-  BsFillCaretLeftFill,
-  BsFillCaretRightFill,
-} from 'react-icons/bs';
+import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
 
 interface PaginationProps {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
+  MoveToTop: () => void;
 }
 
-const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
+const Pagination = ({ page, setPage, totalPages, MoveToTop }: PaginationProps) => {
   const pageCnt = 5;
   const [startPage, setStartPage] = useState(0);
 
@@ -20,6 +18,7 @@ const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
       if (page === startPage) {
         setStartPage((prev) => prev - pageCnt);
       }
+      MoveToTop();
     }
   };
 
@@ -29,23 +28,37 @@ const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
       if (page === startPage + 4) {
         setStartPage((prev) => prev + pageCnt);
       }
+      MoveToTop();
     }
   };
 
   const onClickFirst = () => {
-    setPage(0);
-    setStartPage(0);
+    if (page > 0) {
+      setPage(0);
+      setStartPage(0);
+    }
+    MoveToTop();
   };
 
   const onClickLast = () => {
-    setPage(totalPages - 1);
-    setStartPage((totalPages / pageCnt - 1) * 5);
+    if (page < totalPages - 1) {
+      setPage(totalPages - 1);
+      setStartPage((totalPages / pageCnt - 1) * 5);
+      MoveToTop();
+    }
   };
 
   return (
     <div className="flex w-full items-center justify-center gap-4">
-      <img src='/icons/firstPage.svg' className={`cursor-pointer text-gray3 h-[20px] w-[20px]`} onClick={onClickFirst} />
-      <BsFillCaretLeftFill className={`cursor-pointer text-gray3 h-[20px] w-[20px]`} onClick={onClickNext} />
+      <img
+        src="/icons/firstPage.svg"
+        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        onClick={onClickFirst}
+      />
+      <BsFillCaretLeftFill
+        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        onClick={onClickNext}
+      />
       {Array.from({ length: totalPages }, (v, i) => i)
         .filter((el, idx) => el >= startPage && el < startPage + pageCnt)
         .map((el, idx) => (
@@ -54,6 +67,7 @@ const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
             id={el.toString()}
             onClick={() => {
               setPage(el);
+              MoveToTop();
             }}
             className={`w-7 text-center text-xl font-semibold ${
               page === el ? 'text-gray2' : 'text-gray4'
@@ -63,10 +77,14 @@ const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
           </button>
         ))}
       <BsFillCaretRightFill
-        className={`cursor-pointer text-gray3 h-[20px] w-[20px]`}
+        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
         onClick={onClickPrev}
       />
-      <img src='/icons/lastPage.svg' className={`cursor-pointer text-gray3 h-[20px] w-[20px]`} onClick={onClickLast} />
+      <img
+        src="/icons/lastPage.svg"
+        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        onClick={onClickLast}
+      />
     </div>
   );
 };

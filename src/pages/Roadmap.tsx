@@ -41,7 +41,7 @@ const Roadmap = () => {
       <Search setTitle={setTitle} />
       <Filter type={roadmapType} setType={setRaodmapType} />
       <RoadmapItems data={listData} />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      <Pagination page={page} setPage={setPage} totalPages={totalPages} MoveToTop={()=>{}}/>
     </div>
   );
 };
