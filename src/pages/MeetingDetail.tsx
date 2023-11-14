@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Roadmap from '../components/Roadmap';
 import PageHeading from '../components/PageHeading';
 import Modal from '../components/Modal/Modal';
-import axios from '../assets/api';
+import axios from '../libs/api';
 import { useParams } from 'react-router-dom';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 
