@@ -13,6 +13,7 @@ import Management from './pages/Management';
 import LoginPage from './pages/LoginPage';
 import GoogleLogin from './pages/GoogleLogin';
 import KakaoLogin from './pages/KakaoLogin';
+import TemplateEditor from './pages/TemplateEditor';
 
 const Router = () => {
   return (
@@ -33,6 +34,7 @@ const Router = () => {
           <Route path="/template">
             <Route path="" element={<Template />} />
             <Route path=":templateId" element={<TemplateDetail />} />
+            <Route path="create" element={<TemplateEditor />} />
           </Route>
           <Route path="roadmap">
             <Route path="" element={<Roadmap />} />
