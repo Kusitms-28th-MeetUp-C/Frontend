@@ -1,57 +1,67 @@
-import PageHeading from '../components/PageHeading';
-import SectionHeading from '../components/SectionHeading';
-import Roadmap from '../components/Roadmap';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const data = [
-  {
-    num: 1,
-    title: '온보딩',
-    contents: ['역할분배'],
-  },
-  {
-    num: 2,
-    title: '자료수집',
-    contents: ['초기 설정', '자료 제작', '기능 기획'],
-  },
-  { num: 3, title: '연구설계', contents: ['설문 조사', '자료 분석'] },
-  {
-    num: 4,
-    title: '발표준비',
-    contents: ['발표 레이아웃', '발표 PPT 제작'],
-  },
-  { num: 5, title: '최종 마무리', contents: ['발표 제작'] },
-];
+import axios from '../assets/api';
+import PageHeading from '../components/PageHeading';
+import Roadmap from '../components/Roadmap';
+import SectionHeadingContent from '../components/SectionHeadingContent';
 
 const Meeting = () => {
+  const [teamList, setTeamList] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get('/team', {
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+      .then((res) => {
+        setTeamList(res.data.data.teamList);
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="px-14 py-12">
+        <div>로딩 중...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="px-14 py-12">
       {/* 제목 섹션 */}
       <PageHeading title="나의 회의 관리" previous="관리" hasFilter />
-      {/* 로드맵 1 */}
-      <div>
-        {/* 헤딩 섹션 */}
-        <SectionHeading
-          title="경영정보시스템"
-          subtitle="설문 조사 및 데이터 분석"
-          type="list"
-        />
-        {/* 로드맵 섹션 */}
-        <Roadmap data={data} className="mt-6 rounded-2xl bg-white py-8" />
-      </div>
-      {/* 로드맵 2 */}
-      <div>
-        {/* 헤딩 섹션 */}
-        <SectionHeading
-          title="미팅남녀"
-          subtitle="설문 조사 및 데이터 분석"
-          type="list"
-        />
-        {/* 로드맵 섹션 */}
-        <Roadmap
-          data={data}
-          className="mt-6 justify-center rounded-2xl bg-white py-8"
-        />
-      </div>
+      {/* 팀 선택 섹션 */}
+      {teamList.map((team: any) => (
+        <div key={team.teamInfo.teamId}>
+          {/* 헤딩 섹션 */}
+          <section className="mt-6 rounded-2xl bg-white px-6 py-4">
+            <div className="flex justify-between">
+              <SectionHeadingContent
+                title={team.teamInfo.title}
+                subtitle={team.teamInfo.teamType}
+              />
+              <Link
+                to={`/meeting/${team.teamInfo.teamId}`}
+                className="rounded-full bg-indigo-600 px-5 py-2 font-bold text-white"
+              >
+                스페이스 바로가기
+              </Link>
+            </div>
+          </section>
+          {/* 로드맵 섹션 */}
+          <Roadmap
+            data={team.teamRoadmap.roadmapDetailList}
+            className="mt-6 rounded-2xl bg-white py-8"
+          />
+        </div>
+      ))}
     </div>
   );
 };

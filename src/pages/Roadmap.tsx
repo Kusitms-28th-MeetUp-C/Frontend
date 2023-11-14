@@ -42,7 +42,9 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
       <div className="text-[28px] font-extrabold text-black">
         {'회의 로드맵'}
       </div>
-      <Search setTitle={setTitle} />
+      <div className="mb-6">
+        <Search setTitle={setTitle} />
+      </div>
       <Filter type={roadmapType} setType={setRaodmapType} />
       <RoadmapItems data={listData} />
       <Pagination

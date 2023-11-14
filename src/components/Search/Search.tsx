@@ -15,7 +15,7 @@ const Search = ({ setTitle }: SearchProps) => {
 
   return (
     <form
-      className="mb-6 flex w-full max-w-[420px] items-center justify-between rounded-full bg-white px-[20px] py-[8px]"
+      className="flex w-full max-w-[420px] items-center justify-between rounded-full bg-white px-[20px] py-[8px]"
       onSubmit={onSubmitSearch}
     >
       <input
