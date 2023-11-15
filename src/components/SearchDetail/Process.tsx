@@ -25,7 +25,7 @@ const Process = ({ data }: ProcessProps) => {
             </div>
           </div>
         ))}
-        <div className="absolute left-[7%] top-[25px] z-10 h-[5px] w-[87%] bg-blue3" />
+        <div className="absolute left-[7%] top-[25px] z-0 h-[5px] w-[87%] bg-blue3" />
       </div>
     </div>
   );

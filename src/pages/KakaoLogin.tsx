@@ -29,7 +29,7 @@ const KakaoLogin = () => {
         )
         .then((res) => {
           console.log(res);
-          // navigate('/');
+          navigate('/');
           Axios.post(
             'user/signIn',
             {
@@ -50,8 +50,11 @@ const KakaoLogin = () => {
                 isLogin: true,
                 userId: data.id,
                 profile: data.picture,
-                name: '',
+                name: data.name,
               });
+              Axios.defaults.headers.common[
+                'Authorization'
+              ] = `Bearer ${localStorage.getItem('access-token')}`;
             })
             .catch((err) => console.error(err));
         })

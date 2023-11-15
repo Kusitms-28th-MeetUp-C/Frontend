@@ -11,7 +11,7 @@ import SectionHeadingContent from '../components/SectionHeadingContent';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import axios from '../libs/api';
+import Axios from '../libs/api';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -168,15 +168,12 @@ const Management = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios
+    Axios
       .get('/manage/template/team', {
         params: {
           templateId: 1,
           roadmapTitle: '홍민서 로드맵',
           teamTitle: '미팅남녀',
-        },
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
         },
       })
       .then((res) => {
@@ -199,13 +196,13 @@ const Management = () => {
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex-col space-y-6 px-14 py-12">
         {/* 페이지 제목 */}
-        <PageHeading title={data.templateName} previous="관리" />
+        <PageHeading title={data?.templateName} previous="관리" />
         {/* 헤딩 섹션 */}
         <section className="flex justify-between rounded-2xl bg-white px-6 py-4">
           <div className="flex w-full justify-between">
             <SectionHeadingContent
-              title={data.teamInfo.title}
-              subtitle={data.teamInfo.teamType}
+              title={data?.teamInfo.title}
+              subtitle={data?.teamInfo.teamType}
             />
             <div className="flex gap-5">
               <PurpleButton>원본 데이터 보기</PurpleButton>
@@ -227,9 +224,9 @@ const Management = () => {
         {/* 로드맵 섹션 */}
         <section className="rounded-2xl bg-white py-8">
           <h3 className="mb-5 text-center text-2xl font-bold">
-            {data.roadmapInfo.title}
+            {data?.roadmapInfo.title}
           </h3>
-          <Roadmap data={data.roadmapInfo.roadmapDetailList} />
+          <Roadmap data={data?.roadmapInfo.roadmapDetailList} />
         </section>
         {/* 템플릿 수정 섹션 */}
         <section className="rounded-2xl bg-white px-8 py-8">
@@ -295,7 +292,7 @@ const Management = () => {
         {/* 팀 이름 */}
         <h1 className="mt-5 flex w-full justify-center">
           <div className="flex items-center gap-1 text-xl font-bold">
-            <span>{data.teamInfo.title}</span>
+            <span>{data?.teamInfo.title}</span>
             <i className="h-7 w-7">
               <img
                 src="/icons/edit-icon-black.svg"
@@ -311,7 +308,7 @@ const Management = () => {
             <i className="text-tagPurple1">
               <FaSchool />
             </i>
-            <span className="text-gray-600">{data.teamInfo.teamType}</span>
+            <span className="text-gray-600">{data?.teamInfo.teamType}</span>
           </div>
         </div>
         {/* 팀 스페이스 링크 */}

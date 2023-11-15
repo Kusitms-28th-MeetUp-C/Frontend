@@ -1,7 +1,5 @@
 import MoreItems from '../components/SearchDetail/MoreItems';
 import Info from '../components/SearchDetail/Info';
-import Agenda from '../components/SearchDetail/Agenda';
-import LinkedRoadmap from '../components/SearchDetail/LinkedRoadmap';
 import Maker from '../components/SearchDetail/Maker';
 import Modal from '../components/Modal/Modal';
 import { useState, useEffect } from 'react';
@@ -9,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { MdExpandMore } from 'react-icons/md';
 import UseBtn from '../components/SearchDetail/UseBtn';
 import Axios from '../libs/api';
-import { UserData, RoadmapMainData } from '../interfaces/TemplateDetail';
 import Process from '../components/SearchDetail/Process';
 import BackBtn from '../components/SearchDetail/BackBtn';
 import Title from '../components/Common/Title';
@@ -22,6 +19,7 @@ const RoadmapDetail = () => {
   const [infoData, setInfoData] = useState<any>({});
   const [roadmapData, setRoadmapData] = useState<any>([]);
   const [userData, setUserData] = useState<any>({});
+  const [teamList, setTeamList] = useState<any>([]);
 
   const fetchData = async () => {
     await Axios.get('roadmap/detail', {
@@ -41,33 +39,47 @@ const RoadmapDetail = () => {
       .catch((err) => console.error(err));
   };
 
+  const fetchTeamList = async () => {
+    await Axios.get('team/list')
+      .then((res) => {
+        console.log(res);
+        setTeamList([...res.data.data.teamList]);
+      })
+      .catch((err) => console.error(err));
+  };
+
   useEffect(() => {
     fetchData();
   }, [roadmapId]);
 
-  const teamData = [
-    '조직행위론 c팀',
-    'IT 해커톤 8조',
-    '연합동아리 큐시즘',
-    '비밀프로젝트 a팀',
-  ];
-
   const [isOpenTeamModal, setIsOpenTeamModal] = useState(false);
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
   const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState('선택');
+  const [selectedTeam, setSelectedTeam] = useState({
+    teamId: 0,
+    title: '선택',
+  });
 
-  const onSubmitTeamModal = () => {
-    setIsOpenTeamModal(false);
-    setIsOpenAlertModal(true);
+  const onSubmitTeamModal = async () => {
+    await Axios.post('team/roadmap', {
+      roadmapId,
+      teamId: selectedTeam.teamId,
+    })
+      .then((res) => {
+        console.log(res);
+        setIsOpenTeamModal(false);
+        setIsOpenAlertModal(true);
+      })
+      .catch((err) => console.error(err));
   };
 
   const onSubmitAlertModal = () => {
     setIsOpenAlertModal(false);
-    navigate('/my-items');
+    navigate('/meeting');
   };
 
   const onClickUseBtn = () => {
+    fetchTeamList();
     setIsOpenTeamModal(true);
   };
 
@@ -94,6 +106,7 @@ const RoadmapDetail = () => {
           <Maker data={userData} />
         </div>
       </div>
+
       {isOpenTeamModal && (
         <Modal
           title="사용할 팀을 골라주세요"
@@ -110,22 +123,22 @@ const RoadmapDetail = () => {
               onClick={() => setIsOpenCmbBox((prev) => !prev)}
             >
               <div className="text-base font-bold text-gray2">
-                {selectedTeam}
+                {selectedTeam.title}
               </div>
               <MdExpandMore className="h-8 w-8 text-blue1" />
             </div>
             {isOpenCmbBox && (
               <div className="absolute flex w-full flex-col rounded-[10px] bg-blue5">
-                {teamData.map((el, idx) => (
+                {teamList?.map((el: any, idx: number) => (
                   <div
                     className="cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray2 duration-300 hover:rounded-[10px] hover:bg-blue4"
-                    key={idx}
+                    key={el.teamId}
                     onClick={() => {
-                      setSelectedTeam(el);
+                      setSelectedTeam({ ...el });
                       setIsOpenCmbBox((prev) => !prev);
                     }}
                   >
-                    {el}
+                    {el.title}
                   </div>
                 ))}
               </div>
@@ -133,6 +146,8 @@ const RoadmapDetail = () => {
           </div>
         </Modal>
       )}
+
+      {/* 모달창 */}
       {isOpenAlertModal && (
         <Modal
           title="로드맵을 저장했어요!"

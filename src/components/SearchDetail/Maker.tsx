@@ -1,5 +1,4 @@
 import { BsFillChatFill, BsFillPersonFill } from 'react-icons/bs';
-import { UserData } from '../../interfaces/TemplateDetail';
 
 interface MakerProps {
   data: any;
@@ -20,7 +19,7 @@ const Maker = ({ data }: MakerProps) => {
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex items-center gap-1">
             <div className="rounded-full bg-blue1 px-2 py-1 text-[10px] font-extrabold text-gray9">
-              PM
+              {data?.userType}
             </div>
             <div className="text-base font-semibold text-gray1">
               {data?.name}
