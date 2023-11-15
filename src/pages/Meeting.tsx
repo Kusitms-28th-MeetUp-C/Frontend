@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import axios from '../libs/api';
+import Axios from '../libs/api';
 import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
@@ -13,13 +13,8 @@ const Meeting = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios({
-      method: 'GET',
-      url: '/team',
-      headers: {
-        Authorization: localStorage.getItem('accessToken'),
-      },
-    })
+    Axios
+      .get('/team')
       .then((res) => {
         setTeamList(res.data.data.teamList);
       })

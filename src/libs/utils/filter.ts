@@ -1,7 +1,7 @@
 export const typeFilter = (type: string) => {
   switch (type) {
     case 'all':
-      return '전체';
+      return '전체 카테고리';
     case 'it':
       return 'IT프로젝트';
     case 'team':
@@ -20,5 +20,53 @@ export const typeFilter = (type: string) => {
       return '디자인 프로젝트';
     case 'video':
       return '영상 프로젝트';
+  }
+};
+
+export const tagColorFilter = (option: string, type: string) => {
+  if (option === 'icon') {
+    switch (type) {
+      case 'it':
+        return 'text-tagPurple1';
+      case 'team':
+        return 'text-tagGreen1';
+      case 'club':
+        return 'text-tagSkyblue1';
+      case 'pt':
+        return 'text-tagOrange1';
+      case 'marketing':
+        return 'text-tagYellow1';
+      case 'survey_data_analysis':
+        return 'text-tagPink1';
+      case 'corporate_analysis':
+        return 'text-tagBlue1';
+      case 'design':
+        return 'text-tagKhaki1';
+      case 'video':
+        return 'text-tagRed1';
+    }
+  }
+
+  if (option === 'background') {
+    switch (type) {
+      case 'it':
+        return 'bg-tagPurple2';
+      case 'team':
+        return 'bg-tagGreen2';
+      case 'club':
+        return 'bg-tagSkyblue2';
+      case 'pt':
+        return 'bg-tagOrange2';
+      case 'marketing':
+        return 'bg-tagYellow2';
+      case 'survey_data_analysis':
+        return 'bg-tagPink2';
+      case 'corporate_analysis':
+        return 'bg-tagBlue2';
+      case 'design':
+        return 'bg-tagKhaki2';
+      case 'video':
+        return 'bg-tagRed2';
+    }
   }
 };
