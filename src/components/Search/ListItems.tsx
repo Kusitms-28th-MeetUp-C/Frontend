@@ -16,37 +16,39 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
   const currentPath = location.pathname;
 
   return (
-    <div className="mb-14 flex flex-wrap gap-9">
-      {data?.map((el, idx) => (
+    <div className="mb-14 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      {data?.map((el) => (
         <Link
           to={`${currentPath}/${isRoadmap ? el?.roadmapId : el?.templateId}`}
           key={isRoadmap ? el?.roadmapId : el?.templateId}
-          className="flex w-[355px] flex-col gap-5 rounded-[20px] bg-white p-[26px]"
+          className="flex flex-col gap-10 rounded-[20px] bg-white p-[26px]"
         >
-          <div
-            className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 ${tagColorFilter(
-              'background',
-              el?.type?.toLowerCase(),
-            )}`}
-          >
-            <HiTemplate
-              className={`${tagColorFilter('icon', el?.type?.toLowerCase())}`}
-            />
-            <div className="text-xs font-semibold text-gray3">
-              {typeFilter(el?.type?.toLowerCase())}
-            </div>
-          </div>
-
-          <div className="text-base font-bold text-gray2">{el?.title}</div>
-
-          {!isRoadmap && (
-            <div className="flex w-fit items-center gap-1">
-              <img src="/icons/roadmap.svg" />
+          <div>
+            <div
+              className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 ${tagColorFilter(
+                'background',
+                el?.type?.toLowerCase(),
+              )}`}
+            >
+              <HiTemplate
+                className={`${tagColorFilter('icon', el?.type?.toLowerCase())}`}
+              />
               <div className="text-xs font-semibold text-gray3">
-                {el?.connectedRoadmap}
+                {typeFilter(el?.type?.toLowerCase())}
               </div>
             </div>
-          )}
+            <div className="mt-3 text-base font-bold text-gray2">
+              {el?.title}
+            </div>
+            {!isRoadmap && (
+              <div className="mt-3 flex w-fit items-center gap-1">
+                <img src="/icons/roadmap.svg" />
+                <div className="text-xs font-semibold text-gray3">
+                  {el?.connectedRoadmap}
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-[10px]">

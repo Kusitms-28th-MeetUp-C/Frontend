@@ -1,29 +1,30 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-import axios from '../libs/api';
 import Roadmap from '../components/Roadmap';
 import PageHeading from '../components/PageHeading';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import TeamEditorModal from '../components/TeamEditorModal';
+import Axios from '../libs/api';
 
 interface StepSectionProps {
-  roadmapDetail: any;
+  stepData: any;
+  team: any;
 }
 
-const StepSection = ({ roadmapDetail }: StepSectionProps) => {
+const StepSection = ({ stepData, team }: StepSectionProps) => {
   return (
     <section className="rounded-2xl bg-white px-6 py-4">
       {/* Step 상단 제목 */}
       <div className="flex justify-between gap-3">
         <div className="flex flex-1 justify-between rounded-2xl bg-tagPurple2 px-3 py-2">
           <span className="text-xl font-semibold">
-            <b className="font-bold">Step {roadmapDetail.step}.</b>&nbsp;
-            {roadmapDetail.title}
+            <b className="font-bold">Step {stepData.step}.</b>&nbsp;
+            {stepData.title}
           </span>
           <div className="flex items-center gap-2">
             <span className="font-semibold">
-              {roadmapDetail.startTime} - {roadmapDetail.endTime}
+              {stepData.startTime} - {stepData.endTime}
             </span>
             <button>
               <img src="/icons/edit-icon.svg" alt="수정 버튼" />
@@ -34,10 +35,21 @@ const StepSection = ({ roadmapDetail }: StepSectionProps) => {
           완료
         </button>
       </div>
-      {/* Step 상세 설명 */}
-      <p className="min-h-40 mt-4 px-5 leading-8 text-neutral-600">
-        {roadmapDetail.introduction}
-      </p>
+      {/* Step의 템플릿 리스트 */}
+      <ul>
+        {stepData.templateList.map((template: any) => (
+          <li
+            key={template.templateId}
+            className="ml-6 mt-5 list-disc text-lg text-gray-600 underline"
+          >
+            <Link
+              to={`/meeting/${team.teamId}/template/${template.templateId}?team=${team.title}&roadmap=${team.roadmap.title}`}
+            >
+              {template.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };
@@ -67,20 +79,13 @@ const MeetingDetail = () => {
   useEffect(() => {
     if (!meetingId) return;
     setLoading(true);
-    axios
-      .get(`/team/${meetingId}`, {
-        headers: { Authorization: localStorage.getItem('accessToken') },
-      })
+    Axios.get(`/team/${meetingId}`)
       .then((res) => {
         setTeam(res.data.data);
       })
       .catch((err: any) => setError(err))
       .finally(() => setLoading(false));
   }, [meetingId]);
-
-  useEffect(() => {
-    team && console.log(team);
-  }, [team]);
 
   useEffect(() => {
     if (team) {
@@ -92,6 +97,7 @@ const MeetingDetail = () => {
         teamSpace2: team.teamSpaceList[1] ? team.teamSpaceList[1].url : '',
         teamSpace3: team.teamSpaceList[2] ? team.teamSpaceList[2].url : '',
       });
+      console.log(team);
     }
   }, [team]);
 
@@ -147,10 +153,11 @@ const MeetingDetail = () => {
             <Roadmap data={team.roadmap.roadmapDetailList} />
           </section>
           {/* Step 섹션 모음 */}
-          {team.roadmap.roadmapDetailList.map((roadmapDetail: any) => (
+          {team.roadmap.roadmapDetailList.map((stepData: any) => (
             <StepSection
-              key={roadmapDetail.stepId}
-              roadmapDetail={roadmapDetail}
+              key={stepData.stepId}
+              stepData={stepData}
+              team={team}
             />
           ))}
         </div>
