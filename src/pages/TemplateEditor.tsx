@@ -3,6 +3,7 @@ import ReactQuill from 'react-quill';
 import TurndownService from 'turndown';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import axios from '../libs/api';
 
 interface RoundedBoxProps {
   color?: string;
@@ -74,18 +75,68 @@ const ActionButton = ({
 };
 
 const TemplateEditor = () => {
-  const [content, setContent] = useState('');
   const [rawContent, setRawContent] = useState('');
+  const [error, setError] = useState(null);
+  const [values, setValues] = useState<any>({
+    title: '',
+    content: '',
+    introduction: '',
+    templateType: 'club',
+  });
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const handleEditorSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (
+      values.title === '' ||
+      values.content === '' ||
+      values.introduction === '' ||
+      values.templateType === ''
+    ) {
+      console.log('모든 항목을 입력해주세요.');
+      setErrorMessage('모든 항목을 입력해주세요.');
+      return;
+    }
+    axios({
+      method: 'POST',
+      url: '/manage/template',
+      headers: {
+        Authorization: localStorage.getItem('accessToken'),
+      },
+      data: {
+        ...values,
+        estimatedTime: 30,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => setError(err));
+  };
 
   useEffect(() => {
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(rawContent);
-    setContent(markdown);
-    console.log(content);
+    setValues({ ...values, content: markdown });
   }, [rawContent]);
 
+  useEffect(() => {
+    setErrorMessage('');
+  }, [values]);
+
+  if (error) {
+    return (
+      <div className="px-14 py-12">
+        <div>에러 발생</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-8 px-14 py-12">
+    <form
+      onSubmit={handleEditorSubmit}
+      className="flex flex-col gap-8 px-14 py-12"
+    >
       {/* 글 작성 영역 */}
       <div className="flex flex-col space-y-5">
         {/* 제목 */}
@@ -111,6 +162,10 @@ const TemplateEditor = () => {
             <RoundedBox>
               <input
                 type="text"
+                value={values.title}
+                onChange={(e) =>
+                  setValues({ ...values, title: e.target.value })
+                }
                 placeholder="제목을 입력해주세요."
                 className="w-full bg-inherit outline-none"
               />
@@ -132,21 +187,31 @@ const TemplateEditor = () => {
             {/* 템플릿 설명 입력 상자 */}
             <RoundedBox>
               <textarea
+                value={values.introduction}
+                onChange={(e) =>
+                  setValues({ ...values, introduction: e.target.value })
+                }
                 placeholder="템플릿의 설명을 입력해주세요."
                 className="w-full resize-none bg-inherit outline-none"
                 rows={5}
               />
             </RoundedBox>
           </div>
+          {}
         </div>
       </div>
       {/* 버튼 영역 */}
       <div className="flex justify-center">
-        <div className="flex flex-col gap-5">
-          <ActionButton color="blue1">작성 완료</ActionButton>
+        <div className="flex flex-col items-center gap-5">
+          {errorMessage && (
+            <span className="font-bold text-red-500">{errorMessage}</span>
+          )}
+          <ActionButton type="submit" color="blue1">
+            작성 완료
+          </ActionButton>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
