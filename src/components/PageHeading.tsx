@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 import FilterItem from './FilterItem';
+import TeamEditorModal from './TeamEditorModal';
 
 interface PageHeadingProps {
   title: string;
@@ -7,6 +10,16 @@ interface PageHeadingProps {
 }
 
 const PageHeading = ({ title, previous, hasFilter }: PageHeadingProps) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [teamEditValues, setTeamEditValues] = useState<any>({
+    teamName: '',
+    teamCategory: '',
+    teamGoal: '',
+    teamSpace1: '',
+    teamSpace2: '',
+    teamSpace3: '',
+  });
+
   return (
     <>
       {/* 제목 섹션 */}
@@ -26,8 +39,17 @@ const PageHeading = ({ title, previous, hasFilter }: PageHeadingProps) => {
           <FilterItem>경영정보시스템 c팀</FilterItem>
           <FilterItem>팀명</FilterItem>
           <FilterItem>팀명</FilterItem>
-          <FilterItem>+</FilterItem>
+          <FilterItem onClick={() => setIsModalOpen(true)}>+</FilterItem>
         </div>
+      )}
+      {/* 팀 생성 모달 */}
+      {isModalOpen && (
+        <TeamEditorModal
+          teamName="새로운"
+          setIsOpen={() => setIsModalOpen(false)}
+          values={teamEditValues}
+          setValues={setTeamEditValues}
+        />
       )}
     </>
   );

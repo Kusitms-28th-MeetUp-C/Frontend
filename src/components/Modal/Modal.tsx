@@ -19,7 +19,7 @@ const Modal = ({
 }: ModalProps) => {
   return (
     <div
-      className="z-100 fixed left-0 top-0 flex h-full w-full items-center justify-center"
+      className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center"
       style={{ background: 'rgba(57, 57, 72, 0.60)' }}
     >
       <div

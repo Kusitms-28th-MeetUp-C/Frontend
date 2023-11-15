@@ -172,8 +172,8 @@ const Management = () => {
       .get('/manage/template/team', {
         params: {
           templateId: 1,
-          roadmapTitle: '홍민서 로드맵',
-          teamTitle: '미팅남녀',
+          roadmapTitle: '경영정보시스템 로드맵',
+          teamTitle: '큐시즘',
         },
         headers: {
           Authorization: localStorage.getItem('accessToken'),

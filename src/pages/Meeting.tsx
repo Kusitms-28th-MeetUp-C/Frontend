@@ -9,19 +9,24 @@ import SectionHeadingContent from '../components/SectionHeadingContent';
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get('/team', {
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      })
+    axios({
+      method: 'GET',
+      url: '/team',
+      headers: {
+        Authorization: localStorage.getItem('accessToken'),
+      },
+    })
       .then((res) => {
         setTeamList(res.data.data.teamList);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -29,6 +34,14 @@ const Meeting = () => {
     return (
       <div className="px-14 py-12">
         <div>로딩 중...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="px-14 py-12">
+        <div>에러 발생</div>
       </div>
     );
   }
@@ -47,19 +60,23 @@ const Meeting = () => {
                 title={team.teamInfo.title}
                 subtitle={team.teamInfo.teamType}
               />
-              <Link
-                to={`/meeting/${team.teamInfo.teamId}`}
-                className="rounded-full bg-indigo-600 px-5 py-2 font-bold text-white"
-              >
-                스페이스 바로가기
-              </Link>
+              {team.teamRoadmap && (
+                <Link
+                  to={`/meeting/${team.teamInfo.teamId}`}
+                  className="rounded-full bg-indigo-600 px-5 py-2 font-bold text-white"
+                >
+                  스페이스 바로가기
+                </Link>
+              )}
             </div>
           </section>
           {/* 로드맵 섹션 */}
-          <Roadmap
-            data={team.teamRoadmap.roadmapDetailList}
-            className="mt-6 rounded-2xl bg-white py-8"
-          />
+          {team.teamRoadmap && (
+            <Roadmap
+              data={team.teamRoadmap.roadmapDetailList}
+              className="mt-6 rounded-2xl bg-white py-8"
+            />
+          )}
         </div>
       ))}
     </div>
