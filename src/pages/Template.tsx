@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from '../libs/api';
-import { Link } from 'react-router-dom';
+import { FaQuestion } from 'react-icons/fa6';
 
 import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
 import TemplateItems from '../components/Search/TemplateItems';
 import Pagination from '../components/Search/Pagination';
+import { tagColorFilter } from '../libs/utils/filter';
 
 interface TemplateProps {
   MoveToTop: () => void;
@@ -17,7 +18,6 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   const [listData, setListData] = useState<any[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchTemplate = () => {
     axios
@@ -33,11 +33,6 @@ const Template = ({ MoveToTop }: TemplateProps) => {
       .catch((err) => console.error(err));
   };
 
-  // const MoveToTop = () => {
-  //   containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  //   console.log('실행');
-  // };
-
   useEffect(() => {
     fetchTemplate();
   }, [templateType, page, title]);
@@ -48,18 +43,19 @@ const Template = ({ MoveToTop }: TemplateProps) => {
 
   return (
     <div className="px-[56px] py-[45px]">
-      <div className="text-[28px] font-extrabold text-black">
-        {'회의록 템플릿'}
-      </div>
-      <div className="mb-6 flex items-center gap-3">
-        <Search setTitle={setTitle} />
-        <Link
-          to="/template/create"
-          className="rounded-xl bg-blue1 px-4 py-2 text-sm font-medium text-white"
+      <div className="mb-7 flex cursor-pointer items-center gap-[10px]">
+        <div
+          className="text-[28px] font-bold text-gray1"
+          onClick={() => console.log(tagColorFilter('background', 'marketing'))}
         >
-          템플릿 제작하기
-        </Link>
+          회의록 템플릿
+        </div>
+        <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white">
+          <FaQuestion className="text-[10px] text-blue2" />
+        </div>
       </div>
+
+      <Search setTitle={setTitle} />
       <Filter type={templateType} setType={setTemplateType} />
       <TemplateItems data={listData} />
       <Pagination

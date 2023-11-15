@@ -1,5 +1,7 @@
 import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
-import { GoHomeFill } from 'react-icons/go';
+import { TbLogout } from 'react-icons/tb';
+import { RiPencilFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import ChatList from '../Chat/ChatList';
 import ChatRoom from '../Chat/ChatRoom';
@@ -23,28 +25,12 @@ const TopNavBar = () => {
       </div>
       <div className="flex items-center gap-3">
         <Link
-          to="#"
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
-          // 임시로 로그아웃 버튼기능 추가
-          onClick={() => {
-            localStorage.setItem('access-token', '');
-            setLoginState({});
-            console.log(loginState);
-          }}
+          to="/template/create"
+          className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
         >
-          <GoHomeFill className="text-2xl text-gray3" />
+          <div className="text-sm font-semibold">템플릿 업로드</div>
+          <RiPencilFill className="text-sm" />
         </Link>
-
-        <button
-          className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
-            isOpenChat
-              ? 'bg-[#606DE9] text-white'
-              : 'bg-[#EBEEF9] text-[#495565]'
-          }`}
-          onClick={() => setIsOpenChat((prev) => !prev)}
-        >
-          <BsFillChatFill className="text-xl" />
-        </button>
 
         <Link
           to={loginState.isLogin ? '/my-profile' : '/login'}
@@ -61,6 +47,31 @@ const TopNavBar = () => {
             {loginState.isLogin ? `${loginState.name || '이름없음'}` : '로그인'}
           </div>
         </Link>
+
+        <button
+          className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
+            isOpenChat
+              ? 'bg-[#606DE9] text-white'
+              : 'bg-[#EBEEF9] text-[#495565]'
+          }`}
+          onClick={() => setIsOpenChat((prev) => !prev)}
+        >
+          <BsFillChatFill className="text-xl" />
+        </button>
+
+        {loginState.isLogin && (
+          <Link
+            to="#"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
+            onClick={() => {
+              localStorage.setItem('access-token', '');
+              setLoginState({});
+              console.log(loginState);
+            }}
+          >
+            <TbLogout className="text-2xl text-gray3" />
+          </Link>
+        )}
       </div>
       {isOpenChat && (
         <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">

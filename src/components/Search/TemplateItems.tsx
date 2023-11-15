@@ -1,8 +1,10 @@
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { BiTimeFive } from 'react-icons/bi';
+import { HiTemplate } from 'react-icons/hi';
+
 import { MdNavigateNext } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
-import { typeFilter } from '../../libs/utils/filter';
+import { tagColorFilter, typeFilter } from '../../libs/utils/filter';
 
 interface TemplateItemsProps {
   data: any[];
@@ -19,29 +21,39 @@ const TemplateItems = ({ data }: TemplateItemsProps) => {
           to={`${currentPath}/${el?.templateId}`}
           key={el?.templateId}
           id={el?.templateId.toString()}
-          className="flex w-[355px] flex-col rounded-2xl bg-white p-[26px]"
+          className="flex w-[355px] flex-col gap-5 rounded-[20px] bg-white p-[26px]"
         >
-          <div className="color-[#495565] mb-[10px] text-[12px]">
-            {typeFilter(el?.templateType)}
+          <div
+            className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 bg-${tagColorFilter(
+              'background',
+              el?.templateType?.toLowerCase(),
+            )}`}
+          >
+            <HiTemplate
+              className={`text-${tagColorFilter(
+                'icon',
+                el?.templateType?.toLowerCase(),
+              )}`}
+            />
+            <div className="text-xs font-semibold text-gray3">
+              {typeFilter(el?.templateType?.toLowerCase())}
+            </div>
           </div>
-          <div className="color-[#393948] mb-4 text-base font-bold">
-            {el?.title}
-          </div>
-          <div className="mb-6 flex w-fit items-center gap-1 rounded-full bg-[#EEEEFB] px-2.5 py-[3px] text-[12px] font-semibold text-[#495565]">
-            <img src="/icons/category-purple.svg" />
-            <div>{el?.connectedRoadmap}</div>
+
+          <div className="text-base font-bold text-gray2">{el?.title}</div>
+          <div className="flex w-fit items-center gap-1">
+            <img src="/icons/roadmap.svg" />
+            <div className="text-xs font-semibold text-gray3">
+              {el?.connectedRoadmap}
+            </div>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-[10px]">
-              <FaPeopleGroup
-                style={{ width: '20px', height: '20px', color: '#5A5A5A' }}
-              />
+              <FaPeopleGroup className="text-xl text-tagSkyblue1" />
               <div className="mr-[10px] text-[14px] font-semibold text-[#8A929F]">
                 {el?.count}팀 사용 중
               </div>
-              <BiTimeFive
-                style={{ width: '20px', height: '20px', color: '#5A5A5A' }}
-              />
+              <BiTimeFive className="text-tagLightPurple1 text-xl" />
               <div className="text-[14px] font-semibold text-[#8A929F]">
                 {el?.estimatedTime}m
               </div>

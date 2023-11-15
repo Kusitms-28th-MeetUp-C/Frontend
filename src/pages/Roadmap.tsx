@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Search from '../components/Search/Search';
 import RoadmapItems from '../components/Search/RoadmapItems';
 import Pagination from '../components/Search/Pagination';
+import { FaQuestion } from 'react-icons/fa6';
 
 interface RoadmapProps {
   MoveToTop: () => void;
@@ -39,9 +40,17 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
 
   return (
     <div className="px-[56px] py-[45px]">
-      <div className="text-[28px] font-extrabold text-black">
-        {'회의 로드맵'}
+      <div className="mb-7 flex items-center gap-[10px]">
+        <div
+          className="text-[28px] font-bold text-gray1"
+        >
+          회의록 템플릿
+        </div>
+        <div className="cursor-pointer flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white">
+          <FaQuestion className="text-[10px] text-blue2" />
+        </div>
       </div>
+
       <div className="mb-6">
         <Search setTitle={setTitle} />
       </div>

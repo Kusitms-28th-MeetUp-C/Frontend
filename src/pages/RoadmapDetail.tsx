@@ -94,6 +94,7 @@ const RoadmapDetail = () => {
           <Maker data={userData} />
         </div>
       </div>
+      
       {isOpenTeamModal && (
         <Modal
           title="사용할 팀을 골라주세요"

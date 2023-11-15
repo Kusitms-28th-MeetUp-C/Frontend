@@ -29,7 +29,7 @@ const KakaoLogin = () => {
         )
         .then((res) => {
           console.log(res);
-          // navigate('/');
+          navigate('/');
           Axios.post(
             'user/signIn',
             {
