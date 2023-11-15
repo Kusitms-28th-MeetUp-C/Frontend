@@ -27,46 +27,46 @@ export const tagColorFilter = (option: string, type: string) => {
   if (option === 'icon') {
     switch (type) {
       case 'it':
-        return 'tagPurple1';
+        return 'text-tagPurple1';
       case 'team':
-        return 'tagGreen1';
+        return 'text-tagGreen1';
       case 'club':
-        return 'tagSkyblue1';
+        return 'text-tagSkyblue1';
       case 'pt':
-        return 'tagOrange1';
+        return 'text-tagOrange1';
       case 'marketing':
-        return 'tagYellow1';
+        return 'text-tagYellow1';
       case 'survey_data_analysis':
-        return 'tagPink1';
+        return 'text-tagPink1';
       case 'corporate_analysis':
-        return 'tagBlue1';
+        return 'text-tagBlue1';
       case 'design':
-        return 'tagKhaki1';
+        return 'text-tagKhaki1';
       case 'video':
-        return 'tagRed1';
+        return 'text-tagRed1';
     }
   }
 
   if (option === 'background') {
     switch (type) {
       case 'it':
-        return 'tagPurple2';
+        return 'bg-tagPurple2';
       case 'team':
-        return 'tagGreen2';
+        return 'bg-tagGreen2';
       case 'club':
-        return 'tagSkyblue2';
+        return 'bg-tagSkyblue2';
       case 'pt':
-        return 'tagOrange2';
+        return 'bg-tagOrange2';
       case 'marketing':
-        return 'tagYellow2';
+        return 'bg-tagYellow2';
       case 'survey_data_analysis':
-        return 'tagPink2';
+        return 'bg-tagPink2';
       case 'corporate_analysis':
-        return 'tagBlue2';
+        return 'bg-tagBlue2';
       case 'design':
-        return 'tagKhaki2';
+        return 'bg-tagKhaki2';
       case 'video':
-        return 'tagRed2';
+        return 'bg-tagRed2';
     }
   }
 };

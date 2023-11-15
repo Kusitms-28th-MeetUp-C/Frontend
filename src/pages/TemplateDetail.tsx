@@ -7,7 +7,6 @@ import UseBtn from '../components/SearchDetail/UseBtn';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Axios from '../libs/api';
-import { UserData, MainData } from '../interfaces/TemplateDetail';
 import Modal from '../components/Modal/Modal';
 import Title from '../components/Common/Title';
 import BackBtn from '../components/SearchDetail/BackBtn';
@@ -25,7 +24,7 @@ const TemplateDetail = () => {
 
   const onSubmitAlertModal = () => {
     setIsOpenAlertModal(false);
-    navigate('/my-items');
+    navigate('/management');
   };
 
   const fetchData = async () => {
@@ -46,8 +45,15 @@ const TemplateDetail = () => {
       .catch((err) => console.error(err));
   };
 
-  const onClickUseBtn = () => {
-    setIsOpenAlertModal(true);
+  const onClickUseBtn = async () => {
+    await Axios.post('template/save/user', {
+      templateId,
+    })
+      .then((res) => {
+        console.log(res);
+        setIsOpenAlertModal(true);
+      })
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -72,6 +78,8 @@ const TemplateDetail = () => {
           <Maker data={userData} />
         </div>
       </div>
+
+      {/* 모달창 */}
       {isOpenAlertModal && (
         <Modal
           title="템플릿을 저장했어요!"

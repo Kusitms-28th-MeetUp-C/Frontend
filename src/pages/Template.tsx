@@ -4,7 +4,7 @@ import { FaQuestion } from 'react-icons/fa6';
 
 import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
-import TemplateItems from '../components/Search/TemplateItems';
+import ListItems from '../components/Search/ListItems';
 import Pagination from '../components/Search/Pagination';
 import { tagColorFilter } from '../libs/utils/filter';
 
@@ -57,7 +57,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
 
       <Search setTitle={setTitle} />
       <Filter type={templateType} setType={setTemplateType} />
-      <TemplateItems data={listData} />
+      <ListItems data={listData} />
       <Pagination
         page={page}
         setPage={setPage}

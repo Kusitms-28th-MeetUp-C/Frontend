@@ -64,7 +64,7 @@ const RoadmapDetail = () => {
 
   const onSubmitAlertModal = () => {
     setIsOpenAlertModal(false);
-    navigate('/my-items');
+    navigate('/meeting');
   };
 
   const onClickUseBtn = () => {
@@ -94,7 +94,7 @@ const RoadmapDetail = () => {
           <Maker data={userData} />
         </div>
       </div>
-      
+
       {isOpenTeamModal && (
         <Modal
           title="사용할 팀을 골라주세요"
@@ -134,6 +134,8 @@ const RoadmapDetail = () => {
           </div>
         </Modal>
       )}
+
+      {/* 모달창 */}
       {isOpenAlertModal && (
         <Modal
           title="로드맵을 저장했어요!"
