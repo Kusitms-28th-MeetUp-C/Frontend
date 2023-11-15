@@ -8,12 +8,27 @@ import ChatRoom from '../Chat/ChatRoom';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
+import Axios from '../../libs/api';
+import Modal from '../Modal/Modal';
 
 const TopNavBar = () => {
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
+  const [isClickLogout, setIsClickLogout] = useState(false);
 
   const [loginState, setLoginState] = useRecoilState(LoginState);
+
+  const onClickLogout = async () => {
+    await Axios.patch('user/signOut')
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem('access-token', '');
+        setLoginState({});
+        delete Axios.defaults.headers.common['Authorization'];
+        setIsClickLogout(false);
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <div className="flex h-[65px] items-center justify-between bg-white px-8">
@@ -60,19 +75,15 @@ const TopNavBar = () => {
         </button>
 
         {loginState.isLogin && (
-          <Link
-            to="#"
+          <button
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
-            onClick={() => {
-              localStorage.setItem('access-token', '');
-              setLoginState({});
-              console.log(loginState);
-            }}
+            onClick={() => setIsClickLogout((prev) => !prev)}
           >
             <TbLogout className="text-2xl text-gray3" />
-          </Link>
+          </button>
         )}
       </div>
+
       {isOpenChat && (
         <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
           {!isOpenChatRoom ? (
@@ -84,6 +95,16 @@ const TopNavBar = () => {
             />
           )}
         </div>
+      )}
+
+      {isClickLogout && (
+        <Modal
+          title="정말 로그아웃 하시겠습니까?"
+          setIsOpen={setIsClickLogout}
+          onSubmit={onClickLogout}
+          cancel="취소"
+          submit="확인"
+        />
       )}
     </div>
   );
