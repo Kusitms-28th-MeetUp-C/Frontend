@@ -1,10 +1,14 @@
 import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import React from 'react';
+import Socket from './Socket';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../../states/LoginState';
 
-interface ChatListProps {
-  setIsOpenChatRoom: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface ChatListProps {
+//   setIsOpenChatRoom: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
 const ListContainer = styled.div`
   display: flex;
@@ -42,7 +46,11 @@ const ListContainer = styled.div`
   }
 `;
 
-const ChatList = ({ setIsOpenChatRoom }: ChatListProps) => {
+const ChatList = ({ setIsOpenChatRoom }) => {
+  // const { publish, subscribe } = Socket();
+  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [chatList, setChatList] = useState([]);
+
   const list = [
     {
       name: '신민선',
@@ -93,6 +101,27 @@ const ChatList = ({ setIsOpenChatRoom }: ChatListProps) => {
       uncheckedNum: 1,
     },
   ];
+
+  // useEffect(() => {
+  //   publish({
+  //     option: 'list',
+  //     fromUserName: loginState.name,
+  //   });
+  //   // subscribe({ option: 'list', setChatList: setChatList });
+  // }, []);
+
+  // const onClickList = () => {
+  //   // publish({
+  //   //   option: 'detail',
+  //   //   chatSession: 3,
+  //   //   fromUserName: loginState.name,
+  //   //   toUserName: "류관곤"
+  //   // });
+  //   publish({
+  //     option: 'list',
+  //     fromUserName: loginState.name,
+  //   });
+  // };
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden py-7 pl-6 pr-3">

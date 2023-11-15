@@ -3,8 +3,8 @@ import { TbLogout } from 'react-icons/tb';
 import { RiPencilFill } from 'react-icons/ri';
 
 import { Link } from 'react-router-dom';
-import ChatList from '../Chat/ChatList';
-import ChatRoom from '../Chat/ChatRoom';
+import ChatList from '../Chat/ChatList.jsx';
+import ChatRoom from '../Chat/ChatRoom.jsx';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';

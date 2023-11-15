@@ -18,7 +18,7 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchRoadmap = async () => {
-    await Axios.post(`/roadmap/?page=${page}`, {
+    await Axios.post(`/roadmap?page=${page}`, {
       roadmapType,
       title,
     })

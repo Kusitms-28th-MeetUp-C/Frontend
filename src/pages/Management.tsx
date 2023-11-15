@@ -138,12 +138,9 @@ const RightSectionListItem = ({ children }: RightSectionListItemProps) => {
 
 const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
   const handleOnSubmit = () => {
-    axios({
+    Axios({
       method: 'POST',
       url: '/manage/template/review',
-      headers: {
-        Authorization: localStorage.getItem('accessToken'),
-      },
       data: {
         ...values,
       },
@@ -232,14 +229,13 @@ const Management = () => {
 
   useEffect(() => {
     setLoading(true);
-    Axios
-      .get('/manage/template/team', {
-        params: {
-          templateId: 1,
-          roadmapTitle: '경영정보시스템 로드맵',
-          teamTitle: '큐시즘',
-        },
-      })
+    Axios.get('/manage/template/team', {
+      params: {
+        templateId: 1,
+        roadmapTitle: '경영정보시스템 로드맵',
+        teamTitle: '큐시즘',
+      },
+    })
       .then((res) => {
         setData(res.data.data);
       })

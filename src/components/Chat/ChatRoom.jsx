@@ -1,10 +1,10 @@
 import { BsFillPersonFill, BsSend } from 'react-icons/bs';
 import styled from 'styled-components';
 
-interface ChatRoomProps {
-  isOpenChatRoom: boolean;
-  setIsOpenChatRoom: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface ChatRoomProps {
+//   isOpenChatRoom: boolean;
+//   setIsOpenChatRoom: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
 const BubbleContainer = styled.div`
   display: flex;
@@ -44,7 +44,7 @@ const BubbleContainer = styled.div`
   }
 `;
 
-const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }: ChatRoomProps) => {
+const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
   const messages = [
     {
       text: '신민선 PM님 안녕하세요, 올려주신 템플릿 잘 보았습니다. 궁금한 것 이 있어서 연락드려요. 이번에 템플릿 직접 만드신 건가요? 저한테만 알려주세요.',

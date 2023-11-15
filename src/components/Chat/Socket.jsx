@@ -1,13 +1,10 @@
 import * as StompJs from '@stomp/stompjs';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useEffect } from 'react';
 
-function Socket() {
-  const [chat, setChat] = useState('');
-  const [chatList, setChatList] = useState([]);
+const Socket = () => {
   const client = useRef({});
-  const myToken =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMCIsImlhdCI6MTY5OTg5MjU2NCwiZXhwIjoxNzE3ODkyNTY0fQ.Jhj-Ih83gqcVF1cGBs0zCowwAHiyX3nC-sQ_uk3Hu7A';
-  const sessionId = 10;
+  const myToken = localStorage.getItem('access-token');
+  const sessionId = 11;
 
   const connect = () => {
     console.log('connect 실행');
@@ -27,28 +24,50 @@ function Socket() {
     client.current.activate();
   };
 
-  const publish = (chat) => {
+  const publish = ({ option, chat, chatSession, toUserName, fromUserName }) => {
     console.log('publish 실행');
-
-    if (!client.current.connected) return;
+    // if (!client.current.connected) return;
+    console.log('ddd');
 
     const headers = {
       Authorization: `Bearer ${myToken}`,
     };
 
-    client.current.publish({
-      headers,
-      destination: '/pub/chat',
-      body: JSON.stringify({
-        meetingId: 1,
-        messageType: 'emoji',
-        message: chat,
-      }),
-    });
-    setChat('');
+    if (option === 'list') {
+      console.log('list 맞음');
+      client.current.publish({
+        headers,
+        destination: `/pub/chatList`,
+        body: JSON.stringify({
+          userName: fromUserName,
+        }),
+      });
+    }
+
+    if (option === 'detail') {
+      client.current.publish({
+        headers,
+        destination: `/pub/chat/detail`,
+        body: JSON.stringify({
+          chatSession,
+          fromUserName,
+          toUserName,
+        }),
+      });
+    }
+
+    if (option === 'chat') {
+      client.current.publish({
+        headers,
+        destination: `/pub/chatList/${fromUserName}`,
+        body: JSON.stringify({
+          userName: fromUserName,
+        }),
+      });
+    }
   };
 
-  const subscribe = () => {
+  const subscribe = ({ option, setChatList }) => {
     console.log('subscribe 실행');
     const headers = {
       Authorization: `Bearer ${myToken}`,
@@ -57,11 +76,23 @@ function Socket() {
     client.current.subscribe(
       `/sub/chat/${sessionId}`,
       (body) => {
-        const json_body = JSON.parse(body.body);
-        setChatList((_chat_list) => [..._chat_list, json_body]);
+        console.log('subscribe 받아와짐');
+        console.log(body.body);
       },
       headers,
     );
+
+    // if (option === 'list') {
+    //   client.current.subscribe(
+    //     `/sub/chat/${sessionId}`,
+    //     (body) => {
+    //       console.log(body.body);
+    //       const json_body = JSON.parse(body.body);
+    //       setChatList((list) => [...list, json_body]);
+    //     },
+    //     headers,
+    //   );
+    // }
   };
 
   const disconnect = () => {
@@ -72,8 +103,11 @@ function Socket() {
 
   useEffect(() => {
     connect();
+    publish({ option: 'list' });
   }, []);
 
+  // return { publish, connect, subscribe, disconnect };
   return <></>;
-}
+};
+
 export default Socket;
