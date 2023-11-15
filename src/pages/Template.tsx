@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from '../libs/api';
+import Axios from '../libs/api';
 import { FaQuestion } from 'react-icons/fa6';
 
 import Filter from '../components/Search/Filter';
@@ -20,11 +20,10 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchTemplate = () => {
-    axios
-      .post(`/template/?page=${page}`, {
-        templateType,
-        title,
-      })
+    Axios.post(`/template`, {
+      templateType,
+      title,
+    })
       .then((res) => {
         console.log(res.data.data);
         setListData([...res.data.data.content]);

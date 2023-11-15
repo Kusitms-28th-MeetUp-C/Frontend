@@ -15,6 +15,7 @@ import LoginPage from './pages/Login';
 import GoogleLogin from './pages/GoogleLogin';
 import KakaoLogin from './pages/KakaoLogin';
 import TemplateEditor from './pages/TemplateEditor';
+import TemplateSearch from './pages/TemplateSearch';
 
 const Router = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,7 +24,7 @@ const Router = () => {
     containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     console.log('실행');
   };
-  
+
   return (
     <BrowserRouter>
       <Layout containerRef={containerRef}>
@@ -36,7 +37,10 @@ const Router = () => {
           </Route>
           <Route path="/meeting">
             <Route path="" element={<Meeting />} />
-            <Route path=":meetingId" element={<MeetingDetail />} />
+            <Route path=":meetingId">
+              <Route path="" element={<MeetingDetail />} />
+              <Route path="template/:templateId" element={<Management />} />
+            </Route>
           </Route>
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/template">
@@ -49,6 +53,7 @@ const Router = () => {
             <Route path=":roadmapId" element={<RoadmapDetail />} />
           </Route>
           <Route path="/management" element={<Management />} />
+          <Route path="/search-template" element={<TemplateSearch />} />
         </Routes>
       </Layout>
     </BrowserRouter>
