@@ -1,8 +1,9 @@
-import { BiSolidTimeFive } from 'react-icons/bi';
 import { FaPeopleGroup } from 'react-icons/fa6';
+import { BiTimeFive } from 'react-icons/bi';
 import { GrNext } from 'react-icons/gr';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+
 
 interface MoreItemsProps {
   isRoadmap?: boolean;
@@ -47,7 +48,7 @@ const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
 
               {!isRoadmap && (
                 <div className="flex items-center gap-1">
-                  <BiSolidTimeFive className="text-tagPurple1" />
+                  <BiTimeFive className="text-tagLightPurple1" />
                   <div className="text-xs font-semibold text-gray3">
                     {el.estimatedTime}m
                   </div>

@@ -2,8 +2,9 @@ import Filter from '../components/Search/Filter';
 import Axios from '../libs/api';
 import { useState, useEffect } from 'react';
 import Search from '../components/Search/Search';
-import RoadmapItems from '../components/Search/RoadmapItems';
 import Pagination from '../components/Search/Pagination';
+import { FaQuestion } from 'react-icons/fa6';
+import ListItems from '../components/Search/ListItems';
 
 interface RoadmapProps {
   MoveToTop: () => void;
@@ -17,7 +18,7 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchRoadmap = async () => {
-    await Axios.post(`/roadmap/get?page=${page}`, {
+    await Axios.post(`/roadmap`, {
       roadmapType,
       title,
     })
@@ -39,14 +40,18 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
 
   return (
     <div className="px-[56px] py-[45px]">
-      <div className="text-[28px] font-extrabold text-black">
-        {'회의 로드맵'}
+      <div className="mb-7 flex items-center gap-[10px]">
+        <div className="text-[28px] font-bold text-gray1">로드맵 템플릿</div>
+        <div className="flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-white">
+          <FaQuestion className="text-[10px] text-blue2" />
+        </div>
       </div>
+
       <div className="mb-6">
         <Search setTitle={setTitle} />
       </div>
       <Filter type={roadmapType} setType={setRaodmapType} />
-      <RoadmapItems data={listData} />
+      <ListItems isRoadmap data={listData} />
       <Pagination
         page={page}
         setPage={setPage}

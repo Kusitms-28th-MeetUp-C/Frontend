@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { TbLogout } from 'react-icons/tb';
 import { FaCompass } from 'react-icons/fa';
 import { MdNavigateNext } from 'react-icons/md';
 
@@ -86,14 +85,14 @@ const SideNavTest = () => {
         <SectionTitle isSearch>탐색</SectionTitle>
         <List>
           <ListItem to="/template">회의록 템플릿</ListItem>
-          <ListItem to="/roadmap">회의 로드맵</ListItem>
+          <ListItem to="/roadmap">로드맵 템플릿</ListItem>
         </List>
       </div>
       <div>
         <SectionTitle>관리</SectionTitle>
         <List>
-          <ListItem to="/meeting">나의 회의 관리</ListItem>
-          <ListItem to="/management">내 회의록, 로드맵 관리</ListItem>
+          <ListItem to="/meeting">로드맵 관리</ListItem>
+          <ListItem to="/search-template">회의록 관리</ListItem>
         </List>
       </div>
     </NavBlock>

@@ -3,15 +3,16 @@ import {
   buildStyles,
 } from 'react-circular-progressbar';
 import { FaSchool } from 'react-icons/fa';
-import { HiTemplate } from 'react-icons/hi';
+import { RiPencilFill } from 'react-icons/ri';
 
 import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import axios from '../libs/api';
+import Modal from '../components/Modal/Modal';
+import Axios from '../libs/api';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -39,18 +40,18 @@ interface TeamSpaceNameProps {
   textcolor: string;
 }
 
-interface IconTextProps {
-  text: string;
-  iconUrl: string;
-  iconAlt: string;
-}
-
 interface RightTitleSectionProps {
   children: React.ReactNode;
 }
 
 interface RightSectionListItemProps {
   children: React.ReactNode;
+}
+
+interface ReviewModalProps {
+  values?: any;
+  setValues?: any;
+  setIsOpen: () => void;
 }
 
 const PurpleButton = ({ children }: HeadingButtonProps) => {
@@ -104,17 +105,6 @@ const TeamSpaceLink = ({
   );
 };
 
-const IconText = ({ text, iconUrl, iconAlt }: IconTextProps) => {
-  return (
-    <div className="flex items-center gap-2">
-      <i className="h-4 w-4">
-        <img src={iconUrl} alt={iconAlt} className="w-full" />
-      </i>
-      <span className="text-xs font-medium text-gray3">{text}</span>
-    </div>
-  );
-};
-
 const RightSectionTitle = ({ children }: RightTitleSectionProps) => {
   return (
     <h2 className="mt-7">
@@ -140,10 +130,77 @@ const RightSectionListItem = ({ children }: RightSectionListItemProps) => {
   );
 };
 
+const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
+  const handleOnSubmit = () => {
+    Axios({
+      method: 'POST',
+      url: '/manage/template/review',
+      data: {
+        ...values,
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err))
+      .finally(() => setIsOpen());
+  };
+
+  return (
+    <Modal
+      title="리뷰 작성하기"
+      onSubmit={handleOnSubmit}
+      setIsOpen={setIsOpen}
+      cancel="취소"
+      submit="작성 완료"
+    >
+      <form className="w-full">
+        <label htmlFor="grow" className="block w-full text-xl font-semibold">
+          이 템플릿을 통해 얼마나 성장했나요?
+        </label>
+        <div>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={values.rating}
+            className="w-full"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setValues({ ...values, rating: parseInt(e.target.value) })
+            }
+          />
+        </div>
+        <label
+          htmlFor="content"
+          className="mt-5 block w-full text-xl font-semibold"
+        >
+          이 템플릿을 통해 어떻게 성장할 수 있었나요?
+        </label>
+        <textarea
+          id="content"
+          rows={10}
+          value={values.content}
+          className="mt-3 w-full resize-none rounded-2xl bg-gray7 px-4 py-4 outline-none"
+          placeholder="템플릿에 대한 리뷰를 작성해주세요"
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setValues({ ...values, content: e.target.value })
+          }
+        ></textarea>
+      </form>
+    </Modal>
+  );
+};
+
 const Management = () => {
+  const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [progress] = useState(50);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [values, setValues] = useState<any>({
+    meetingId: 1,
+    content: '',
+    rating: 0,
+  });
 
   const spaceLink: any = {
     NOTION: {
@@ -168,23 +225,28 @@ const Management = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get('/manage/template/team', {
-        params: {
-          templateId: 1,
-          roadmapTitle: '홍민서 로드맵',
-          teamTitle: '미팅남녀',
-        },
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      })
+    if (!searchParams) return;
+    if (!params) return;
+    Axios.get('/manage/template/team', {
+      params: {
+        templateId: params.templateId,
+        roadmapTitle: searchParams.get('roadmap'),
+        teamTitle: searchParams.get('team'),
+      },
+    })
       .then((res) => {
         setData(res.data.data);
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      setValues({ ...values, templateId: data.originalTemplateId });
+    }
+  }, [data]);
 
   if (loading) {
     return (
@@ -199,13 +261,13 @@ const Management = () => {
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex-col space-y-6 px-14 py-12">
         {/* 페이지 제목 */}
-        <PageHeading title={data.templateName} previous="관리" />
+        <PageHeading title={data?.templateName} previous="관리" />
         {/* 헤딩 섹션 */}
         <section className="flex justify-between rounded-2xl bg-white px-6 py-4">
           <div className="flex w-full justify-between">
             <SectionHeadingContent
-              title={data.teamInfo.title}
-              subtitle={data.teamInfo.teamType}
+              title={data?.teamInfo.title}
+              subtitle={data?.teamInfo.teamType}
             />
             <div className="flex gap-5">
               <PurpleButton>원본 데이터 보기</PurpleButton>
@@ -227,9 +289,9 @@ const Management = () => {
         {/* 로드맵 섹션 */}
         <section className="rounded-2xl bg-white py-8">
           <h3 className="mb-5 text-center text-2xl font-bold">
-            {data.roadmapInfo.title}
+            {data?.roadmapInfo.title}
           </h3>
-          <Roadmap data={data.roadmapInfo.roadmapDetailList} />
+          <Roadmap data={data?.roadmapInfo.roadmapDetailList} />
         </section>
         {/* 템플릿 수정 섹션 */}
         <section className="rounded-2xl bg-white px-8 py-8">
@@ -295,7 +357,7 @@ const Management = () => {
         {/* 팀 이름 */}
         <h1 className="mt-5 flex w-full justify-center">
           <div className="flex items-center gap-1 text-xl font-bold">
-            <span>{data.teamInfo.title}</span>
+            <span>{data?.teamInfo.title}</span>
             <i className="h-7 w-7">
               <img
                 src="/icons/edit-icon-black.svg"
@@ -311,11 +373,11 @@ const Management = () => {
             <i className="text-tagPurple1">
               <FaSchool />
             </i>
-            <span className="text-gray-600">{data.teamInfo.teamType}</span>
+            <span className="text-gray-600">{data?.teamInfo.teamType}</span>
           </div>
         </div>
         {/* 팀 스페이스 링크 */}
-        <div className="mt-8 flex justify-center">
+        {/* <div className="mt-8 flex justify-center">
           <div className="flex gap-3">
             {data.teamInfo.spaceList.map((teamSpace: any, index: number) => (
               <TeamSpaceLink
@@ -329,7 +391,7 @@ const Management = () => {
               />
             ))}
           </div>
-        </div>
+        </div> */}
         {/* 회의록 템플릿 */}
         <section>
           <RightSectionTitle>회의록 리스트</RightSectionTitle>
@@ -341,6 +403,26 @@ const Management = () => {
             <RightSectionListItem>최종 기획서 회의</RightSectionListItem>
           </ul>
         </section>
+        {/* 리뷰 작성 버튼 */}
+        <div className="mt-5 flex justify-center">
+          <button
+            className="flex items-center gap-1 rounded-lg bg-blue1 px-6 py-2 font-semibold text-white"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <span>리뷰 남기기</span>
+            <i>
+              <RiPencilFill />
+            </i>
+          </button>
+        </div>
+        {/* 리뷰 작성 모달 */}
+        {isModalOpen && (
+          <ReviewModal
+            values={values}
+            setValues={setValues}
+            setIsOpen={() => setIsModalOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

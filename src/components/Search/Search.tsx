@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { FiSearch } from 'react-icons/fi';
 
 interface SearchProps {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
 }
 
-const Search = ({ setTitle }: SearchProps) => {
+const Search = ({ setTitle, className }: SearchProps) => {
   const [search, setSearch] = useState('');
 
   const onSubmitSearch = (e: React.FormEvent) => {
@@ -15,7 +16,9 @@ const Search = ({ setTitle }: SearchProps) => {
 
   return (
     <form
-      className="flex w-full max-w-[420px] items-center justify-between rounded-full bg-white px-[20px] py-[8px]"
+      className={`mb-7 flex w-full max-w-[550px] items-center justify-between rounded-[20px] bg-white px-[20px] py-[8px]${
+        className ? ` ${className}` : ''
+      }`}
       onSubmit={onSubmitSearch}
     >
       <input
@@ -24,14 +27,7 @@ const Search = ({ setTitle }: SearchProps) => {
         onChange={(e) => setSearch(e.target.value)}
       />
       <button>
-        <AiOutlineSearch
-          style={{
-            cursor: 'pointer',
-            color: '#495565',
-            width: '20px',
-            height: '20px',
-          }}
-        />
+        <FiSearch className="text-lg text-gray3" />
       </button>
     </form>
   );
