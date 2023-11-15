@@ -21,7 +21,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
 
   const fetchTemplate = () => {
     axios
-      .post(`/template/get?page=${page}`, {
+      .post(`/template/?page=${page}`, {
         templateType,
         title,
       })

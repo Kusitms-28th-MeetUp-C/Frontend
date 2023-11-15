@@ -11,7 +11,7 @@ import SectionHeadingContent from '../components/SectionHeadingContent';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import axios from '../libs/api';
+import Axios from '../libs/api';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -168,15 +168,12 @@ const Management = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios
+    Axios
       .get('/manage/template/team', {
         params: {
           templateId: 1,
           roadmapTitle: '홍민서 로드맵',
           teamTitle: '미팅남녀',
-        },
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
         },
       })
       .then((res) => {
