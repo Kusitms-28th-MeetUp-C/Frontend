@@ -20,10 +20,11 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchTemplate = () => {
-    Axios.post(`/template`, {
-      templateType,
-      title,
-    })
+    Axios
+      .post(`/template?page=${page}`, {
+        templateType,
+        title,
+      })
       .then((res) => {
         console.log(res.data.data);
         setListData([...res.data.data.content]);
