@@ -73,7 +73,7 @@ const InfoItem = ({ children, category }: InfoItemProps) => {
 
 const Info = ({ isRoadmap, data }: InfoProps) => {
   return (
-    <div className="w-full rounded-[20px] bg-gray9 p-6">
+    <div className="w-full rounded-[10px] bg-gray9 p-6">
       <div className="mb-7 flex items-center justify-between">
         <div className="text-xl font-bold text-gray1">
           {isRoadmap ? '로드맵 소개' : '템플릿 소개'}

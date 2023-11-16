@@ -39,13 +39,15 @@ const TopNavBar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-3">
-        <Link
-          to="/template/create"
-          className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
-        >
-          <div className="text-sm font-semibold">템플릿 업로드</div>
-          <RiPencilFill className="text-sm" />
-        </Link>
+        {loginState.isLogin && (
+          <Link
+            to="/template/create"
+            className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
+          >
+            <div className="text-sm font-semibold">템플릿 업로드</div>
+            <RiPencilFill className="text-sm" />
+          </Link>
+        )}
 
         <Link
           to={loginState.isLogin ? '/my-profile' : '/login'}
@@ -63,16 +65,18 @@ const TopNavBar = () => {
           </div>
         </Link>
 
-        <button
-          className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
-            isOpenChat
-              ? 'bg-[#606DE9] text-white'
-              : 'bg-[#EBEEF9] text-[#495565]'
-          }`}
-          onClick={() => setIsOpenChat((prev) => !prev)}
-        >
-          <BsFillChatFill className="text-xl" />
-        </button>
+        {loginState.isLogin && (
+          <button
+            className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
+              isOpenChat
+                ? 'bg-[#606DE9] text-white'
+                : 'bg-[#EBEEF9] text-[#495565]'
+            }`}
+            onClick={() => setIsOpenChat((prev) => !prev)}
+          >
+            <BsFillChatFill className="text-xl" />
+          </button>
+        )}
 
         {loginState.isLogin && (
           <button

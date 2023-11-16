@@ -1,5 +1,4 @@
-import axios from '../libs/api';
-
+import Axios from '../libs/api';
 import Modal from '../components/Modal/Modal';
 
 interface TeamEditorModalProps {
@@ -106,13 +105,10 @@ const TeamEditorModal = ({
       ],
     };
 
-    axios({
+    Axios({
       url: '/team',
       data: requestBody,
       method: apiMode === 'edit' ? 'PATCH' : 'POST',
-      headers: {
-        Authorization: localStorage.getItem('accessToken'),
-      },
     })
       .then(() => {
         setIsOpen();

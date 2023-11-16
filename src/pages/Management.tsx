@@ -8,7 +8,7 @@ import { RiPencilFill } from 'react-icons/ri';
 import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Modal from '../components/Modal/Modal';
@@ -38,12 +38,6 @@ interface TeamSpaceLinkBlockProps {
 
 interface TeamSpaceNameProps {
   textcolor: string;
-}
-
-interface IconTextProps {
-  text: string;
-  iconUrl: string;
-  iconAlt: string;
 }
 
 interface RightTitleSectionProps {
@@ -196,6 +190,8 @@ const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
 };
 
 const Management = () => {
+  const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [progress] = useState(50);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -229,11 +225,13 @@ const Management = () => {
 
   useEffect(() => {
     setLoading(true);
+    if (!searchParams) return;
+    if (!params) return;
     Axios.get('/manage/template/team', {
       params: {
-        templateId: 1,
-        roadmapTitle: '경영정보시스템 로드맵',
-        teamTitle: '큐시즘',
+        templateId: params.templateId,
+        roadmapTitle: searchParams.get('roadmap'),
+        teamTitle: searchParams.get('team'),
       },
     })
       .then((res) => {
@@ -379,7 +377,7 @@ const Management = () => {
           </div>
         </div>
         {/* 팀 스페이스 링크 */}
-        <div className="mt-8 flex justify-center">
+        {/* <div className="mt-8 flex justify-center">
           <div className="flex gap-3">
             {data.teamInfo.spaceList.map((teamSpace: any, index: number) => (
               <TeamSpaceLink
@@ -393,7 +391,7 @@ const Management = () => {
               />
             ))}
           </div>
-        </div>
+        </div> */}
         {/* 회의록 템플릿 */}
         <section>
           <RightSectionTitle>회의록 리스트</RightSectionTitle>

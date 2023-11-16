@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import TurndownService from 'turndown';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import axios from '../libs/api';
+import Axios from '../libs/api';
 
 interface RoundedBoxProps {
   color?: string;
@@ -97,7 +97,7 @@ const TemplateEditor = () => {
       setErrorMessage('모든 항목을 입력해주세요.');
       return;
     }
-    axios({
+    Axios({
       method: 'POST',
       url: '/manage/template',
       headers: {
