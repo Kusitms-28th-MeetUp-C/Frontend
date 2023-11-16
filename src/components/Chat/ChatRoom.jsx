@@ -1,10 +1,10 @@
 import { BsFillPersonFill, BsSend } from 'react-icons/bs';
 import styled from 'styled-components';
+import { useEffect, useState, useRef } from 'react';
+import * as StompJs from '@stomp/stompjs';
 
-// interface ChatRoomProps {
-//   isOpenChatRoom: boolean;
-//   setIsOpenChatRoom: React.Dispatch<React.SetStateAction<boolean>>;
-// }
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../../states/LoginState';
 
 const BubbleContainer = styled.div`
   display: flex;
@@ -45,37 +45,112 @@ const BubbleContainer = styled.div`
 `;
 
 const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
-  const messages = [
-    {
-      text: '신민선 PM님 안녕하세요, 올려주신 템플릿 잘 보았습니다. 궁금한 것 이 있어서 연락드려요. 이번에 템플릿 직접 만드신 건가요? 저한테만 알려주세요.',
-      isSend: false,
-    },
-    {
-      text: '안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요안녕하세요 안녕하세요',
-      isSend: true,
-    },
-    {
-      text: '안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요',
-      isSend: false,
+  const [loginState, setLoginState] = useRecoilState(LoginState);
+
+  const [msgList, setMsgList] = useState([]);
+  const [msg, setMsg] = useState('');
+  const [isSend, setIsSend] = useState(false);
+
+  // Socket
+  const client = useRef({});
+  const myToken = localStorage.getItem('access-token');
+  const sessionId = 11;
+
+  client.current = new StompJs.Client({
+    brokerURL: 'wss://panpeun.shop/ws',
+    connectHeaders: {
+      Authorization: `Bearer ${myToken}`,
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
     },
 
-    {
-      text: '안녕하세요 안녕하세요',
-      isSend: true,
+    onConnect: () => {
+      console.log('chatRoom success');
+      subscribe();
+      publish('detail');
+      isSend && publish('chat');
+      isSend && publish('detail');
     },
-    {
-      text: '신민선 PM님 안녕하세요, 올려주신 템플릿 잘 보았습니다. 궁금한 것 이 있어서 연락드려요. 이번에 템플릿 직접 만드신 건가요? 저한테만 알려주세요.',
-      isSend: false,
-    },
-    {
-      text: '신민선 PM님 안녕하세요, 올려주신 템플릿 잘 보았습니다. 궁금한 것 이 있어서 연락드려요. 이번에 템플릿 직접 만드신 건가요? 저한테만 알려주세요.',
-      isSend: true,
-    },
-    {
-      text: '신민선 PM님 안녕하세요, 올려주신 템플릿 잘 보았습니다. 궁금한 것 이 있어서 연락드려요. 이번에 템플릿 직접 만드신 건가요? 저한테만 알려주세요.',
-      isSend: false,
-    },
-  ];
+  });
+
+  const publish = (option) => {
+    if (!client.current.connected) {
+      console.log('publish 통신 실패');
+      return;
+    } else {
+      console.log('publish 통신 성공');
+    }
+
+    if (option === 'detail') {
+      client.current.publish({
+        destination: `/pub/chat/detail`,
+        body: JSON.stringify({
+          chatSession: 3,
+          fromUserName: '김승훈',
+          toUserName: '류관곤',
+        }),
+      });
+      return;
+    }
+
+    if (option === 'chat') {
+      client.current.publish({
+        destination: `/pub/chat`,
+        body: JSON.stringify({
+          chatSession: 3,
+          fromUserName: '김승훈',
+          toUserName: '류관곤',
+          content: msg,
+        }),
+      });
+      return;
+    }
+  };
+
+  const subscribe = () => {
+    console.log('subscribe 실행');
+    const headers = {
+      Authorization: `Bearer ${myToken}`,
+    };
+
+    client.current.subscribe(
+      `/sub/chat/${sessionId}`,
+      (body) => {
+        const response = JSON.parse(body.body);
+        console.log(response);
+        if (response.messageType === 'messageDetail') {
+          setMsgList([...response.data.chatMessageList]);
+          MoveToBottom();
+        }
+        if (response.messageType === 'received') {
+          console.log('전송완료');
+          setIsSend(false);
+          setMsg('');
+        }
+      },
+      headers,
+    );
+  };
+
+  useEffect(() => {
+    client.current.activate();
+    return () => client.current.deactivate();
+  }, [isSend]);
+
+  const onSubmitChat = (e) => {
+    e.preventDefault();
+    setIsSend(true);
+  };
+
+  // 스크롤 이벤트
+  const containerRef = useRef();
+
+  const MoveToBottom = () => {
+    containerRef.current?.scrollTo({
+      top: containerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+    console.log('실행');
+  };
 
   return (
     <div className={`flex h-full w-full flex-col gap-4 p-6 `}>
@@ -94,27 +169,36 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
         </div>
       </div>
       <div className="h-[1.5px] w-full bg-gray6"></div>
-      <BubbleContainer>
-        {messages.map((el, idx) => (
+
+      <BubbleContainer ref={containerRef}>
+        {msgList.map((el, idx) => (
           <div
             className={`flex w-full ${
-              el.isSend ? 'justify-end' : 'justify-start'
+              el.userName === loginState.name ? 'justify-end' : 'justify-start'
             }`}
+            key={idx}
           >
             <div
               className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
-                el.isSend
+                el.userName === loginState.name
                   ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
                   : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
               }`}
             >
-              {el.text}
+              {el.content}
             </div>
           </div>
         ))}
       </BubbleContainer>
-      <form className="flex w-full items-center gap-2 rounded-[10px] bg-gray7 p-[10px]">
-        <input className="h-6 flex-1 bg-transparent text-xs font-medium text-gray1 outline-none" />
+      <form
+        className="flex w-full items-center gap-2 rounded-[10px] bg-gray7 p-[10px]"
+        onSubmit={onSubmitChat}
+      >
+        <input
+          className="h-6 flex-1 bg-transparent text-xs font-medium text-gray1 outline-none"
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+        />
         <button className="flex h-6 w-6 items-center justify-center rounded-[4px] bg-blue3">
           <BsSend className="text-sm text-white" />
         </button>

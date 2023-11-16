@@ -4,17 +4,16 @@ import { RecoilRoot } from 'recoil';
 import { useEffect } from 'react';
 
 function App() {
-  // const { connect, disconnect } = Socket();
+  const { connect, disconnect } = Socket();
 
   useEffect(() => {
-    // connect();
-    // return () => disconnect();
+    connect();
+    return () => disconnect();
   }, []);
 
   return (
     <RecoilRoot>
       <Router />
-      {/* <Socket /> */}
     </RecoilRoot>
   );
 }

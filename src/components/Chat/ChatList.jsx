@@ -1,15 +1,12 @@
 import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import React from 'react';
-import Socket from './Socket';
+import * as StompJs from '@stomp/stompjs';
+
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 
-// interface ChatListProps {
-//   setIsOpenChatRoom: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-
+// 스크롤 커스텀
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,94 +44,107 @@ const ListContainer = styled.div`
 `;
 
 const ChatList = ({ setIsOpenChatRoom }) => {
-  // const { publish, subscribe } = Socket();
   const [loginState, setLoginState] = useRecoilState(LoginState);
   const [chatList, setChatList] = useState([]);
 
-  const list = [
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 1,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 2,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 0,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 1,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 0,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 1,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 1,
-    },
-    {
-      name: '신민선',
-      content: '안녕하세요. IT템플릿 보고 연락드립니다.',
-      time: '11:05',
-      uncheckedNum: 1,
-    },
-  ];
+  // Socket
+  const client = useRef({});
+  const myToken = localStorage.getItem('access-token');
+  const sessionId = 11;
 
-  // useEffect(() => {
-  //   publish({
-  //     option: 'list',
-  //     fromUserName: loginState.name,
-  //   });
-  //   // subscribe({ option: 'list', setChatList: setChatList });
-  // }, []);
+  client.current = new StompJs.Client({
+    brokerURL: 'wss://panpeun.shop/ws',
+    connectHeaders: {
+      Authorization: `Bearer ${myToken}`,
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+    },
 
-  // const onClickList = () => {
-  //   // publish({
-  //   //   option: 'detail',
-  //   //   chatSession: 3,
-  //   //   fromUserName: loginState.name,
-  //   //   toUserName: "류관곤"
-  //   // });
-  //   publish({
-  //     option: 'list',
-  //     fromUserName: loginState.name,
-  //   });
-  // };
+    onConnect: () => {
+      console.log('chatList success');
+      subscribe();
+      publish();
+    },
+  });
+
+  const publish = () => {
+    if (!client.current.connected) {
+      console.log('publish 통신 실패');
+      return;
+    } else {
+      console.log('publish 통신 성공');
+    }
+
+    client.current.publish({
+      destination: `/pub/chatList`,
+      body: JSON.stringify({
+        userName: '김승훈',
+      }),
+    });
+  };
+
+  const subscribe = () => {
+    console.log('subscribe 실행');
+    const headers = {
+      Authorization: `Bearer ${myToken}`,
+    };
+
+    client.current.subscribe(
+      `/sub/chat/${sessionId}`,
+      (body) => {
+        const response = JSON.parse(body.body);
+        console.log(response);
+        setChatList([...response.data.chatList]);
+      },
+      headers,
+    );
+  };
+
+  useEffect(() => {
+    client.current.activate();
+    return () => client.current.deactivate();
+  }, []);
+
+  const onClickList = () => {
+    console.log(chatList);
+  };
+
+  const formatDate = (rawDate) => {
+    const date = new Date(rawDate);
+    const now = new Date();
+
+    // 오늘인지 확인하는 경우
+    if (
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear()
+    ) {
+      // 오늘인 경우 시간만 표시
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      // 오늘이 아닌 경우 날짜만 표시
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${month}월 ${day}일`;
+    }
+  };
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden py-7 pl-6 pr-3">
-      <div className="mb-9 flex items-center gap-2">
+      <div className="mb-9 flex items-center gap-2" onClick={onClickList}>
         <BsFillChatFill className="text-2xl text-blue1" />
         <div className="text-2xl font-bold text-black">커피챗 목록</div>
       </div>
 
       <ListContainer>
-        {list.map((el, idx) => (
+        {chatList.map((el, idx) => (
           <button
             className="flex w-full gap-[10px] rounded-[10px] px-2 py-2 hover:bg-blue5"
-            onClick={() => setIsOpenChatRoom(true)}
+            key={idx}
+            onClick={() => {
+              setIsOpenChatRoom(true);
+            }}
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray6">
               <BsFillPersonFill className="text-3xl text-gray3" />
@@ -146,20 +156,20 @@ const ChatList = ({ setIsOpenChatRoom }) => {
                     PM
                   </div>
                   <div className="text-sm font-semibold text-black">
-                    {el.name}
+                    {el.userName}
                   </div>
                 </div>
                 <div className="text-xs font-semibold text-gray4">
-                  {el.time}
+                  {formatDate(el.time)}
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="text-xs font-medium text-gray4">
                   {el.content}
                 </div>
-                {el.uncheckedNum > 0 && (
+                {1 > 0 && (
                   <div className="flex h-4 w-4 items-center justify-center rounded-full bg-[#F14646] text-[9px] font-bold text-white">
-                    {el.uncheckedNum}
+                    1
                   </div>
                 )}
               </div>
