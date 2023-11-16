@@ -16,7 +16,7 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
   const currentPath = location.pathname;
 
   return (
-    <div className="mb-14 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <div className="mb-14 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
       {data?.map((el) => (
         <Link
           to={`${currentPath}/${isRoadmap ? el?.roadmapId : el?.templateId}`}
