@@ -6,7 +6,7 @@ interface LinkedRoadmapProps {
 
 const LinkedRoadmap = ({ data }: LinkedRoadmapProps) => {
   return (
-    <div className="mb-8 flex flex-col gap-[38px] rounded-[10px] bg-white px-6 py-7">
+    <div className="mb-8 flex flex-col gap-[38px] rounded-[20px] bg-white px-6 py-7">
       <div className="text-xl font-bold text-gray1">연결된 로드맵</div>
       <div className="text-sm font-medium text-gray2">
         {data?.connectedRoadmap}

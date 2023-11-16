@@ -6,7 +6,7 @@ interface MakerProps {
 
 const Maker = ({ data }: MakerProps) => {
   return (
-    <div className="flex flex-col rounded-[10px] bg-white px-6 py-7">
+    <div className="flex flex-col rounded-[20px] bg-white px-6 py-7">
       <div className="mb-[26px] text-xl font-bold text-gray1">메이커 소개</div>
       <div className="mb-[22px] flex items-center gap-4">
         <div className="flex h-[78px] w-[78px] items-center justify-center overflow-hidden rounded-full bg-gray6">
