@@ -6,7 +6,7 @@ interface UseBtnProps {
 const UseBtn = ({ children, onClickBtn }: UseBtnProps) => {
   return (
     <button
-      className="mb-7 w-full rounded-[10px] bg-blue1 py-5 text-xl font-semibold text-white"
+      className="mb-7 w-full rounded-[15px] bg-blue1 py-5 text-xl font-semibold text-white"
       onClick={onClickBtn}
     >
       {children}

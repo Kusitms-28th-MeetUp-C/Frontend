@@ -12,7 +12,7 @@ interface MoreItemsProps {
 
 const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
   return (
-    <div className="rounded-[10px] bg-white px-8 py-8">
+    <div className="rounded-[20px] bg-white px-8 py-8">
       <div className="mb-6  text-xl font-bold text-black">
         {isRoadmap
           ? 'IT프로젝트 다른 로드맵 모아보기'

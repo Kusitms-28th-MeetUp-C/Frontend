@@ -6,17 +6,27 @@ import Pagination from '../components/Search/Pagination';
 import { FaQuestion } from 'react-icons/fa6';
 import ListItems from '../components/Search/ListItems';
 import InfoBox from '../components/Search/InfoBox';
+import { typeFilter } from '../libs/utils/filter';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface RoadmapProps {
   MoveToTop: () => void;
 }
 
 const Roadmap = ({ MoveToTop }: RoadmapProps) => {
-  const [roadmapType, setRaodmapType] = useState('all');
-  const [title, setTitle] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const typeData = searchParams.get('type');
+  const searchData = searchParams.get('search');
+  const pageData = searchParams.get('page');
+
+  const [roadmapType, setRaodmapType] = useState(typeData || 'all');
+  const [title, setTitle] = useState(searchData || '');
   const [listData, setListData] = useState<any[]>([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(parseInt(pageData || '0'));
   const [totalPages, setTotalPages] = useState(0);
+  const [totalCnt, setTotalCnt] = useState(0);
   const [isHover, setIsHover] = useState(false);
 
   const fetchRoadmap = async () => {
@@ -28,6 +38,8 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
         console.log(res.data.data);
         setListData([...res.data.data.content]);
         setTotalPages(res.data.data.totalPages);
+        setTotalCnt(res.data.data.totalElements);
+        navigate(`/roadmap?type=${roadmapType}&search=${title}&page=${page}`);
       })
       .catch((err) => console.error(err));
   };
@@ -35,10 +47,6 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   useEffect(() => {
     fetchRoadmap();
   }, [roadmapType, page, title]);
-
-  useEffect(() => {
-    setPage(0);
-  }, [roadmapType, title]);
 
   return (
     <div className="px-[56px] py-[45px]">
@@ -60,9 +68,13 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
       </div>
 
       <div className="mb-6">
-        <Search setTitle={setTitle} />
+        <Search setTitle={setTitle} setPage={setPage} />
       </div>
-      <Filter type={roadmapType} setType={setRaodmapType} />
+      <Filter type={roadmapType} setType={setRaodmapType} setPage={setPage} />
+      <div className="mb-5 text-sm font-semibold text-gray4">
+        {typeFilter(roadmapType)} {title && `"${title}" 검색결과`} 총 {totalCnt}
+        건
+      </div>
       <ListItems isRoadmap data={listData} />
       <Pagination
         page={page}

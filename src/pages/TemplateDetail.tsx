@@ -61,7 +61,7 @@ const TemplateDetail = () => {
   }, [templateId]);
 
   return (
-    <div className="w-[1300px] px-10 py-9">
+    <div className="w-full min-w-[1300px] px-10 py-9">
       <BackBtn>전체 템플릿 보기</BackBtn>
       <Title>{mainData.title}</Title>
       <div className="flex justify-between">

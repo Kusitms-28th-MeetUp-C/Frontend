@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
 interface SearchProps {
+  title?: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
+  setPage?: React.Dispatch<React.SetStateAction<number>>;
   className?: string;
 }
 
-const Search = ({ setTitle, className }: SearchProps) => {
+const Search = ({ title, setTitle, className, setPage }: SearchProps) => {
   const [search, setSearch] = useState('');
 
   const onSubmitSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setTitle(search);
+    setPage && setPage(0);
   };
+
+  useEffect(() => {
+    title && setSearch(title);
+  }, []);
 
   return (
     <form
-      className={`mb-7 flex w-full max-w-[550px] items-center justify-between rounded-[20px] bg-white px-[20px] py-[8px]${
+      className={`mb-6 flex w-full max-w-[550px] items-center justify-between rounded-[20px] bg-white px-[20px] py-[8px]${
         className ? ` ${className}` : ''
       }`}
       onSubmit={onSubmitSearch}

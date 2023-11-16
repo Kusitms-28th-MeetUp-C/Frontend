@@ -39,7 +39,7 @@ const Agenda = ({ data }: AgendaProps) => {
   ];
 
   return (
-    <div className="mb-8 flex flex-col items-center gap-8 rounded-[10px] bg-white px-8 py-9">
+    <div className="mb-8 flex flex-col items-center gap-8 rounded-[20px] bg-white px-8 py-9">
       {sampleData.map((el, idx) => (
         <div className="flex flex-col gap-[10px] text-gray1" key={idx}>
           <div className="text-base font-semibold">{el.title}</div>

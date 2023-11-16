@@ -13,8 +13,8 @@ interface ListItemsProps {
 }
 
 const ListContainer = styled.div`
-  @media (min-width: 1920px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   @media (min-width: 1920px) {
@@ -27,12 +27,12 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
   const currentPath = location.pathname;
 
   return (
-    <ListContainer className="3xl:grid-cols-4 mb-14 grid grid-cols-1 gap-9 lg:grid-cols-2 xl:grid-cols-3">
+    <ListContainer className="3xl:grid-cols-4 mb-14 grid grid-cols-1 gap-9 lg:grid-cols-2">
       {data?.map((el) => (
         <Link
           to={`${currentPath}/${isRoadmap ? el?.roadmapId : el?.templateId}`}
           key={isRoadmap ? el?.roadmapId : el?.templateId}
-          className="flex flex-col gap-5 rounded-[20px] bg-white p-[26px]"
+          className="flex min-w-[330px] flex-col gap-5 rounded-[20px] bg-white p-[26px]"
         >
           <div
             className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 ${tagColorFilter(
