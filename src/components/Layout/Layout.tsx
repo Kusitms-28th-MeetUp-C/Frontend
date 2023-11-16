@@ -13,7 +13,7 @@ const Layout = ({ children, containerRef }: Props) => {
   const currentPath = location.pathname;
 
   const excludedSideBarPaths = ['/login'];
-  const includedFooter = [''];
+  const includedFooter = ['/login'];
 
   const showSideBar = !excludedSideBarPaths.includes(currentPath);
   const showFooter = includedFooter.includes(currentPath);
@@ -21,13 +21,7 @@ const Layout = ({ children, containerRef }: Props) => {
   return (
     <div className="flex flex-col overflow-auto bg-[#EEEEFB]">
       <TopNavBar />
-      <div
-        className={`flex ${
-          showFooter
-            ? 'max-h-[calc(100vh-275px)]'
-            : 'h-screen max-h-[calc(100vh-65px)]'
-        } flex-1`}
-      >
+      <div className="flex h-screen max-h-[calc(100vh-65px)] flex-1">
         {showSideBar && <SideNavTest />}
         <div ref={containerRef} className="flex-1 overflow-y-auto bg-[#EEEEFB]">
           {children}
