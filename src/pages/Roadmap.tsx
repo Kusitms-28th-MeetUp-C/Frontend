@@ -49,7 +49,7 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   }, [roadmapType, page, title]);
 
   return (
-    <div className="px-[56px] py-[45px]">
+    <div className="pr-12 py-[45px]">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
         <div className="text-[28px] font-bold text-gray1">로드맵 템플릿</div>
         <div

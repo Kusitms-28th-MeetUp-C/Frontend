@@ -119,7 +119,6 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
         console.log(response);
         if (response.messageType === 'messageDetail') {
           setMsgList([...response.data.chatMessageList]);
-          MoveToBottom();
         }
         if (response.messageType === 'received') {
           console.log('전송완료');
@@ -135,6 +134,10 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
     client.current.activate();
     return () => client.current.deactivate();
   }, [isSend]);
+
+  useEffect(() => {
+    MoveToBottom();
+  }, [msgList]);
 
   const onSubmitChat = (e) => {
     e.preventDefault();
