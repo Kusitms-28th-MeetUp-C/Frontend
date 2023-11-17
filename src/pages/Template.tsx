@@ -50,7 +50,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   }, [templateType, page, title]);
 
   return (
-    <div className="px-[56px] py-[45px]">
+    <div className="pr-12 py-[45px]">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
         <div
           className="text-[28px] font-bold text-gray1"
