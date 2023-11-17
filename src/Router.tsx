@@ -46,12 +46,18 @@ const Router = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/template">
             <Route path="" element={<Template MoveToTop={MoveToTop} />} />
-            <Route path=":templateId" element={<TemplateDetail />} />
+            <Route
+              path=":templateId"
+              element={<TemplateDetail MoveToTop={MoveToTop} />}
+            />
             <Route path="create" element={<TemplateEditor />} />
           </Route>
           <Route path="roadmap">
             <Route path="" element={<Roadmap MoveToTop={MoveToTop} />} />
-            <Route path=":roadmapId" element={<RoadmapDetail />} />
+            <Route
+              path=":roadmapId"
+              element={<RoadmapDetail MoveToTop={MoveToTop} />}
+            />
             <Route path="create" element={<RoadmapEditor />} />
           </Route>
           <Route path="/management" element={<Management />} />

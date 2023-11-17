@@ -11,7 +11,11 @@ import Modal from '../components/Modal/Modal';
 import Title from '../components/Common/Title';
 import BackBtn from '../components/SearchDetail/BackBtn';
 
-const TemplateDetail = () => {
+interface TemplateDetailProps {
+  MoveToTop: () => void;
+}
+
+const TemplateDetail = ({ MoveToTop }: TemplateDetailProps) => {
   const navigate = useNavigate();
   const { templateId } = useParams();
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
@@ -58,10 +62,11 @@ const TemplateDetail = () => {
 
   useEffect(() => {
     fetchData();
+    MoveToTop();
   }, [templateId]);
 
   return (
-    <div className="w-full min-w-[1300px] px-10 py-9">
+    <div className="w-full min-w-[1250px] py-9 pr-10">
       <BackBtn>전체 템플릿 보기</BackBtn>
       <Title>{mainData.title}</Title>
       <div className="flex justify-between">
