@@ -85,7 +85,10 @@ const TopNavBar = () => {
                 ? 'bg-[#606DE9] text-white'
                 : 'bg-[#EBEEF9] text-[#495565]'
             }`}
-            onClick={() => setIsOpenChat((prev) => !prev)}
+            onClick={() => {
+              setIsOpenChat((prev) => !prev);
+              setIsOpenChatRoom(false);
+            }}
           >
             <BsFillChatFill className="text-xl" />
           </button>
