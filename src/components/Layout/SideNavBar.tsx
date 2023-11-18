@@ -80,7 +80,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
 
 const SideNavBar = () => {
   return (
-    <NavBlock className="flex w-[216px] flex-col h-[calc(100vh-121px)] my-7 mx-6 rounded-[20px] bg-[#5257D6] pb-5 pt-[30px]">
+    <NavBlock className="flex w-[216px] flex-col h-[calc(100vh-121px)] my-7 mx-6 rounded-[20px] bg-blue1 pb-5 pt-[30px]">
       <div className="mb-[50px]">
         <SectionTitle isSearch>탐색</SectionTitle>
         <List>

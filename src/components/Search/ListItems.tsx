@@ -1,5 +1,5 @@
 import { FaPeopleGroup } from 'react-icons/fa6';
-import { BiTimeFive } from 'react-icons/bi';
+import { BiSolidTimeFive } from 'react-icons/bi';
 import { HiTemplate } from 'react-icons/hi';
 
 import { MdNavigateNext } from 'react-icons/md';
@@ -78,7 +78,7 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
                 </>
               ) : (
                 <>
-                  <BiTimeFive className="text-tagLightPurple1 text-xl" />
+                  <BiSolidTimeFive className="text-tagLightPurple1 text-xl" />
                   <div className="text-[14px] font-semibold text-[#8A929F]">
                     {el?.estimatedTime}m
                   </div>

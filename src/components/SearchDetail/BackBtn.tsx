@@ -1,10 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-interface BackBtnProps {
-  children: React.ReactNode;
-}
-
-const BackBtn = ({ children }: BackBtnProps) => {
+const BackBtn = () => {
   const navigate = useNavigate();
 
   return (
@@ -13,7 +9,7 @@ const BackBtn = ({ children }: BackBtnProps) => {
       onClick={() => navigate(-1)}
     >
       <span>{'<'}</span>
-      <span className="hover:underline">{children}</span>
+      <span className="hover:underline">뒤로가기</span>
     </button>
   );
 };

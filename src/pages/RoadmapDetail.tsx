@@ -90,7 +90,7 @@ const RoadmapDetail = ({ MoveToTop }: RoadmapDetailProps) => {
 
   return (
     <div className="w-full min-w-[1250px] py-9 pr-10">
-      <BackBtn>전체 로드맵 보기</BackBtn>
+      <BackBtn/>
 
       <Title>{mainData.title}</Title>
 

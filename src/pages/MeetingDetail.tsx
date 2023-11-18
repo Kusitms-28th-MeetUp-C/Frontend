@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import Roadmap from '../components/Roadmap';
+import Process from '../components/SearchDetail/Process';
 import PageHeading from '../components/PageHeading';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import TeamEditorModal from '../components/TeamEditorModal';
@@ -150,10 +150,10 @@ const MeetingDetail = () => {
             <h3 className="mb-5 text-center text-2xl font-bold">
               {team.roadmap.title}
             </h3>
-            <Roadmap data={team.roadmap.roadmapDetailList} />
+            <Process data={team.roadmap} isShowTitle />
           </section>
           {/* Step 섹션 모음 */}
-          {team.roadmap.roadmapDetailList.map((stepData: any) => (
+          {team.roadmap.roadmapList.map((stepData: any) => (
             <StepSection
               key={stepData.stepId}
               stepData={stepData}
