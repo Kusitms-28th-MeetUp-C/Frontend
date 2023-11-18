@@ -4,6 +4,8 @@ import {
 } from 'react-circular-progressbar';
 import { FaSchool } from 'react-icons/fa';
 import { RiPencilFill } from 'react-icons/ri';
+import Markdown from 'react-markdown';
+import '../styles/github-markdown-light.css';
 
 import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
@@ -223,6 +225,20 @@ const Management = () => {
     },
   };
 
+  const handleDownload = () => {
+    const markdownText = data.content;
+
+    const blob = new Blob([markdownText], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${data?.teamInfo.title}.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   useEffect(() => {
     setLoading(true);
     if (!searchParams) return;
@@ -305,8 +321,11 @@ const Management = () => {
                 iconUrl="/icons/google-docs-icon.png"
               />
               <PurpleButton>
-                <span className="flex items-center gap-1">
-                  <span>복사하기</span>
+                <span
+                  className="flex cursor-pointer items-center gap-1"
+                  onClick={handleDownload}
+                >
+                  <span>다운로드</span>
                   <i className="h-4 w-4">
                     <img
                       src="/icons/copy-icon-purple.svg"
@@ -325,7 +344,7 @@ const Management = () => {
                 <span className="font-bold">템플릿 내용</span>
               </div>
               <div className="w-full rounded-2xl px-6 py-4 leading-6 shadow-lg">
-                {data.content}
+                <Markdown className="markdown-body">{data.content}</Markdown>
               </div>
             </div>
           </div>
