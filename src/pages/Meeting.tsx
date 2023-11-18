@@ -5,6 +5,7 @@ import Axios from '../libs/api';
 import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
+import Process from '../components/SearchDetail/Process';
 
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);
@@ -49,7 +50,7 @@ const Meeting = () => {
       {teamList.map((team: any) => (
         <div key={team.teamInfo.teamId}>
           {/* 헤딩 섹션 */}
-          <section className="mt-6 rounded-2xl bg-white px-6 py-4">
+          <section className="mt-10 mb-6 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
                 title={team.teamInfo.title}
@@ -65,11 +66,11 @@ const Meeting = () => {
               )}
             </div>
           </section>
+
           {/* 로드맵 섹션 */}
           {team.teamRoadmap && (
-            <Roadmap
-              data={team.teamRoadmap.roadmapDetailList}
-              className="mt-6 rounded-2xl bg-white py-8"
+            <Process
+              data={team.teamRoadmap}
             />
           )}
         </div>
