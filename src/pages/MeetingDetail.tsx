@@ -145,13 +145,10 @@ const MeetingDetail = () => {
               </span>
             </div>
           </section>
+
           {/* 로드맵 섹션 */}
-          <section className="rounded-2xl bg-white py-8">
-            <h3 className="mb-5 text-center text-2xl font-bold">
-              {team.roadmap.title}
-            </h3>
-            <Process data={team.roadmap} isShowTitle />
-          </section>
+          <Process data={team.roadmap} isShowTitle />
+
           {/* Step 섹션 모음 */}
           {team.roadmap.roadmapList.map((stepData: any) => (
             <StepSection

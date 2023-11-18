@@ -8,17 +8,15 @@ interface ProcessProps {
 
 const Process = ({ data, isShowTitle }: ProcessProps) => {
   const processingRatio = `w-[${
-    (( data.processingNum && data.processingNum - 1) / ( data.processingNum && data.roadmapList.length - 1)) * 87
+    ((data.processingNum && data.processingNum - 1) /
+      (data.processingNum && data.roadmapList.length - 1)) *
+    87
   }%]`;
 
   return (
     <div
       className="flex w-full flex-col items-center rounded-[20px] bg-white px-9 py-9"
-      onClick={() =>
-        console.log(
-          processingRatio,
-        )
-      }
+      onClick={() => console.log(processingRatio)}
     >
       {isShowTitle && (
         <div className="mb-6 text-[28px] font-bold text-gray1">
@@ -29,20 +27,28 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
         {data?.roadmapList?.map((el: any, idx: number) => (
           <div className=" flex w-[14%] flex-col items-center">
             <div className="z-20 mb-[14px] flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white">
-              {data?.processingNum && (data?.processingNum !== idx + 1) ? (
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#5257D6] text-base font-bold text-white">
-                  {el.step}
+              {data?.processingNum !== idx + 1 ? (
+                <div
+                  className={`flex h-7 w-7 items-center justify-center rounded-full text-base font-bold text-white ${
+                    data.processingNum <= idx + 1 ? 'bg-blue4' : 'bg-blue1'
+                  }`}
+                >
+                  {idx + 1 < data.processingNum ? (
+                    <FaCheck className="text-sm" />
+                  ) : (
+                    el.step
+                  )}
                 </div>
               ) : (
                 <div
                   className={`flex h-[42px] w-[42px] items-center justify-center rounded-full bg-blue4`}
                 >
                   <div
-                    className={`flex h-7 w-7 items-center justify-center rounded-full text-base font-bold text-white ${
-                      idx + 1 <= data?.processingNum ? 'bg-blue1' : 'blue4'
-                    }`}
+                    className={
+                      'flex h-7 w-7 items-center justify-center rounded-full bg-blue1 text-base font-bold text-white'
+                    }
                   >
-                    {idx + 1 < data?.processingNum ? <FaCheck /> : el.step}
+                    {el.step}
                   </div>
                 </div>
               )}
@@ -63,7 +69,7 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
         <div className="absolute left-[7%] top-[25px] z-0 h-[5px] w-[87%] bg-blue3" />
         {data.processingNum && (
           <div
-            className={`absolute left-[7%] top-[25px] z-0 h-[5px] bg-blue1 ${processingRatio} w-[21.75%]`}
+            className={`absolute left-[7%] top-[25px] z-0 h-[5px] bg-blue1 ${processingRatio}`}
           />
         )}
       </div>
