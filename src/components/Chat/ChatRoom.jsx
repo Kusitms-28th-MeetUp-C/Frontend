@@ -44,17 +44,19 @@ const BubbleContainer = styled.div`
   }
 `;
 
-const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
+const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const [msgList, setMsgList] = useState([]);
+  const [userData, setUserData] = useState([]);
+
   const [msg, setMsg] = useState('');
   const [isSend, setIsSend] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Socket
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
-  const sessionId = 11;
 
   client.current = new StompJs.Client({
     brokerURL: 'wss://panpeun.shop/ws',
@@ -68,11 +70,14 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
       subscribe();
       publish('detail');
       isSend && publish('chat');
-      isSend && publish('detail');
     },
   });
 
   const publish = (option) => {
+    const headers = {
+      Authorization: `Bearer ${myToken}`,
+    };
+
     if (!client.current.connected) {
       console.log('publish 통신 실패');
       return;
@@ -82,11 +87,12 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
 
     if (option === 'detail') {
       client.current.publish({
+        headers,
         destination: `/pub/chat/detail`,
         body: JSON.stringify({
-          chatSession: 3,
+          chatSession: sessionId,
           fromUserName: '김승훈',
-          toUserName: '류관곤',
+          toUserName: '더미유저1',
         }),
       });
       return;
@@ -94,11 +100,12 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
 
     if (option === 'chat') {
       client.current.publish({
+        headers,
         destination: `/pub/chat`,
         body: JSON.stringify({
-          chatSession: 3,
+          chatSession: sessionId,
           fromUserName: '김승훈',
-          toUserName: '류관곤',
+          toUserName: '더미유저1',
           content: msg,
         }),
       });
@@ -113,15 +120,19 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
     };
 
     client.current.subscribe(
-      `/sub/chat/${sessionId}`,
+      `/sub/chat/11`,
       (body) => {
         const response = JSON.parse(body.body);
         console.log(response);
+
         if (response.messageType === 'messageDetail') {
           setMsgList([...response.data.chatMessageList]);
+          setUserData({ ...response.data.user });
+          setIsLoading(false);
         }
         if (response.messageType === 'received') {
           console.log('전송완료');
+          setMsgList((prev) => [...prev, response.data.message]);
           setIsSend(false);
           setMsg('');
         }
@@ -161,38 +172,58 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
         <button className="text-xl" onClick={() => setIsOpenChatRoom(false)}>
           {'<'}
         </button>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray6">
-          <BsFillPersonFill className="text-3xl text-gray3" />
+        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray6">
+          {userData.profile ? (
+            <img src={userData.profile} />
+          ) : (
+            <BsFillPersonFill className="text-3xl text-gray3" />
+          )}
         </div>
         <div className="flex flex-col gap-1">
-          <div className="rounded-full bg-blue1 px-1.5 py-[1px] text-center text-[8px] font-semibold text-white">
-            대학생
+          <div
+            className={`rounded-full ${
+              isLoading ? 'bg-transparent' : 'bg-blue1'
+            } px-1.5 py-[1px] text-center text-[8px] font-semibold text-white`}
+          >
+            {userData.type}
           </div>
-          <div className="text-balck text-sm font-semibold ">정예진</div>
+          <div className="text-balck text-sm font-semibold ">
+            {userData.name}
+          </div>
         </div>
       </div>
       <div className="h-[1.5px] w-full bg-gray6"></div>
 
-      <BubbleContainer ref={containerRef}>
-        {msgList.map((el, idx) => (
-          <div
-            className={`flex w-full ${
-              el.userName === loginState.name ? 'justify-end' : 'justify-start'
-            }`}
-            key={idx}
-          >
+      {isLoading ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
+          <img src="/icons/loading.svg" />
+          <div className="text-xs font-semibold text-black">Loading...</div>
+        </div>
+      ) : (
+        <BubbleContainer ref={containerRef}>
+          {msgList.map((el, idx) => (
             <div
-              className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
+              className={`flex w-full ${
                 el.userName === loginState.name
-                  ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
-                  : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
+                  ? 'justify-end'
+                  : 'justify-start'
               }`}
+              key={idx}
             >
-              {el.content}
+              <div
+                className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
+                  el.userName === loginState.name
+                    ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
+                    : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
+                }`}
+              >
+                {el.content}
+              </div>
             </div>
-          </div>
-        ))}
-      </BubbleContainer>
+          ))}
+        </BubbleContainer>
+      )}
+
       <form
         className="flex w-full items-center gap-2 rounded-[10px] bg-gray7 p-[10px]"
         onSubmit={onSubmitChat}

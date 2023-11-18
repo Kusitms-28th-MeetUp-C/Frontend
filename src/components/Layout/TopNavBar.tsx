@@ -19,6 +19,8 @@ const TopNavBar = () => {
   const [isClickLogout, setIsClickLogout] = useState(false);
   const [isClickCreate, setIsClickCreate] = useState(false);
 
+  const [sessionId, setSessionId] = useState(0);
+
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const onClickLogout = async () => {
@@ -107,10 +109,13 @@ const TopNavBar = () => {
       {isOpenChat && (
         <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
           {!isOpenChatRoom ? (
-            <ChatList setIsOpenChatRoom={setIsOpenChatRoom} />
+            <ChatList
+              setIsOpenChatRoom={setIsOpenChatRoom}
+              setSessionId={setSessionId}
+            />
           ) : (
             <ChatRoom
-              isOpenChatRoom={isOpenChatRoom}
+              sessionId={sessionId}
               setIsOpenChatRoom={setIsOpenChatRoom}
             />
           )}

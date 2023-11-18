@@ -43,9 +43,10 @@ const ListContainer = styled.div`
   }
 `;
 
-const ChatList = ({ setIsOpenChatRoom }) => {
+const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
   const [chatList, setChatList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Socket
   const client = useRef({});
@@ -94,6 +95,7 @@ const ChatList = ({ setIsOpenChatRoom }) => {
         const response = JSON.parse(body.body);
         console.log(response);
         setChatList([...response.data.chatList]);
+        setIsLoading(false);
       },
       headers,
     );
@@ -137,46 +139,54 @@ const ChatList = ({ setIsOpenChatRoom }) => {
         <div className="text-2xl font-bold text-black">커피챗 목록</div>
       </div>
 
-      <ListContainer>
-        {chatList.map((el, idx) => (
-          <button
-            className="flex w-full gap-[10px] rounded-[10px] px-2 py-2 hover:bg-blue5"
-            key={idx}
-            onClick={() => {
-              setIsOpenChatRoom(true);
-            }}
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray6">
-              <BsFillPersonFill className="text-3xl text-gray3" />
-            </div>
-            <div className="flex flex-1 flex-col justify-center gap-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full bg-blue1 px-1.5 py-[1px] text-[8px] font-extrabold text-white">
-                    PM
+      {isLoading ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
+          <img src="/icons/loading.svg" />
+          <div className="text-xs font-semibold text-black">Loading...</div>
+        </div>
+      ) : (
+        <ListContainer>
+          {chatList.map((el, idx) => (
+            <button
+              className="flex w-full gap-[10px] rounded-[10px] px-2 py-2 hover:bg-blue5"
+              key={idx}
+              onClick={() => {
+                setIsOpenChatRoom(true);
+                setSessionId(el.sessionId);
+              }}
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray6">
+                <BsFillPersonFill className="text-3xl text-gray3" />
+              </div>
+              <div className="flex flex-1 flex-col justify-center gap-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <div className="rounded-full bg-blue1 px-1.5 py-[1px] text-[8px] font-extrabold text-white">
+                      PM
+                    </div>
+                    <div className="text-sm font-semibold text-black">
+                      {el.userName}
+                    </div>
                   </div>
-                  <div className="text-sm font-semibold text-black">
-                    {el.userName}
+                  <div className="text-xs font-semibold text-gray4">
+                    {formatDate(el.time)}
                   </div>
                 </div>
-                <div className="text-xs font-semibold text-gray4">
-                  {formatDate(el.time)}
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-medium text-gray4">
+                    {el.content}
+                  </div>
+                  {1 > 0 && (
+                    <div className="flex h-4 w-4 items-center justify-center rounded-full bg-[#F14646] text-[9px] font-bold text-white">
+                      1
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="text-xs font-medium text-gray4">
-                  {el.content}
-                </div>
-                {1 > 0 && (
-                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-[#F14646] text-[9px] font-bold text-white">
-                    1
-                  </div>
-                )}
-              </div>
-            </div>
-          </button>
-        ))}
-      </ListContainer>
+            </button>
+          ))}
+        </ListContainer>
+      )}
     </div>
   );
 };
