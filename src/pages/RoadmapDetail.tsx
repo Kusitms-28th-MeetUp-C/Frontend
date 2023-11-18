@@ -11,7 +11,11 @@ import Process from '../components/SearchDetail/Process';
 import BackBtn from '../components/SearchDetail/BackBtn';
 import Title from '../components/Common/Title';
 
-const RoadmapDetail = () => {
+interface RoadmapDetailProps {
+  MoveToTop: () => void;
+}
+
+const RoadmapDetail = ({ MoveToTop }: RoadmapDetailProps) => {
   const navigate = useNavigate();
   const { roadmapId } = useParams();
   const [mainData, setMainData] = useState<any>({});
@@ -50,6 +54,7 @@ const RoadmapDetail = () => {
 
   useEffect(() => {
     fetchData();
+    MoveToTop();
   }, [roadmapId]);
 
   const [isOpenTeamModal, setIsOpenTeamModal] = useState(false);
@@ -84,8 +89,8 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-full px-10 py-9">
-      <BackBtn>전체 로드맵 보기</BackBtn>
+    <div className="w-full min-w-[1250px] py-9 pr-10">
+      <BackBtn/>
 
       <Title>{mainData.title}</Title>
 

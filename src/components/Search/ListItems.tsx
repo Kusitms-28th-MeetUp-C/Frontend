@@ -1,54 +1,63 @@
 import { FaPeopleGroup } from 'react-icons/fa6';
-import { BiTimeFive } from 'react-icons/bi';
+import { BiSolidTimeFive } from 'react-icons/bi';
 import { HiTemplate } from 'react-icons/hi';
 
 import { MdNavigateNext } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
 import { tagColorFilter, typeFilter } from '../../libs/utils/filter';
+import styled from 'styled-components';
 
 interface ListItemsProps {
   data: any[];
   isRoadmap?: boolean;
 }
 
+const ListContainer = styled.div`
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1920px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+`;
+
 const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
   return (
-    <div className="mb-14 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <ListContainer className="3xl:grid-cols-4 mb-14 grid grid-cols-1 gap-9 lg:grid-cols-2">
       {data?.map((el) => (
         <Link
           to={`${currentPath}/${isRoadmap ? el?.roadmapId : el?.templateId}`}
           key={isRoadmap ? el?.roadmapId : el?.templateId}
-          className="flex flex-col gap-10 rounded-[20px] bg-white p-[26px]"
+          className="flex min-w-[330px] flex-col gap-5 rounded-[20px] bg-white p-[26px]"
         >
-          <div>
-            <div
-              className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 ${tagColorFilter(
-                'background',
-                el?.type?.toLowerCase(),
-              )}`}
-            >
-              <HiTemplate
-                className={`${tagColorFilter('icon', el?.type?.toLowerCase())}`}
-              />
-              <div className="text-xs font-semibold text-gray3">
-                {typeFilter(el?.type?.toLowerCase())}
-              </div>
+          <div
+            className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 ${tagColorFilter(
+              'background',
+              el?.type?.toLowerCase(),
+            )}`}
+          >
+            <HiTemplate
+              className={`${tagColorFilter('icon', el?.type?.toLowerCase())}`}
+            />
+            <div className="text-xs font-semibold text-gray3">
+              {typeFilter(el?.type?.toLowerCase())}
             </div>
-            <div className="mt-3 text-base font-bold text-gray2">
-              {el?.title}
-            </div>
-            {!isRoadmap && (
-              <div className="mt-3 flex w-fit items-center gap-1">
-                <img src="/icons/roadmap.svg" />
-                <div className="text-xs font-semibold text-gray3">
-                  {el?.connectedRoadmap}
-                </div>
-              </div>
-            )}
           </div>
+
+          <div className="text-base font-bold text-gray2">{el?.title}</div>
+
+          {!isRoadmap && (
+            <div className="flex w-fit items-center gap-1">
+              <img src="/icons/roadmap.svg" />
+              <div className="text-xs font-semibold text-gray3">
+                {el?.connectedRoadmap}
+              </div>
+            </div>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-[10px]">
@@ -69,7 +78,7 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
                 </>
               ) : (
                 <>
-                  <BiTimeFive className="text-tagLightPurple1 text-xl" />
+                  <BiSolidTimeFive className="text-tagLightPurple1 text-xl" />
                   <div className="text-[14px] font-semibold text-[#8A929F]">
                     {el?.estimatedTime}m
                   </div>
@@ -86,7 +95,7 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
           </div>
         </Link>
       ))}
-    </div>
+    </ListContainer>
   );
 };
 

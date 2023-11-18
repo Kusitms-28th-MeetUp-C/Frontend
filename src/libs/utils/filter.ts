@@ -1,9 +1,9 @@
 export const typeFilter = (type: string) => {
   switch (type) {
     case 'all':
-      return '전체 카테고리';
+      return '전체';
     case 'it':
-      return 'IT프로젝트';
+      return 'IT 프로젝트';
     case 'team':
       return '팀플';
     case 'club':

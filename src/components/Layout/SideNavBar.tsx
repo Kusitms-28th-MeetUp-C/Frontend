@@ -26,7 +26,7 @@ const NavBlock = styled.nav`
 
 const SectionTitle = ({ children, isSearch }: SectionTitleProps) => {
   return (
-    <div className="px-8">
+    <div className="px-6">
       <div className="flex items-center gap-3">
         {isSearch ? (
           <FaCompass
@@ -43,7 +43,7 @@ const SectionTitle = ({ children, isSearch }: SectionTitleProps) => {
 };
 
 const List = ({ children }: ListProps) => {
-  return <div className="mt-2 flex flex-col gap-2 pl-8">{children}</div>;
+  return <div className="mt-2 flex flex-col gap-2 px-6">{children}</div>;
 };
 
 const ListItem = ({ to, children }: ListItemProps) => {
@@ -60,7 +60,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
   return (
     <Link
       to={to ? to : '#'}
-      className={`flex w-full cursor-pointer items-center justify-between rounded-l-full py-2 pl-6 pr-1 text-[14px]  duration-300 ${
+      className={`flex w-full cursor-pointer items-center justify-between rounded-full py-2 pl-5 pr-2 text-[14px]  duration-300 ${
         isActive
           ? 'bg-[#EEEEFB] font-bold text-[#5257D6]'
           : 'font-semibold text-white hover:bg-[#EEEEFB] hover:text-[#5257D6]'
@@ -78,9 +78,9 @@ const ListItem = ({ to, children }: ListItemProps) => {
   );
 };
 
-const SideNavTest = () => {
+const SideNavBar = () => {
   return (
-    <NavBlock className="flex h-[calc(100vh-65px)] w-[216px] flex-col rounded-tr-[20px] bg-[#5257D6] pb-5 pt-7">
+    <NavBlock className="flex w-[216px] flex-col h-[calc(100vh-121px)] my-7 mx-6 rounded-[20px] bg-blue1 pb-5 pt-[30px]">
       <div className="mb-[50px]">
         <SectionTitle isSearch>탐색</SectionTitle>
         <List>
@@ -99,4 +99,4 @@ const SideNavTest = () => {
   );
 };
 
-export default SideNavTest;
+export default SideNavBar;

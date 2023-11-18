@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import { BiSolidTimeFive, BiSolidCommentDetail } from 'react-icons/bi';
 import { FaPeopleGroup } from 'react-icons/fa6';
-import { MdNavigateNext, MdExpandMore } from 'react-icons/md';
+import { MdNavigateNext } from 'react-icons/md';
 
 interface InfoProps {
   isRoadmap?: boolean;
@@ -33,7 +33,7 @@ const InfoItem = ({ children, category }: InfoItemProps) => {
         {category === 'rate' ? (
           <FaStar className="text-[#F8D20C]" />
         ) : category === 'time' ? (
-          <BiSolidTimeFive className="text-tagPurple1" />
+          <BiSolidTimeFive className="text-tagLightPurple1" />
         ) : category === 'step' ? (
           <img src="/icons/stair-purple.svg" className="h-3.5 w-3.5" />
         ) : category === 'team' ? (

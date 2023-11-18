@@ -2,9 +2,9 @@ import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import { RiPencilFill } from 'react-icons/ri';
 
-import { Link } from 'react-router-dom';
-import ChatList from '../Chat/ChatList';
-import ChatRoom from '../Chat/ChatRoom';
+import { Link, useNavigate } from 'react-router-dom';
+import ChatList from '../Chat/ChatList.jsx';
+import ChatRoom from '../Chat/ChatRoom.jsx';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
@@ -12,9 +12,12 @@ import Axios from '../../libs/api';
 import Modal from '../Modal/Modal';
 
 const TopNavBar = () => {
+  const navigate = useNavigate();
+
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
   const [isClickLogout, setIsClickLogout] = useState(false);
+  const [isClickCreate, setIsClickCreate] = useState(false);
 
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
@@ -30,6 +33,16 @@ const TopNavBar = () => {
       .catch((err) => console.error(err));
   };
 
+  const onClickTemplate = () => {
+    navigate('/template/create');
+    setIsClickCreate(false);
+  };
+
+  const onClickRoadmap = () => {
+    navigate('/roadmap/create');
+    setIsClickCreate(false);
+  };
+
   return (
     <div className="flex h-[65px] items-center justify-between bg-white px-8">
       <div className="flex items-center">
@@ -39,16 +52,18 @@ const TopNavBar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-3">
-        <Link
-          to="/template/create"
-          className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
-        >
-          <div className="text-sm font-semibold">템플릿 업로드</div>
-          <RiPencilFill className="text-sm" />
-        </Link>
+        {loginState.isLogin && (
+          <button
+            className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
+            onClick={() => setIsClickCreate(true)}
+          >
+            <div className="text-sm font-semibold">템플릿 업로드</div>
+            <RiPencilFill className="text-sm" />
+          </button>
+        )}
 
         <Link
-          to={loginState.isLogin ? '/my-profile' : '/login'}
+          to={loginState.isLogin ? '/mypage' : '/login'}
           className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-[#EBEEF9] px-2"
         >
           <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
@@ -63,16 +78,21 @@ const TopNavBar = () => {
           </div>
         </Link>
 
-        <button
-          className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
-            isOpenChat
-              ? 'bg-[#606DE9] text-white'
-              : 'bg-[#EBEEF9] text-[#495565]'
-          }`}
-          onClick={() => setIsOpenChat((prev) => !prev)}
-        >
-          <BsFillChatFill className="text-xl" />
-        </button>
+        {loginState.isLogin && (
+          <button
+            className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
+              isOpenChat
+                ? 'bg-[#606DE9] text-white'
+                : 'bg-[#EBEEF9] text-[#495565]'
+            }`}
+            onClick={() => {
+              setIsOpenChat((prev) => !prev);
+              setIsOpenChatRoom(false);
+            }}
+          >
+            <BsFillChatFill className="text-xl" />
+          </button>
+        )}
 
         {loginState.isLogin && (
           <button
@@ -104,6 +124,18 @@ const TopNavBar = () => {
           onSubmit={onClickLogout}
           cancel="취소"
           submit="확인"
+        />
+      )}
+
+      {isClickCreate && (
+        <Modal
+          isCreate
+          title="어떤 템플릿을 업로드 할까요?"
+          cancel="회의록 템플릿"
+          submit="로드맵 템플릿"
+          setIsOpen={setIsClickCreate}
+          onCancel={onClickTemplate}
+          onSubmit={onClickRoadmap}
         />
       )}
     </div>

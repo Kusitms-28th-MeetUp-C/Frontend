@@ -1,11 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { typeFilter } from '../../libs/utils/filter';
 
 interface FilterProps {
   type: string;
   setType: React.Dispatch<React.SetStateAction<string>>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Filter = ({ type, setType }: FilterProps) => {
+const Filter = ({ type, setType, setPage }: FilterProps) => {
   const filterList = [
     'all',
     'it',
@@ -20,7 +22,7 @@ const Filter = ({ type, setType }: FilterProps) => {
   ];
 
   return (
-    <div className="mb-10 flex flex-wrap gap-3">
+    <div className="mb-[22px] flex flex-wrap gap-3">
       {filterList.map((el, idx) => (
         <div
           key={el}
@@ -32,6 +34,7 @@ const Filter = ({ type, setType }: FilterProps) => {
           }`}
           onClick={() => {
             setType(el);
+            setPage(0);
           }}
         >
           {typeFilter(el)}

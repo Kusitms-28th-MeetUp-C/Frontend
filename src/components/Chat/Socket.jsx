@@ -1,79 +1,109 @@
 import * as StompJs from '@stomp/stompjs';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
-function Socket() {
-  const [chat, setChat] = useState('');
-  const [chatList, setChatList] = useState([]);
+const Socket = () => {
   const client = useRef({});
-  const myToken =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMCIsImlhdCI6MTY5OTg5MjU2NCwiZXhwIjoxNzE3ODkyNTY0fQ.Jhj-Ih83gqcVF1cGBs0zCowwAHiyX3nC-sQ_uk3Hu7A';
-  const sessionId = 10;
+  const myToken = localStorage.getItem('access-token');
+  const sessionId = 11;
+
+  // const [chatList, setChatList] = useState('');
+  // const [msgList, setMsgList] = useState([]);
+
+  client.current = new StompJs.Client({
+    brokerURL: 'wss://panpeun.shop/ws',
+    connectHeaders: {
+      Authorization: `Bearer ${myToken}`,
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+    },
+
+    onConnect: () => {
+      console.log('success');
+      // subscribe();
+      // publish('list');
+    },
+  });
 
   const connect = () => {
     console.log('connect 실행');
-
-    client.current = new StompJs.Client({
-      brokerURL: 'wss://panpeun.shop/ws',
-      connectHeaders: {
-        Authorization: `Bearer ${myToken}`,
-        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-      },
-
-      onConnect: () => {
-        console.log('success');
-        subscribe();
-      },
-    });
     client.current.activate();
   };
 
-  const publish = (chat) => {
-    console.log('publish 실행');
+  // const publish = (option) => {
+  //   if (!client.current.connected) {
+  //     console.log('publish 통신 실패');
+  //     return;
+  //   } else {
+  //     console.log('publish 통신 성공');
+  //   }
 
-    if (!client.current.connected) return;
+  //   if (option === 'list') {
+  //     client.current.publish({
+  //       destination: `/pub/chatList`,
+  //       body: JSON.stringify({
+  //         userName: '김승훈',
+  //       }),
+  //     });
+  //   }
 
-    const headers = {
-      Authorization: `Bearer ${myToken}`,
-    };
+  //   if (option === 'detail') {
+  //     client.current.publish({
+  //       destination: `/pub/chat/detail`,
+  //       body: JSON.stringify({
+  //         chatSession: 3,
+  //         fromUserName: '김승훈',
+  //         toUserName: '류관곤',
+  //       }),
+  //     });
+  //   }
 
-    client.current.publish({
-      headers,
-      destination: '/pub/chat',
-      body: JSON.stringify({
-        meetingId: 1,
-        messageType: 'emoji',
-        message: chat,
-      }),
-    });
-    setChat('');
-  };
+  //   if (option === 'chat') {
+  //     client.current.publish({
+  //       destination: `/pub/chat`,
+  //       body: JSON.stringify({
+  //         chatSession: 3,
+  //         fromUserName: '김승훈',
+  //         toUserName: '류관곤',
+  //         content: '아 제발 성공해라',
+  //       }),
+  //     });
+  //   }
+  // };
 
-  const subscribe = () => {
-    console.log('subscribe 실행');
-    const headers = {
-      Authorization: `Bearer ${myToken}`,
-    };
+  // const subscribe = () => {
+  //   console.log('subscribe 실행');
+  //   const headers = {
+  //     Authorization: `Bearer ${myToken}`,
+  //   };
 
-    client.current.subscribe(
-      `/sub/chat/${sessionId}`,
-      (body) => {
-        const json_body = JSON.parse(body.body);
-        setChatList((_chat_list) => [..._chat_list, json_body]);
-      },
-      headers,
-    );
-  };
+  //   client.current.subscribe(
+  //     `/sub/chat/${sessionId}`,
+  //     (body) => {
+  //       const response = JSON.parse(body.body);
+  //       console.log(response);
+
+  //       if (response.messageType === 'chatList') {
+  //         setChatList(response.messageType);
+  //         console.log(chatList);
+  //         console.log(
+  //           response.messageType,
+  //           response.data,
+  //           response.data.chatList,
+  //         );
+  //       } else if (response.messageType === 'messageDetail')
+  //         setMsgList([...response.data.chatMessageList]);
+  //       else if (response.messageType === 'received') console.log('전송완료');
+  //       else console.log('messageType이 올바르지 않음');
+  //     },
+  //     headers,
+  //   );
+  // };
 
   const disconnect = () => {
     console.log('disconnect 실행');
-
     client.current.deactivate();
   };
 
-  useEffect(() => {
-    connect();
-  }, []);
+  return { connect, disconnect };
+};
 
-  return <></>;
-}
 export default Socket;
