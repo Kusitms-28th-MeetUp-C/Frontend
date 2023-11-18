@@ -97,16 +97,14 @@ const TemplateEditor = () => {
       setErrorMessage('모든 항목을 입력해주세요.');
       return;
     }
+    const newData = {
+      ...values,
+      estimatedTime: 30,
+    };
     Axios({
       method: 'POST',
       url: '/manage/template',
-      headers: {
-        Authorization: localStorage.getItem('accessToken'),
-      },
-      data: {
-        ...values,
-        estimatedTime: 30,
-      },
+      data: newData,
     })
       .then((res) => {
         console.log(res);

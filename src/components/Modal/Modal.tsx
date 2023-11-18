@@ -2,12 +2,13 @@ interface ModalProps {
   title: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel?: () => void;
-  onSubmit: () => void;
+  onSubmit: (e?: any) => void;
   children?: React.ReactNode;
   cancel: string;
   submit: string;
   className?: string;
   isCreate?: boolean;
+  disabledOnClick?: boolean;
 }
 
 const Modal = ({
@@ -20,12 +21,16 @@ const Modal = ({
   submit,
   className,
   isCreate,
+  disabledOnClick,
 }: ModalProps) => {
   return (
     <div
       className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center"
       style={{ background: 'rgba(57, 57, 72, 0.60)' }}
-      onClick={() => setIsOpen(false)}
+      onClick={() => {
+        if (disabledOnClick) return;
+        setIsOpen(false);
+      }}
     >
       <div
         className={`-[101] flex flex-col items-center gap-10 rounded-[20px] bg-white px-[34px] py-10 duration-300${
@@ -53,6 +58,7 @@ const Modal = ({
             {cancel}
           </button>
           <button
+            type="submit"
             className={`h-[52px] w-[156px] rounded-[10px] text-base duration-300 ${
               isCreate
                 ? 'bg-blue5 font-semibold text-gray2 hover:bg-blue1 hover:font-bold hover:text-white'
