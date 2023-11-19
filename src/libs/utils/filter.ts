@@ -70,3 +70,26 @@ export const tagColorFilter = (option: string, type: string) => {
     }
   }
 };
+
+export const chatDateFilter = (rawDate: string) => {
+  const date = new Date(rawDate);
+  const now = new Date();
+
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  // 오늘인지 확인하는 경우
+  if (
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear()
+  ) {
+    // 오늘인 경우 시간만 표시
+    return `${hours}:${minutes}`;
+  } else {
+    // 오늘이 아닌 경우 날짜,시간 표시
+    return `${month}월 ${day}일 ${hours}:${minutes}`;
+  }
+};

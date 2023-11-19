@@ -20,6 +20,7 @@ const TopNavBar = () => {
   const [isClickCreate, setIsClickCreate] = useState(false);
 
   const [sessionId, setSessionId] = useState(0);
+  const [chatName, setChatName] = useState('');
 
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
@@ -112,11 +113,13 @@ const TopNavBar = () => {
             <ChatList
               setIsOpenChatRoom={setIsOpenChatRoom}
               setSessionId={setSessionId}
+              setChatName={setChatName}
             />
           ) : (
             <ChatRoom
-              sessionId={sessionId}
               setIsOpenChatRoom={setIsOpenChatRoom}
+              sessionId={sessionId}
+              chatName={chatName}
             />
           )}
         </div>

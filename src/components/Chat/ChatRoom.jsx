@@ -2,6 +2,7 @@ import { BsFillPersonFill, BsSend } from 'react-icons/bs';
 import styled from 'styled-components';
 import { useEffect, useState, useRef } from 'react';
 import * as StompJs from '@stomp/stompjs';
+import { chatDateFilter } from '../../libs/utils/filter';
 
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
@@ -44,40 +45,76 @@ const BubbleContainer = styled.div`
   }
 `;
 
-const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
+const ChatBubble = ({ el, idx, name }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className={`flex w-full items-end gap-2 ${
+        el.userName === name ? 'justify-end' : 'justify-start'
+      }`}
+      key={idx}
+    >
+      {el.userName === name && isHovered && (
+        <div className="text-[10px] font-semibold text-gray4">
+          {chatDateFilter(el.time)}
+        </div>
+      )}
+      <div
+        className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
+          el.userName === name
+            ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
+            : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {el.content}
+      </div>
+      {el.userName !== name && isHovered && (
+        <div className="text-[10px] font-semibold text-gray4">
+          {chatDateFilter(el.time)}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const [msgList, setMsgList] = useState([]);
   const [userData, setUserData] = useState([]);
 
   const [msg, setMsg] = useState('');
-  const [isSend, setIsSend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Socket
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
+  const headers = {
+    Authorization: `Bearer ${myToken}`,
+  };
 
-  client.current = new StompJs.Client({
-    brokerURL: 'wss://panpeun.shop/ws',
-    connectHeaders: {
-      Authorization: `Bearer ${myToken}`,
-      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-    },
+  const connect = () => {
+    client.current = new StompJs.Client({
+      brokerURL: 'wss://panpeun.shop/ws',
+      connectHeaders: {
+        Authorization: `Bearer ${myToken}`,
+        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+      },
 
-    onConnect: () => {
-      console.log('chatRoom success');
-      subscribe();
-      publish('detail');
-      isSend && publish('chat');
-    },
-  });
+      onConnect: () => {
+        console.log('chatRoom success');
+        subscribe();
+        publish('detail');
+      },
+    });
+
+    client.current.activate();
+  };
 
   const publish = (option) => {
-    const headers = {
-      Authorization: `Bearer ${myToken}`,
-    };
-
     if (!client.current.connected) {
       console.log('publish 통신 실패');
       return;
@@ -91,11 +128,10 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
         destination: `/pub/chat/detail`,
         body: JSON.stringify({
           chatSession: sessionId,
-          fromUserName: '김승훈',
-          toUserName: '더미유저1',
+          fromUserName: loginState.name,
+          toUserName: chatName,
         }),
       });
-      return;
     }
 
     if (option === 'chat') {
@@ -104,20 +140,16 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
         destination: `/pub/chat`,
         body: JSON.stringify({
           chatSession: sessionId,
-          fromUserName: '김승훈',
-          toUserName: '더미유저1',
+          fromUserName: loginState.name,
+          toUserName: chatName,
           content: msg,
         }),
       });
-      return;
     }
   };
 
   const subscribe = () => {
     console.log('subscribe 실행');
-    const headers = {
-      Authorization: `Bearer ${myToken}`,
-    };
 
     client.current.subscribe(
       `/sub/chat/11`,
@@ -133,7 +165,6 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
         if (response.messageType === 'received') {
           console.log('전송완료');
           setMsgList((prev) => [...prev, response.data.message]);
-          setIsSend(false);
           setMsg('');
         }
       },
@@ -142,9 +173,13 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
   };
 
   useEffect(() => {
-    client.current.activate();
-    return () => client.current.deactivate();
-  }, [isSend]);
+    connect();
+    return () => {
+      if (client.current) {
+        client.current.deactivate();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     MoveToBottom();
@@ -152,7 +187,7 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
 
   const onSubmitChat = (e) => {
     e.preventDefault();
-    setIsSend(true);
+    publish('chat');
   };
 
   // 스크롤 이벤트
@@ -168,7 +203,10 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
 
   return (
     <div className={`flex h-full w-full flex-col gap-4 p-6 `}>
-      <div className="flex items-center gap-3 ">
+      <div
+        className="flex items-center gap-3 "
+        onClick={() => publish('detail')}
+      >
         <button className="text-xl" onClick={() => setIsOpenChatRoom(false)}>
           {'<'}
         </button>
@@ -202,24 +240,7 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId }) => {
       ) : (
         <BubbleContainer ref={containerRef}>
           {msgList.map((el, idx) => (
-            <div
-              className={`flex w-full ${
-                el.userName === loginState.name
-                  ? 'justify-end'
-                  : 'justify-start'
-              }`}
-              key={idx}
-            >
-              <div
-                className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
-                  el.userName === loginState.name
-                    ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
-                    : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
-                }`}
-              >
-                {el.content}
-              </div>
-            </div>
+            <ChatBubble el={el} idx={idx} name={loginState.name} />
           ))}
         </BubbleContainer>
       )}

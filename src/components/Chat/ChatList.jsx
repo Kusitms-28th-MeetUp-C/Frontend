@@ -5,6 +5,7 @@ import * as StompJs from '@stomp/stompjs';
 
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
+import { chatDateFilter } from '../../libs/utils/filter';
 
 // 스크롤 커스텀
 const ListContainer = styled.div`
@@ -43,7 +44,7 @@ const ListContainer = styled.div`
   }
 `;
 
-const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
+const ChatList = ({ setIsOpenChatRoom, setSessionId, setChatName }) => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
   const [chatList, setChatList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,20 +53,27 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
   const sessionId = 11;
+  const headers = {
+    Authorization: `Bearer ${myToken}`,
+  };
 
-  client.current = new StompJs.Client({
-    brokerURL: 'wss://panpeun.shop/ws',
-    connectHeaders: {
-      Authorization: `Bearer ${myToken}`,
-      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-    },
+  const connect = () => {
+    client.current = new StompJs.Client({
+      brokerURL: 'wss://panpeun.shop/ws',
+      connectHeaders: {
+        Authorization: `Bearer ${myToken}`,
+        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+      },
 
-    onConnect: () => {
-      console.log('chatList success');
-      subscribe();
-      publish();
-    },
-  });
+      onConnect: () => {
+        console.log('chatList success');
+        subscribe();
+        publish();
+      },
+    });
+
+    client.current.activate();
+  };
 
   const publish = () => {
     if (!client.current.connected) {
@@ -78,16 +86,13 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
     client.current.publish({
       destination: `/pub/chatList`,
       body: JSON.stringify({
-        userName: '김승훈',
+        userName: loginState.name,
       }),
     });
   };
 
   const subscribe = () => {
     console.log('subscribe 실행');
-    const headers = {
-      Authorization: `Bearer ${myToken}`,
-    };
 
     client.current.subscribe(
       `/sub/chat/${sessionId}`,
@@ -102,39 +107,17 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
   };
 
   useEffect(() => {
-    client.current.activate();
-    return () => client.current.deactivate();
+    connect();
+    return () => {
+      if (client.current) {
+        client.current.deactivate();
+      }
+    };
   }, []);
-
-  const onClickList = () => {
-    console.log(chatList);
-  };
-
-  const formatDate = (rawDate) => {
-    const date = new Date(rawDate);
-    const now = new Date();
-
-    // 오늘인지 확인하는 경우
-    if (
-      date.getDate() === now.getDate() &&
-      date.getMonth() === now.getMonth() &&
-      date.getFullYear() === now.getFullYear()
-    ) {
-      // 오늘인 경우 시간만 표시
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-    } else {
-      // 오늘이 아닌 경우 날짜만 표시
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      return `${month}월 ${day}일`;
-    }
-  };
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden py-7 pl-6 pr-3">
-      <div className="mb-9 flex items-center gap-2" onClick={onClickList}>
+      <div className="mb-9 flex items-center gap-2">
         <BsFillChatFill className="text-2xl text-blue1" />
         <div className="text-2xl font-bold text-black">커피챗 목록</div>
       </div>
@@ -153,6 +136,7 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
               onClick={() => {
                 setIsOpenChatRoom(true);
                 setSessionId(el.sessionId);
+                setChatName(el.userName);
               }}
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray6">
@@ -169,7 +153,7 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId }) => {
                     </div>
                   </div>
                   <div className="text-xs font-semibold text-gray4">
-                    {formatDate(el.time)}
+                    {chatDateFilter(el.time)}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
