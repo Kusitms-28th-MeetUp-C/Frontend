@@ -11,11 +11,7 @@ import Modal from '../components/Modal/Modal';
 import Title from '../components/Common/Title';
 import BackBtn from '../components/SearchDetail/BackBtn';
 
-interface TemplateDetailProps {
-  MoveToTop: () => void;
-}
-
-const TemplateDetail = ({ MoveToTop }: TemplateDetailProps) => {
+const TemplateDetail = () => {
   const navigate = useNavigate();
   const { templateId } = useParams();
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
@@ -62,7 +58,6 @@ const TemplateDetail = ({ MoveToTop }: TemplateDetailProps) => {
 
   useEffect(() => {
     fetchData();
-    MoveToTop();
   }, [templateId]);
 
   return (

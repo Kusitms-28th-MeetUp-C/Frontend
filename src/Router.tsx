@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useRef } from 'react';
 
 import Layout from './components/Layout/Layout';
-import Home from './pages/Home';
 import Meeting from './pages/Meeting';
 import MeetingDetail from './pages/MeetingDetail';
 import MyPage from './pages/MyPage';
@@ -17,6 +16,7 @@ import KakaoLogin from './pages/KakaoLogin';
 import TemplateEditor from './pages/TemplateEditor';
 import TemplateSearch from './pages/TemplateSearch';
 import RoadmapEditor from './pages/RoadmapEditor';
+import Main from './pages/Main';
 
 const Router = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,9 +28,9 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <Layout containerRef={containerRef}>
+      <Layout containerRef={containerRef} moveToTop={MoveToTop}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Main />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/oauth">
             <Route path="google" element={<GoogleLogin />} />
@@ -48,7 +48,7 @@ const Router = () => {
             <Route path="" element={<Template MoveToTop={MoveToTop} />} />
             <Route
               path=":templateId"
-              element={<TemplateDetail MoveToTop={MoveToTop} />}
+              element={<TemplateDetail />}
             />
             <Route path="create" element={<TemplateEditor />} />
           </Route>
@@ -56,7 +56,7 @@ const Router = () => {
             <Route path="" element={<Roadmap MoveToTop={MoveToTop} />} />
             <Route
               path=":roadmapId"
-              element={<RoadmapDetail MoveToTop={MoveToTop} />}
+              element={<RoadmapDetail />}
             />
             <Route path="create" element={<RoadmapEditor />} />
           </Route>
