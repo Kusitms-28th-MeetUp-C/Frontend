@@ -1,4 +1,9 @@
-import { InputProps } from '../interface';
+interface InputProps {
+  placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+}
 
 const Input: React.FC<InputProps> = ({
   placeholder,

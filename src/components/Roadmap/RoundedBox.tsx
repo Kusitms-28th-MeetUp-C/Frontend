@@ -1,4 +1,8 @@
-import { RoundedBoxProps } from '../interface';
+interface RoundedBoxProps {
+  children: React.ReactNode;
+  className?: string;
+  color?: 'blue' | 'white';
+}
 
 const RoundedBox = ({
   children,
