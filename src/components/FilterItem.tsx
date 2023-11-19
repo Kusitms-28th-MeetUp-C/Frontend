@@ -3,6 +3,7 @@ interface FilterItemProps {
   isActive?: boolean;
   defaultBgColor?: string;
   onClick?: () => void;
+  className?: string;
 }
 
 const FilerItem = ({
@@ -10,6 +11,7 @@ const FilerItem = ({
   isActive,
   defaultBgColor = 'white',
   onClick,
+  className,
 }: FilterItemProps) => {
   return (
     <div
@@ -20,7 +22,7 @@ const FilerItem = ({
           : ` font-medium text-[#8A929F] hover:bg-blue1 hover:text-white ${
               defaultBgColor === 'white' ? ' bg-white' : ' bg-gray7'
             }`
-      }`}
+      }${className ? ` ${className}` : ''}`}
     >
       {children}
     </div>
