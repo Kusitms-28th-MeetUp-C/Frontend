@@ -14,7 +14,7 @@ const Layout = ({ children, containerRef, moveToTop }: Props) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const includedFooter = ['/login', '/'];
+  const includedFooter = ['/', '/login', '/article'];
   const isFullScreen = includedFooter.includes(currentPath);
 
   useEffect(() => {
