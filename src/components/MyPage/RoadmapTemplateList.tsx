@@ -17,7 +17,7 @@ const RoadmapTemplateList = ({
 }: RoadmapTemplateListProps) => {
   const [contentData, setContentData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<unknown>(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -34,24 +34,23 @@ const RoadmapTemplateList = ({
   };
 
   useEffect(() => {
-    Axios.get('/mypage', {
-      params: {
-        page,
-      },
-    })
-      .then((res) => {
+    const fetchContentData = async () => {
+      try {
+        const res = await Axios.get('/mypage', {
+          params: {
+            page,
+          },
+        });
         setContentData(res.data.data.contentList);
-        console.log('res contentList', res.data.data.contentList);
         setTotalPages(res.data.data.contentList.totalPages);
-        console.log('res contentList', res.data.data.contentList.totalPages);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(err);
         setError(err);
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchContentData();
   }, [page]);
 
   useEffect(() => {
