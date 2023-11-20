@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useRef } from 'react';
 
 import Layout from './components/Layout/Layout';
-import Home from './pages/Home';
 import Meeting from './pages/Meeting';
 import MeetingDetail from './pages/MeetingDetail';
 import MyPage from './pages/MyPage';
@@ -17,7 +16,10 @@ import KakaoLogin from './pages/KakaoLogin';
 import TemplateEditor from './pages/TemplateEditor';
 import TemplateSearch from './pages/TemplateSearch';
 import RoadmapEditor from './pages/RoadmapEditor';
+import Main from './pages/Main';
+import Article from './pages/Article';
 import OtherUser from './pages/OtherUser';
+import OnBoarding from './pages/OnBoarding';
 
 const Router = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,17 +31,19 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <Layout containerRef={containerRef}>
+      <Layout containerRef={containerRef} moveToTop={MoveToTop}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Main />} />
+          <Route path="/article" element={<Article />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signUp" element={<OnBoarding />} />
           <Route path="/oauth">
             <Route path="google" element={<GoogleLogin />} />
             <Route path="kakao" element={<KakaoLogin />} />
           </Route>
           <Route path="/meeting">
             <Route path="" element={<Meeting />} />
-            <Route path=":meetingId">
+            <Route path=":teamId">
               <Route path="" element={<MeetingDetail />} />
               <Route path="template/:templateId" element={<Management />} />
             </Route>
@@ -47,18 +51,12 @@ const Router = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/template">
             <Route path="" element={<Template MoveToTop={MoveToTop} />} />
-            <Route
-              path=":templateId"
-              element={<TemplateDetail MoveToTop={MoveToTop} />}
-            />
+            <Route path=":templateId" element={<TemplateDetail />} />
             <Route path="create" element={<TemplateEditor />} />
           </Route>
           <Route path="roadmap">
             <Route path="" element={<Roadmap MoveToTop={MoveToTop} />} />
-            <Route
-              path=":roadmapId"
-              element={<RoadmapDetail MoveToTop={MoveToTop} />}
-            />
+            <Route path=":roadmapId" element={<RoadmapDetail />} />
             <Route path="create" element={<RoadmapEditor />} />
           </Route>
           <Route path="/management" element={<Management />} />

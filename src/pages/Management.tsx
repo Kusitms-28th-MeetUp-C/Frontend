@@ -8,13 +8,13 @@ import Markdown from 'react-markdown';
 import '../styles/github-markdown-light.css';
 
 import PageHeading from '../components/PageHeading';
-import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Modal from '../components/Modal/Modal';
 import Axios from '../libs/api';
+import Process from '../components/SearchDetail/Process';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -179,7 +179,7 @@ const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
         <textarea
           id="content"
           rows={10}
-          value={values.content}
+          value={values?.content}
           className="mt-3 w-full resize-none rounded-2xl bg-gray7 px-4 py-4 outline-none"
           placeholder="템플릿에 대한 리뷰를 작성해주세요"
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -199,10 +199,11 @@ const Management = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [values, setValues] = useState<any>({
-    meetingId: 1,
+    teamId: 1,
     content: '',
     rating: 0,
   });
+  const [roadmap, setRoadmap] = useState<any>(null);
 
   const spaceLink: any = {
     NOTION: {
@@ -226,7 +227,7 @@ const Management = () => {
   };
 
   const handleDownload = () => {
-    const markdownText = data.content;
+    const markdownText = data?.content;
 
     const blob = new Blob([markdownText], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
@@ -240,26 +241,38 @@ const Management = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    if (!searchParams) return;
-    if (!params) return;
-    Axios.get('/manage/template/team', {
-      params: {
-        templateId: params.templateId,
+    const fetchRoadmap = async () => {
+      setLoading(true);
+      if (!searchParams) return;
+      if (!params) return;
+      const data = {
+        templateId: Number(params.templateId),
         roadmapTitle: searchParams.get('roadmap'),
         teamTitle: searchParams.get('team'),
-      },
-    })
-      .then((res) => {
+      };
+      try {
+        const res = await Axios.get('/manage/template/team', {
+          params: data,
+        });
         setData(res.data.data);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+      } catch (err) {
+        console.error(err);
+      }
+      try {
+        const res = await Axios.get(`/team/${params.teamId}`);
+        setRoadmap(res.data.data.roadmap);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRoadmap();
+  }, [params, searchParams]);
 
   useEffect(() => {
     if (data) {
-      console.log(data);
+      console.log(data.roadmapInfo.roadmapList);
       setValues({ ...values, templateId: data.originalTemplateId });
     }
   }, [data]);
@@ -307,7 +320,7 @@ const Management = () => {
           <h3 className="mb-5 text-center text-2xl font-bold">
             {data?.roadmapInfo.title}
           </h3>
-          <Roadmap data={data?.roadmapInfo.roadmapDetailList} />
+          <Process data={roadmap} />
         </section>
         {/* 템플릿 수정 섹션 */}
         <section className="rounded-2xl bg-white px-8 py-8">
@@ -344,7 +357,7 @@ const Management = () => {
                 <span className="font-bold">템플릿 내용</span>
               </div>
               <div className="w-full rounded-2xl px-6 py-4 leading-6 shadow-lg">
-                <Markdown className="markdown-body">{data.content}</Markdown>
+                <Markdown className="markdown-body">{data?.content}</Markdown>
               </div>
             </div>
           </div>

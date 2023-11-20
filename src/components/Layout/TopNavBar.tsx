@@ -1,35 +1,40 @@
+import Axios from '../../libs/api';
+import Modal from '../Modal/Modal';
+import ChatList from '../Chat/ChatList.jsx';
+import ChatRoom from '../Chat/ChatRoom.jsx';
+
 import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import { RiPencilFill } from 'react-icons/ri';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import ChatList from '../Chat/ChatList.jsx';
-import ChatRoom from '../Chat/ChatRoom.jsx';
-import { useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
-import Axios from '../../libs/api';
-import Modal from '../Modal/Modal';
+import { OpenChatState, OpenChatRoomState } from '../../states/ChatState';
 
 const TopNavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const currentPath = location.pathname;
 
-  const [isOpenChat, setIsOpenChat] = useState(false);
-  const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
   const [isClickLogout, setIsClickLogout] = useState(false);
   const [isClickCreate, setIsClickCreate] = useState(false);
 
   const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [openChatState, setOpenChatState] = useRecoilState(OpenChatState);
+  const [openChatRoomState, setOpenChatRoomState] =
+    useRecoilState(OpenChatRoomState);
 
   const onClickLogout = async () => {
-    await Axios.patch('user/signOut')
+    localStorage.setItem('access-token', '');
+    setLoginState({});
+    await Axios.patch('user/signout')
       .then((res) => {
         console.log(res);
-        localStorage.setItem('access-token', '');
-        setLoginState({});
         delete Axios.defaults.headers.common['Authorization'];
         setIsClickLogout(false);
+        navigate('/');
       })
       .catch((err) => console.error(err));
   };
@@ -44,79 +49,127 @@ const TopNavBar = () => {
     setIsClickCreate(false);
   };
 
+  const onClickLoginCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (loginState.isLogin) {
+      navigate(`/${e.currentTarget.id}`);
+    } else {
+      alert('로그인이 필요한 서비스입니다');
+      navigate('/login');
+    }
+    return;
+  };
+
   return (
     <div className="flex h-[65px] items-center justify-between bg-white px-8">
       <div className="flex items-center">
-        <Link to="/" className="flex items-center gap-4">
+        <Link
+          to="/"
+          className={`flex items-center gap-4 ${
+            currentPath === '/signUp' && 'pointer-events-none'
+          }`}
+        >
           <img src="/logo/logo.svg" alt="logo" className="h-6" />
           <img src="/logo/logo-typo-black.svg" />
         </Link>
       </div>
-      <div className="flex items-center gap-3">
-        {loginState.isLogin && (
-          <button
-            className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
-            onClick={() => setIsClickCreate(true)}
+
+      {(currentPath === '/' || currentPath === '/article') && (
+        <div className="flex items-center gap-14">
+          <Link
+            to="/"
+            className={`${
+              currentPath === '/' && 'border-b-4 border-tagLightPurple1'
+            } text-xl font-semibold text-gray3 duration-300`}
           >
-            <div className="text-sm font-semibold">템플릿 업로드</div>
-            <RiPencilFill className="text-sm" />
-          </button>
-        )}
-
-        <Link
-          to={loginState.isLogin ? '/mypage' : '/login'}
-          className={`flex h-10 items-center justify-center gap-2 rounded-[10px] ${
-            location.pathname === '/mypage' ? ' bg-blue4' : ' bg-blue5'
-          }  px-2`}
-        >
-          <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
-            {loginState.profile ? (
-              <img src={loginState.profile} />
-            ) : (
-              <BsFillPersonFill className="text-xl text-gray3" />
-            )}
-          </div>
-          <div className="text-base font-semibold text-gray2">
-            {loginState.isLogin ? `${loginState.name || '이름없음'}` : '로그인'}
-          </div>
-        </Link>
-
-        {loginState.isLogin && (
+            서비스 소개
+          </Link>
           <button
-            className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
-              isOpenChat
-                ? 'bg-[#606DE9] text-white'
-                : 'bg-[#EBEEF9] text-[#495565]'
-            }`}
-            onClick={() => {
-              setIsOpenChat((prev) => !prev);
-              setIsOpenChatRoom(false);
-            }}
+            id="template"
+            className={`text-xl font-semibold text-gray3 duration-300`}
+            onClick={onClickLoginCategory}
           >
-            <BsFillChatFill className="text-xl" />
+            템플릿 탐색
           </button>
-        )}
-
-        {loginState.isLogin && (
           <button
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
-            onClick={() => setIsClickLogout((prev) => !prev)}
+            id="meeting"
+            className={`text-xl font-semibold text-gray3 duration-300`}
+            onClick={onClickLoginCategory}
           >
-            <TbLogout className="text-2xl text-gray3" />
+            나의 회의 관리
           </button>
-        )}
-      </div>
+          <Link
+            to="/article"
+            className={`${
+              currentPath === '/article' && 'border-b-4 border-tagLightPurple1'
+            } text-xl font-semibold text-gray3 duration-300`}
+          >
+            아티클
+          </Link>
+        </div>
+      )}
 
-      {isOpenChat && (
-        <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
-          {!isOpenChatRoom ? (
-            <ChatList setIsOpenChatRoom={setIsOpenChatRoom} />
-          ) : (
-            <ChatRoom
-              isOpenChatRoom={isOpenChatRoom}
-              setIsOpenChatRoom={setIsOpenChatRoom}
-            />
+      {currentPath !== '/signUp' && (
+        <div className="flex items-center gap-3">
+          {loginState.isLogin && (
+            <button
+              className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 py-2 text-white"
+              onClick={() => setIsClickCreate(true)}
+            >
+              <div className="text-sm font-semibold">템플릿 업로드</div>
+              <RiPencilFill className="text-sm" />
+            </button>
           )}
+
+          <Link
+            to={loginState.isLogin ? '/mypage' : '/login'}
+            className={`flex h-10 items-center justify-center gap-2 rounded-[10px] ${
+              currentPath === '/mypage' ? ' bg-blue4' : ' bg-blue5'
+            }  px-2`}
+          >
+            <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
+              {loginState.profile ? (
+                <img src={loginState.profile} />
+              ) : (
+                <BsFillPersonFill className="text-xl text-gray3" />
+              )}
+            </div>
+            <div className="text-base font-semibold text-gray2">
+              {loginState.isLogin
+                ? `${loginState.name || '이름없음'}`
+                : '로그인'}
+            </div>
+          </Link>
+
+          {loginState.isLogin && (
+            <button
+              className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
+                openChatState
+                  ? 'bg-[#606DE9] text-white'
+                  : 'bg-[#EBEEF9] text-[#495565]'
+              }`}
+              onClick={() => {
+                setOpenChatState((prev: boolean) => !prev);
+                setOpenChatRoomState(false);
+              }}
+            >
+              <BsFillChatFill className="text-xl" />
+            </button>
+          )}
+
+          {loginState.isLogin && (
+            <button
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
+              onClick={() => setIsClickLogout((prev) => !prev)}
+            >
+              <TbLogout className="text-2xl text-gray3" />
+            </button>
+          )}
+        </div>
+      )}
+
+      {openChatState && (
+        <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
+          {!openChatRoomState ? <ChatList /> : <ChatRoom />}
         </div>
       )}
 

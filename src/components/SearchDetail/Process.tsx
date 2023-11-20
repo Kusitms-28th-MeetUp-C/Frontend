@@ -16,7 +16,7 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
   return (
     <div
       className="flex w-full flex-col items-center rounded-[20px] bg-white px-9 py-9"
-      onClick={() => console.log(processingRatio)}
+      onClick={() => console.log(processingRatio, data.processingNum)}
     >
       {isShowTitle && (
         <div className="mb-6 text-[28px] font-bold text-gray1">
@@ -69,7 +69,7 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
         <div className="absolute left-[7%] top-[25px] z-0 h-[5px] w-[87%] bg-blue3" />
         {data.processingNum && (
           <div
-            className={`absolute left-[7%] top-[25px] z-0 h-[5px] bg-blue1 ${processingRatio}`}
+            className={`z-1 absolute left-[7%] top-[25px] h-[5px] bg-blue1 ${processingRatio}`}
           />
         )}
       </div>

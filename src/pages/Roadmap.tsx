@@ -49,7 +49,7 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   }, [roadmapType, page, title]);
 
   return (
-    <div className="pr-12 py-[45px]">
+    <div className="py-[45px] pr-12">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
         <div className="text-[28px] font-bold text-gray1">로드맵 템플릿</div>
         <div
@@ -61,8 +61,8 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
         </div>
         {isHover && (
           <InfoBox>
-            로드맵 템플릿 설명입니다. 로드맵 템플릿 설명입니다. 로드맵 템플릿
-            설명입니다.로드맵 템플릿 설명입니다.
+            같은 카테고리의 프로젝트를 먼저 경험한 사용자들이 공유한
+            로드맵입니다. 로드맵을 통해 전체 타임라인을 확인해보세요!
           </InfoBox>
         )}
       </div>

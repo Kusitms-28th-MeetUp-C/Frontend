@@ -99,20 +99,10 @@ const Info = ({ isRoadmap, data }: InfoProps) => {
         {data.introduction}
       </div>
 
-      <button className="w-full rounded-[10px] bg-[#ECEBFE] py-2.5 text-sm font-semibold text-blue1">
-        사용 예시 보러가기
-      </button>
-
       {!isRoadmap && (
         <>
-          <div className="mb-4 mt-10 flex items-center justify-between">
-            <div className="text-base font-bold text-gray2">리뷰 미리보기</div>
-            <Link to="/" className="flex items-center">
-              <div className="text-[13px] font-medium text-[#4F4949]">
-                더보기
-              </div>
-              <MdNavigateNext className="text-[#4F4949]" />
-            </Link>
+          <div className="mb-4 mt-10 text-base font-bold text-gray2">
+            리뷰 미리보기
           </div>
           <li className="flex flex-col gap-4">
             {data?.reviews?.map((el: any, idx: number) => (

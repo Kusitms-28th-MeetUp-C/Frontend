@@ -11,11 +11,7 @@ import Process from '../components/SearchDetail/Process';
 import BackBtn from '../components/SearchDetail/BackBtn';
 import Title from '../components/Common/Title';
 
-interface RoadmapDetailProps {
-  MoveToTop: () => void;
-}
-
-const RoadmapDetail = ({ MoveToTop }: RoadmapDetailProps) => {
+const RoadmapDetail = () => {
   const navigate = useNavigate();
   const { roadmapId } = useParams();
   const [mainData, setMainData] = useState<any>({});
@@ -54,7 +50,6 @@ const RoadmapDetail = ({ MoveToTop }: RoadmapDetailProps) => {
 
   useEffect(() => {
     fetchData();
-    MoveToTop();
   }, [roadmapId]);
 
   const [isOpenTeamModal, setIsOpenTeamModal] = useState(false);
@@ -90,7 +85,7 @@ const RoadmapDetail = ({ MoveToTop }: RoadmapDetailProps) => {
 
   return (
     <div className="w-full min-w-[1250px] py-9 pr-10">
-      <BackBtn/>
+      <BackBtn />
 
       <Title>{mainData.title}</Title>
 
