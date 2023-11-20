@@ -26,11 +26,11 @@ const TopNavBar = () => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const onClickLogout = async () => {
-    await Axios.patch('user/signOut')
+    localStorage.setItem('access-token', '');
+    setLoginState({});
+    await Axios.patch('user/signout')
       .then((res) => {
         console.log(res);
-        localStorage.setItem('access-token', '');
-        setLoginState({});
         delete Axios.defaults.headers.common['Authorization'];
         setIsClickLogout(false);
       })

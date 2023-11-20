@@ -16,7 +16,7 @@ const GoogleLogin = () => {
     if (accessToken) {
       console.log(accessToken);
       Axios.post(
-        'user/signIn',
+        'user/signin',
         {
           platform: 'google',
         },
@@ -28,19 +28,19 @@ const GoogleLogin = () => {
         },
       )
         .then((res) => {
-          navigate('/');
           const data = res.data.data;
           console.log(data);
           localStorage.setItem('access-token', data.accessToken);
           setLoginState({
             isLogin: true,
-            userId: data.id,
+            sessionId: data.sessionId,
             profile: data.picture,
             name: data.name,
           });
           Axios.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${data.accessToken}`;
+          navigate(`${data.isFirst ? '/signUp' : '/'}`);
         })
         .catch((err) => console.error(err));
     }

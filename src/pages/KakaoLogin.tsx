@@ -29,9 +29,8 @@ const KakaoLogin = () => {
         )
         .then((res) => {
           console.log(res);
-          navigate('/');
           Axios.post(
-            'user/signIn',
+            'user/signin',
             {
               platform: 'kakao',
             },
@@ -43,12 +42,13 @@ const KakaoLogin = () => {
             },
           )
             .then((res) => {
+              navigate('/');
               const data = res.data.data;
               console.log(data);
               localStorage.setItem('access-token', data.accessToken);
               setLoginState({
                 isLogin: true,
-                userId: data.id,
+                sessionId: data.sessionId,
                 profile: data.picture,
                 name: data.name,
               });
