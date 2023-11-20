@@ -55,8 +55,8 @@ const StepSection = ({ stepData, team }: StepSectionProps) => {
 };
 
 const MeetingDetail = () => {
-  const params = useParams<{ meetingId: string }>();
-  const [meetingId, setMeetingId] = useState<number>();
+  const params = useParams<{ teamId: string }>();
+  const [teamId, setTeamId] = useState<number>();
   const [team, setTeam] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState(null);
@@ -71,21 +71,22 @@ const MeetingDetail = () => {
   });
 
   useEffect(() => {
-    if (params.meetingId) {
-      setMeetingId(parseInt(params.meetingId));
+    if (params.teamId) {
+      setTeamId(parseInt(params.teamId));
     }
   }, [params]);
 
   useEffect(() => {
-    if (!meetingId) return;
+    if (!teamId) return;
     setLoading(true);
-    Axios.get(`/team/${meetingId}`)
+    Axios.get(`/team/${teamId}`)
       .then((res) => {
+        console.log(res);
         setTeam(res.data.data);
       })
       .catch((err: any) => setError(err))
       .finally(() => setLoading(false));
-  }, [meetingId]);
+  }, [teamId]);
 
   useEffect(() => {
     if (team) {
