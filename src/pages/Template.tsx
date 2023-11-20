@@ -69,8 +69,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
         </div>
         {isHover && (
           <InfoBox>
-            회의록 템플릿 설명입니다. 회의록 템플릿 설명입니다. 회의록 템플릿
-            설명입니다.회의록 템플릿 설명입니다.
+            유사한 목적의 회의를 먼저 경험한 사용자들이 공유한 회의록 템플릿입니다. 템플릿을 통해 빠르고 쉽게 회의를 설계하세요!
           </InfoBox>
         )}
       </div>

@@ -12,12 +12,14 @@ interface DropDownProps {
   itemList: selectedItem[];
   selectedItem: selectedItem;
   setSelectedItem: React.Dispatch<React.SetStateAction<selectedItem>>;
+  className?: string;
 }
 
 const DropDown = ({
   itemList,
   selectedItem,
   setSelectedItem,
+  className,
 }: DropDownProps) => {
   const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
 
@@ -26,7 +28,7 @@ const DropDown = ({
       <div
         className={`flex cursor-pointer items-center justify-between bg-white px-4 py-3 ${
           isOpenCmbBox ? 'rounded-t-[15px] bg-blue4' : 'rounded-[15px]'
-        }`}
+        } ${className}`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
       >
         <div className="text-base font-medium text-gray3">
@@ -39,7 +41,7 @@ const DropDown = ({
         />
       </div>
       {isOpenCmbBox && (
-        <div className="absolute flex w-full flex-col rounded-b-[15px] bg-white">
+        <div className="absolute z-[50] flex w-full flex-col rounded-b-[15px] bg-white">
           <div className="m-auto h-[1.5px] w-[95%] bg-gray6" />
           {itemList?.map((el: any, idx: number) => (
             <div

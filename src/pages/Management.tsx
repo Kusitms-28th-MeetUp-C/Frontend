@@ -179,7 +179,7 @@ const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
         <textarea
           id="content"
           rows={10}
-          value={values.content}
+          value={values?.content}
           className="mt-3 w-full resize-none rounded-2xl bg-gray7 px-4 py-4 outline-none"
           placeholder="템플릿에 대한 리뷰를 작성해주세요"
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -227,7 +227,7 @@ const Management = () => {
   };
 
   const handleDownload = () => {
-    const markdownText = data.content;
+    const markdownText = data?.content;
 
     const blob = new Blob([markdownText], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
@@ -357,7 +357,7 @@ const Management = () => {
                 <span className="font-bold">템플릿 내용</span>
               </div>
               <div className="w-full rounded-2xl px-6 py-4 leading-6 shadow-lg">
-                <Markdown className="markdown-body">{data.content}</Markdown>
+                <Markdown className="markdown-body">{data?.content}</Markdown>
               </div>
             </div>
           </div>
