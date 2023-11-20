@@ -24,12 +24,12 @@ const DropDown = ({
   return (
     <div className="relative w-full">
       <div
-        className={`flex cursor-pointer items-center justify-between bg-white px-5 py-4 ${
+        className={`flex cursor-pointer items-center justify-between bg-white px-4 py-3 ${
           isOpenCmbBox ? 'rounded-t-[15px] bg-blue4' : 'rounded-[15px]'
         }`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
       >
-        <div className="text-xl font-medium text-gray3">
+        <div className="text-base font-medium text-gray3">
           {selectedItem.title}
         </div>
         <MdExpandMore
@@ -43,7 +43,7 @@ const DropDown = ({
           <div className="m-auto h-[1.5px] w-[95%] bg-gray6" />
           {itemList?.map((el: any, idx: number) => (
             <div
-              className={`cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray3 duration-300 ${
+              className={`cursor-pointer overflow-hidden px-7 py-3 text-sm font-medium text-gray3 duration-300 ${
                 idx === itemList.length - 1 && 'hover:rounded-b-[15px]'
               } hover:bg-[#ECEEF8]`}
               key={el.id}

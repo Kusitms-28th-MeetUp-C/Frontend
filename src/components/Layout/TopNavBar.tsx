@@ -14,6 +14,7 @@ import Modal from '../Modal/Modal';
 const TopNavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const currentPath = location.pathname;
 
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
@@ -50,65 +51,75 @@ const TopNavBar = () => {
   return (
     <div className="flex h-[65px] items-center justify-between bg-white px-8">
       <div className="flex items-center">
-        <Link to="/" className="flex items-center gap-4">
+        <Link
+          to="/"
+          className={`flex items-center gap-4 ${
+            currentPath === '/signUp' && 'pointer-events-none'
+          }`}
+        >
           <img src="/logo/logo.svg" alt="logo" className="h-6" />
           <img src="/logo/logo-typo-black.svg" />
         </Link>
       </div>
-      <div className="flex items-center gap-3">
-        {loginState.isLogin && (
-          <button
-            className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
-            onClick={() => setIsClickCreate(true)}
-          >
-            <div className="text-sm font-semibold">템플릿 업로드</div>
-            <RiPencilFill className="text-sm" />
-          </button>
-        )}
 
-        <Link
-          to={loginState.isLogin ? '/mypage' : '/login'}
-          className={`flex h-10 items-center justify-center gap-2 rounded-[10px] ${
-            location.pathname === '/mypage' ? ' bg-blue4' : ' bg-blue5'
-          }  px-2`}
-        >
-          <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
-            {loginState.profile ? (
-              <img src={loginState.profile} />
-            ) : (
-              <BsFillPersonFill className="text-xl text-gray3" />
-            )}
-          </div>
-          <div className="text-base font-semibold text-gray2">
-            {loginState.isLogin ? `${loginState.name || '이름없음'}` : '로그인'}
-          </div>
-        </Link>
+      {currentPath !== '/signUp' && (
+        <div className="flex items-center gap-3">
+          {loginState.isLogin && (
+            <button
+              className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 text-white"
+              onClick={() => setIsClickCreate(true)}
+            >
+              <div className="text-sm font-semibold">템플릿 업로드</div>
+              <RiPencilFill className="text-sm" />
+            </button>
+          )}
 
-        {loginState.isLogin && (
-          <button
-            className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
-              isOpenChat
-                ? 'bg-[#606DE9] text-white'
-                : 'bg-[#EBEEF9] text-[#495565]'
-            }`}
-            onClick={() => {
-              setIsOpenChat((prev) => !prev);
-              setIsOpenChatRoom(false);
-            }}
+          <Link
+            to={loginState.isLogin ? '/mypage' : '/login'}
+            className={`flex h-10 items-center justify-center gap-2 rounded-[10px] ${
+              currentPath === '/mypage' ? ' bg-blue4' : ' bg-blue5'
+            }  px-2`}
           >
-            <BsFillChatFill className="text-xl" />
-          </button>
-        )}
+            <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
+              {loginState.profile ? (
+                <img src={loginState.profile} />
+              ) : (
+                <BsFillPersonFill className="text-xl text-gray3" />
+              )}
+            </div>
+            <div className="text-base font-semibold text-gray2">
+              {loginState.isLogin
+                ? `${loginState.name || '이름없음'}`
+                : '로그인'}
+            </div>
+          </Link>
 
-        {loginState.isLogin && (
-          <button
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
-            onClick={() => setIsClickLogout((prev) => !prev)}
-          >
-            <TbLogout className="text-2xl text-gray3" />
-          </button>
-        )}
-      </div>
+          {loginState.isLogin && (
+            <button
+              className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
+                isOpenChat
+                  ? 'bg-[#606DE9] text-white'
+                  : 'bg-[#EBEEF9] text-[#495565]'
+              }`}
+              onClick={() => {
+                setIsOpenChat((prev) => !prev);
+                setIsOpenChatRoom(false);
+              }}
+            >
+              <BsFillChatFill className="text-xl" />
+            </button>
+          )}
+
+          {loginState.isLogin && (
+            <button
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
+              onClick={() => setIsClickLogout((prev) => !prev)}
+            >
+              <TbLogout className="text-2xl text-gray3" />
+            </button>
+          )}
+        </div>
+      )}
 
       {isOpenChat && (
         <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">

@@ -17,13 +17,13 @@ interface InputWrapperProps {
 }
 
 const InputTitle = ({ children }: InputTitleProps) => {
-  return <div className="text-xl font-semibold text-gray1">{children}</div>;
+  return <div className="text-base font-semibold text-gray1">{children}</div>;
 };
 
 const Input = ({ placeholder, onChange }: InputProps) => {
   return (
     <input
-      className="w-full rounded-[15px] bg-white p-5 text-xl font-medium text-gray3 outline-none"
+      className="w-full rounded-[15px] bg-white p-4 text-base font-medium text-gray3 outline-none"
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
     />
@@ -82,14 +82,14 @@ const OnBoarding = () => {
   return (
     <div className="w-full bg-blue5 py-[115px]">
       <div className="m-auto flex w-[90%] max-w-[550px] flex-col items-center">
-        <div className="mb-3 text-2xl font-medium text-gray1">반가워요</div>
+        <div className="mb-4 text-base font-medium text-gray1">반가워요</div>
         <div
-          className="mb-[88px] text-[28px] font-bold text-gray1"
+          className="mb-20 text-2xl font-bold text-gray1"
           onClick={() => console.log(userName, userType, teamName)}
         >
           프로필을 입력해주세요
         </div>
-        <div className="mb-[88px] flex w-full flex-col gap-9">
+        <div className="mb-20 flex w-full flex-col gap-9">
           <InputWrapper>
             <InputTitle>이름</InputTitle>
             <Input placeholder="이름을 입력해주세요" onChange={setUserName} />
@@ -111,7 +111,7 @@ const OnBoarding = () => {
           </InputWrapper>
         </div>
         <button
-          className="w-full max-w-[196px] rounded-[20px] bg-blue1 px-[60px] py-4 text-xl font-medium text-white"
+          className="w-full max-w-[196px] rounded-[10px] bg-blue1 px-10 py-3 text-base font-medium text-white"
           onClick={onClickBtn}
         >
           작성 완료

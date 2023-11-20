@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Axios from '../libs/api';
 import { useSetRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
@@ -9,12 +9,20 @@ const GoogleLogin = () => {
   const urlSearchParams = new URLSearchParams(window.location.hash.substr(1));
   const accessToken = urlSearchParams.get('access_token');
 
+  const [isSecondCallback, setIsSecondCallback] = useState(false);
+
   // 로그인 상태 설정
   const setLoginState = useSetRecoilState(LoginState);
 
   useEffect(() => {
     if (accessToken) {
       console.log(accessToken);
+      setIsSecondCallback(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSecondCallback) {
       Axios.post(
         'user/signin',
         {
@@ -29,7 +37,6 @@ const GoogleLogin = () => {
       )
         .then((res) => {
           const data = res.data.data;
-          console.log(data);
           localStorage.setItem('access-token', data.accessToken);
           setLoginState({
             isLogin: true,
@@ -44,7 +51,7 @@ const GoogleLogin = () => {
         })
         .catch((err) => console.error(err));
     }
-  }, []);
+  }, [isSecondCallback]);
 
   return <></>;
 };
