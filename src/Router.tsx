@@ -19,6 +19,7 @@ import RoadmapEditor from './pages/RoadmapEditor';
 import Main from './pages/Main';
 import Article from './pages/Article';
 import OtherUser from './pages/OtherUser';
+import OnBoarding from './pages/OnBoarding';
 
 const Router = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,6 +36,7 @@ const Router = () => {
           <Route path="/" element={<Main />} />
           <Route path="/article" element={<Article />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signUp" element={<OnBoarding />} />
           <Route path="/oauth">
             <Route path="google" element={<GoogleLogin />} />
             <Route path="kakao" element={<KakaoLogin />} />

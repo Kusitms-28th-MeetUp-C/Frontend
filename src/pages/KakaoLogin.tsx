@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import Axios from '../libs/api';
@@ -13,6 +13,9 @@ const KakaoLogin = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get('code');
+
+  const [isSecondCallback, setIsSecondCallback] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
 
   // 로그인 상태 설정
   const setLoginState = useSetRecoilState(LoginState);
@@ -29,38 +32,44 @@ const KakaoLogin = () => {
         )
         .then((res) => {
           console.log(res);
-          navigate('/');
-          Axios.post(
-            'user/signIn',
-            {
-              platform: 'kakao',
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: res.data.access_token,
-              },
-            },
-          )
-            .then((res) => {
-              const data = res.data.data;
-              console.log(data);
-              localStorage.setItem('access-token', data.accessToken);
-              setLoginState({
-                isLogin: true,
-                userId: data.id,
-                profile: data.picture,
-                name: data.name,
-              });
-              Axios.defaults.headers.common[
-                'Authorization'
-              ] = `Bearer ${data.accessToken}`;
-            })
-            .catch((err) => console.error(err));
+          setAccessToken(res.data.access_token);
+          setIsSecondCallback(true);
         })
         .catch((err) => console.error(err));
     }
   }, []);
+
+  useEffect(() => {
+    if (isSecondCallback) {
+      Axios.post(
+        'user/signin',
+        {
+          platform: 'kakao',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: accessToken,
+          },
+        },
+      )
+        .then((res) => {
+          const data = res.data.data;
+          localStorage.setItem('access-token', data.accessToken);
+          setLoginState({
+            isLogin: true,
+            sessionId: data.sessionId,
+            profile: data.picture,
+            name: data.name,
+          });
+          Axios.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${data.accessToken}`;
+          navigate(`${data.isFirst ? '/signUp' : '/'}`);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [isSecondCallback]);
 
   return <></>;
 };
