@@ -6,6 +6,7 @@ import * as StompJs from '@stomp/stompjs';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { chatDateFilter } from '../../libs/utils/filter';
+import { OpenChatRoomState, ChatUserState } from '../../states/ChatState';
 
 // 스크롤 커스텀
 const ListContainer = styled.div`
@@ -44,15 +45,18 @@ const ListContainer = styled.div`
   }
 `;
 
-const ChatList = ({ setIsOpenChatRoom, setSessionId, setChatName }) => {
+const ChatList = () => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [openChatRoomState, setOpenChatRoomState] =
+    useRecoilState(OpenChatRoomState);
+  const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
+
   const [chatList, setChatList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Socket
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
-  const sessionId = 11;
   const headers = {
     Authorization: `Bearer ${myToken}`,
   };
@@ -95,7 +99,7 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId, setChatName }) => {
     console.log('subscribe 실행');
 
     client.current.subscribe(
-      `/sub/chat/${sessionId}`,
+      `/sub/chat/${loginState.sessionId}`,
       (body) => {
         const response = JSON.parse(body.body);
         console.log(response);
@@ -134,14 +138,16 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId, setChatName }) => {
               className="flex w-full gap-[10px] rounded-[10px] px-2 py-2 hover:bg-blue5"
               key={idx}
               onClick={() => {
-                setIsOpenChatRoom(true);
-                setSessionId(el.sessionId);
-                setChatName(el.userName);
+                setOpenChatRoomState(true);
+                setChatUserState({
+                  name: el.userName,
+                  sessionId: el.sessionId,
+                });
               }}
             >
-              <div className="flex h-12 w-12 overflow-hidden items-center justify-center rounded-full bg-gray6">
+              <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray6">
                 {el.profile ? (
-                  <img src={el.profile} className='object-cover'/>
+                  <img src={el.profile} className="object-cover" />
                 ) : (
                   <BsFillPersonFill className="text-3xl text-gray3" />
                 )}
