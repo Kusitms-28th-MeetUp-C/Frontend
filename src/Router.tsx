@@ -39,7 +39,7 @@ const Router = () => {
           </Route>
           <Route path="/meeting">
             <Route path="" element={<Meeting />} />
-            <Route path=":meetingId">
+            <Route path=":teamId">
               <Route path="" element={<MeetingDetail />} />
               <Route path="template/:templateId" element={<Management />} />
             </Route>

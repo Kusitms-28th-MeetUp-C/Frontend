@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import TurndownService from 'turndown';
-import Axios from '../libs/api';
-import { produce } from 'immer';
+import { useEffect, useState } from 'react';
 import RoundedBox from '../components/Roadmap/RoundedBox';
 import StepItem from '../components/Roadmap/StepItem';
 import AddButton from '../components/Roadmap/AddButton';
@@ -14,26 +11,9 @@ const RoadmapEditor = () => {
     title: '',
     introduction: '',
     steps: [],
-    roadmapType: 'video',
+    roadmapType: 'it',
   });
-  const [templateNames, setTemplateNames] = useState<any[]>([
-    {
-      templateId: 44,
-      title: '템플릿 1',
-    },
-    {
-      templateId: 46,
-      title: '템플릿 2',
-    },
-    {
-      templateId: 48,
-      title: '템플릿 3',
-    },
-    {
-      templateId: 49,
-      title: '템플릿 4',
-    },
-  ]);
+  const [templateNames, setTemplateNames] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [templateValues, setTemplateValues] = useState<any>({
     title: '',
