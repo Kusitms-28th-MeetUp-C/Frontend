@@ -6,6 +6,7 @@ import { chatDateFilter } from '../../libs/utils/filter';
 
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
+import { OpenChatRoomState, ChatUserState } from '../../states/ChatState';
 
 const BubbleContainer = styled.div`
   display: flex;
@@ -80,8 +81,11 @@ const ChatBubble = ({ el, idx, name }) => {
   );
 };
 
-const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
+const ChatRoom = () => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [openChatRoomState, setOpenChatRoomState] =
+    useRecoilState(OpenChatRoomState);
+  const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
 
   const [msgList, setMsgList] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -127,9 +131,9 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
         headers,
         destination: `/pub/chat/detail`,
         body: JSON.stringify({
-          chatSession: sessionId,
+          chatSession: chatUserState.sessionId,
           fromUserName: loginState.name,
-          toUserName: chatName,
+          toUserName: chatUserState.name,
         }),
       });
     }
@@ -139,9 +143,9 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
         headers,
         destination: `/pub/chat`,
         body: JSON.stringify({
-          chatSession: sessionId,
+          chatSession: chatUserState.sessionId,
           fromUserName: loginState.name,
-          toUserName: chatName,
+          toUserName: chatUserState.name,
           content: msg,
         }),
       });
@@ -152,7 +156,7 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
     console.log('subscribe 실행');
 
     client.current.subscribe(
-      `/sub/chat/11`,
+      `/sub/chat/${loginState.sessionId}`,
       (body) => {
         const response = JSON.parse(body.body);
         console.log(response);
@@ -173,6 +177,7 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
   };
 
   useEffect(() => {
+    console.log(chatUserState);
     connect();
     return () => {
       if (client.current) {
@@ -207,7 +212,7 @@ const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
         className="flex items-center gap-3 "
         onClick={() => publish('detail')}
       >
-        <button className="text-xl" onClick={() => setIsOpenChatRoom(false)}>
+        <button className="text-xl" onClick={() => setOpenChatRoomState(false)}>
           {'<'}
         </button>
         <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray6">
