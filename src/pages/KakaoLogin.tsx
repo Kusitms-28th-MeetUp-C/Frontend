@@ -54,7 +54,7 @@ const KakaoLogin = () => {
               });
               Axios.defaults.headers.common[
                 'Authorization'
-              ] = `Bearer ${localStorage.getItem('access-token')}`;
+              ] = `Bearer ${data.accessToken}`;
             })
             .catch((err) => console.error(err));
         })

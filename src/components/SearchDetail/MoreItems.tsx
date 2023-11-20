@@ -4,7 +4,6 @@ import { GrNext } from 'react-icons/gr';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-
 interface MoreItemsProps {
   isRoadmap?: boolean;
   data: any;
@@ -74,7 +73,7 @@ const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
 
             {!isRoadmap && (
               <div className="mt-5 flex items-center gap-1 rounded-full bg-white px-[11px] py-[3px]">
-                <img src="/icons/category-purple.svg" />
+                <img src="/icons/category-green.svg" />
                 <div className="text-[10px] font-semibold text-gray3">
                   {el?.connectedRoadmap}
                 </div>

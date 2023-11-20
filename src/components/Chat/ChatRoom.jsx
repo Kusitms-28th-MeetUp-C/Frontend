@@ -2,6 +2,7 @@ import { BsFillPersonFill, BsSend } from 'react-icons/bs';
 import styled from 'styled-components';
 import { useEffect, useState, useRef } from 'react';
 import * as StompJs from '@stomp/stompjs';
+import { chatDateFilter } from '../../libs/utils/filter';
 
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
@@ -44,33 +45,74 @@ const BubbleContainer = styled.div`
   }
 `;
 
-const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
+const ChatBubble = ({ el, idx, name }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className={`flex w-full items-end gap-2 ${
+        el.userName === name ? 'justify-end' : 'justify-start'
+      }`}
+      key={idx}
+    >
+      {el.userName === name && isHovered && (
+        <div className="text-[10px] font-semibold text-gray4">
+          {chatDateFilter(el.time)}
+        </div>
+      )}
+      <div
+        className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
+          el.userName === name
+            ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
+            : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {el.content}
+      </div>
+      {el.userName !== name && isHovered && (
+        <div className="text-[10px] font-semibold text-gray4">
+          {chatDateFilter(el.time)}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ChatRoom = ({ setIsOpenChatRoom, sessionId, chatName }) => {
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const [msgList, setMsgList] = useState([]);
+  const [userData, setUserData] = useState([]);
+
   const [msg, setMsg] = useState('');
-  const [isSend, setIsSend] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Socket
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
-  const sessionId = 11;
+  const headers = {
+    Authorization: `Bearer ${myToken}`,
+  };
 
-  client.current = new StompJs.Client({
-    brokerURL: 'wss://panpeun.shop/ws',
-    connectHeaders: {
-      Authorization: `Bearer ${myToken}`,
-      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-    },
+  const connect = () => {
+    client.current = new StompJs.Client({
+      brokerURL: 'wss://panpeun.shop/ws',
+      connectHeaders: {
+        Authorization: `Bearer ${myToken}`,
+        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+      },
 
-    onConnect: () => {
-      console.log('chatRoom success');
-      subscribe();
-      publish('detail');
-      isSend && publish('chat');
-      isSend && publish('detail');
-    },
-  });
+      onConnect: () => {
+        console.log('chatRoom success');
+        subscribe();
+        publish('detail');
+      },
+    });
+
+    client.current.activate();
+  };
 
   const publish = (option) => {
     if (!client.current.connected) {
@@ -82,47 +124,47 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
 
     if (option === 'detail') {
       client.current.publish({
+        headers,
         destination: `/pub/chat/detail`,
         body: JSON.stringify({
-          chatSession: 3,
-          fromUserName: '김승훈',
-          toUserName: '류관곤',
+          chatSession: sessionId,
+          fromUserName: loginState.name,
+          toUserName: chatName,
         }),
       });
-      return;
     }
 
     if (option === 'chat') {
       client.current.publish({
+        headers,
         destination: `/pub/chat`,
         body: JSON.stringify({
-          chatSession: 3,
-          fromUserName: '김승훈',
-          toUserName: '류관곤',
+          chatSession: sessionId,
+          fromUserName: loginState.name,
+          toUserName: chatName,
           content: msg,
         }),
       });
-      return;
     }
   };
 
   const subscribe = () => {
     console.log('subscribe 실행');
-    const headers = {
-      Authorization: `Bearer ${myToken}`,
-    };
 
     client.current.subscribe(
-      `/sub/chat/${sessionId}`,
+      `/sub/chat/11`,
       (body) => {
         const response = JSON.parse(body.body);
         console.log(response);
+
         if (response.messageType === 'messageDetail') {
           setMsgList([...response.data.chatMessageList]);
+          setUserData({ ...response.data.user });
+          setIsLoading(false);
         }
         if (response.messageType === 'received') {
           console.log('전송완료');
-          setIsSend(false);
+          setMsgList((prev) => [...prev, response.data.message]);
           setMsg('');
         }
       },
@@ -131,9 +173,13 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
   };
 
   useEffect(() => {
-    client.current.activate();
-    return () => client.current.deactivate();
-  }, [isSend]);
+    connect();
+    return () => {
+      if (client.current) {
+        client.current.deactivate();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     MoveToBottom();
@@ -141,7 +187,7 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
 
   const onSubmitChat = (e) => {
     e.preventDefault();
-    setIsSend(true);
+    publish('chat');
   };
 
   // 스크롤 이벤트
@@ -157,42 +203,48 @@ const ChatRoom = ({ isOpenChatRoom, setIsOpenChatRoom }) => {
 
   return (
     <div className={`flex h-full w-full flex-col gap-4 p-6 `}>
-      <div className="flex items-center gap-3 ">
+      <div
+        className="flex items-center gap-3 "
+        onClick={() => publish('detail')}
+      >
         <button className="text-xl" onClick={() => setIsOpenChatRoom(false)}>
           {'<'}
         </button>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray6">
-          <BsFillPersonFill className="text-3xl text-gray3" />
+        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray6">
+          {userData.profile ? (
+            <img src={userData.profile} />
+          ) : (
+            <BsFillPersonFill className="text-3xl text-gray3" />
+          )}
         </div>
         <div className="flex flex-col gap-1">
-          <div className="rounded-full bg-blue1 px-1.5 py-[1px] text-center text-[8px] font-semibold text-white">
-            대학생
+          <div
+            className={`rounded-full ${
+              isLoading ? 'bg-transparent' : 'bg-blue1'
+            } px-1.5 py-[1px] text-center text-[8px] font-semibold text-white`}
+          >
+            {userData.type}
           </div>
-          <div className="text-balck text-sm font-semibold ">정예진</div>
+          <div className="text-balck text-sm font-semibold ">
+            {userData.name}
+          </div>
         </div>
       </div>
       <div className="h-[1.5px] w-full bg-gray6"></div>
 
-      <BubbleContainer ref={containerRef}>
-        {msgList.map((el, idx) => (
-          <div
-            className={`flex w-full ${
-              el.userName === loginState.name ? 'justify-end' : 'justify-start'
-            }`}
-            key={idx}
-          >
-            <div
-              className={`max-w-[260px] px-4 py-3 text-xs font-medium leading-4 ${
-                el.userName === loginState.name
-                  ? 'rounded-l-[20px] rounded-tr-[20px] bg-blue1 text-white'
-                  : 'rounded-r-[20px] rounded-tl-[20px] bg-gray7 text-black  '
-              }`}
-            >
-              {el.content}
-            </div>
-          </div>
-        ))}
-      </BubbleContainer>
+      {isLoading ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
+          <img src="/icons/loading.svg" />
+          <div className="text-xs font-semibold text-black">Loading...</div>
+        </div>
+      ) : (
+        <BubbleContainer ref={containerRef}>
+          {msgList.map((el, idx) => (
+            <ChatBubble el={el} idx={idx} name={loginState.name} />
+          ))}
+        </BubbleContainer>
+      )}
+
       <form
         className="flex w-full items-center gap-2 rounded-[10px] bg-gray7 p-[10px]"
         onSubmit={onSubmitChat}

@@ -1,4 +1,5 @@
 import { BsFillChatFill, BsFillPersonFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 interface MakerProps {
   data: any;
@@ -21,9 +22,12 @@ const Maker = ({ data }: MakerProps) => {
             <div className="rounded-full bg-blue1 px-2 py-1 text-[10px] font-extrabold text-gray9">
               {data?.userType}
             </div>
-            <div className="text-base font-semibold text-gray1">
+            <Link
+              to="#"
+              className="cursor-pointer text-base font-semibold text-gray1 hover:underline"
+            >
               {data?.name}
-            </div>
+            </Link>
           </div>
           <div className="text-[11px] font-medium text-gray3">
             {data?.email}
