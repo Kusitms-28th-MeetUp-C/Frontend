@@ -18,6 +18,7 @@ import TemplateSearch from './pages/TemplateSearch';
 import RoadmapEditor from './pages/RoadmapEditor';
 import Main from './pages/Main';
 import Article from './pages/Article';
+import OtherUser from './pages/OtherUser';
 
 const Router = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,7 @@ const Router = () => {
           </Route>
           <Route path="/management" element={<Management />} />
           <Route path="/search-template" element={<TemplateSearch />} />
+          <Route path="/user/:userId" element={<OtherUser />} />
         </Routes>
       </Layout>
     </BrowserRouter>

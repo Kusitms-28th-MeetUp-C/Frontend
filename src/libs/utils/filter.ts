@@ -24,7 +24,7 @@ export const typeFilter = (type: string) => {
 };
 
 export const tagColorFilter = (option: string, type: string) => {
-  if (option === 'icon') {
+  if (option === 'icon' || option === 'text') {
     switch (type) {
       case 'it':
         return 'text-tagPurple1';

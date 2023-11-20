@@ -2,7 +2,7 @@ import { BsFillPersonFill, BsFillChatFill } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import { RiPencilFill } from 'react-icons/ri';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ChatList from '../Chat/ChatList.jsx';
 import ChatRoom from '../Chat/ChatRoom.jsx';
 import { useState } from 'react';
@@ -13,6 +13,7 @@ import Modal from '../Modal/Modal';
 
 const TopNavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isOpenChatRoom, setIsOpenChatRoom] = useState(false);
@@ -67,7 +68,9 @@ const TopNavBar = () => {
 
         <Link
           to={loginState.isLogin ? '/mypage' : '/login'}
-          className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-[#EBEEF9] px-2"
+          className={`flex h-10 items-center justify-center gap-2 rounded-[10px] ${
+            location.pathname === '/mypage' ? ' bg-blue4' : ' bg-blue5'
+          }  px-2`}
         >
           <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
             {loginState.profile ? (
