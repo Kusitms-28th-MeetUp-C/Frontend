@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import Axios from '../libs/api';
-import { FaQuestion } from 'react-icons/fa6';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import Axios from '../libs/api';
 import Filter from '../components/Search/Filter';
 import Search from '../components/Search/Search';
 import ListItems from '../components/Search/ListItems';
 import Pagination from '../components/Search/Pagination';
-import { tagColorFilter, typeFilter } from '../libs/utils/filter';
 import InfoBox from '../components/Search/InfoBox';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { FaQuestion } from 'react-icons/fa6';
+
+import { tagColorFilter, typeFilter } from '../libs/utils/filter';
 
 interface TemplateProps {
   MoveToTop: () => void;
@@ -50,7 +52,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   }, [templateType, page, title]);
 
   return (
-    <div className="pr-12 py-[45px]">
+    <div className="py-[45px] pr-12">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
         <div
           className="text-[28px] font-bold text-gray1"
@@ -75,7 +77,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
 
       <Search title={title} setTitle={setTitle} setPage={setPage} />
       <Filter type={templateType} setType={setTemplateType} setPage={setPage} />
-      <div className="text-sm font-semibold text-gray4 mb-5">
+      <div className="mb-5 text-sm font-semibold text-gray4">
         {typeFilter(templateType)} {title && `"${title}" 검색결과`} 총{' '}
         {totalCnt}건
       </div>

@@ -139,14 +139,18 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId, setChatName }) => {
                 setChatName(el.userName);
               }}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray6">
-                <BsFillPersonFill className="text-3xl text-gray3" />
+              <div className="flex h-12 w-12 overflow-hidden items-center justify-center rounded-full bg-gray6">
+                {el.profile ? (
+                  <img src={el.profile} className='object-cover'/>
+                ) : (
+                  <BsFillPersonFill className="text-3xl text-gray3" />
+                )}
               </div>
               <div className="flex flex-1 flex-col justify-center gap-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
                     <div className="rounded-full bg-blue1 px-1.5 py-[1px] text-[8px] font-extrabold text-white">
-                      PM
+                      {el.userType}
                     </div>
                     <div className="text-sm font-semibold text-black">
                       {el.userName}
@@ -160,11 +164,6 @@ const ChatList = ({ setIsOpenChatRoom, setSessionId, setChatName }) => {
                   <div className="text-xs font-medium text-gray4">
                     {el.content}
                   </div>
-                  {1 > 0 && (
-                    <div className="flex h-4 w-4 items-center justify-center rounded-full bg-[#F14646] text-[9px] font-bold text-white">
-                      1
-                    </div>
-                  )}
                 </div>
               </div>
             </button>

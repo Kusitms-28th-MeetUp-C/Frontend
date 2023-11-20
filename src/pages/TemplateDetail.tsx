@@ -46,8 +46,10 @@ const TemplateDetail = () => {
   };
 
   const onClickUseBtn = async () => {
-    await Axios.post('template/save/user', {
-      templateId,
+    await Axios.get('template/save/user', {
+      params: {
+        templateId,
+      },
     })
       .then((res) => {
         console.log(res);
@@ -62,7 +64,7 @@ const TemplateDetail = () => {
 
   return (
     <div className="w-full min-w-[1250px] py-9 pr-10">
-      <BackBtn/>
+      <BackBtn />
       <Title>{mainData.title}</Title>
       <div className="flex justify-between">
         <div className="w-[22%]">

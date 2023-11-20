@@ -15,7 +15,6 @@ const GoogleLogin = () => {
   useEffect(() => {
     if (accessToken) {
       console.log(accessToken);
-      navigate('/');
       Axios.post(
         'user/signIn',
         {
@@ -29,6 +28,7 @@ const GoogleLogin = () => {
         },
       )
         .then((res) => {
+          navigate('/');
           const data = res.data.data;
           console.log(data);
           localStorage.setItem('access-token', data.accessToken);
