@@ -5,7 +5,7 @@ import AddButton from '../components/Roadmap/AddButton';
 import TemplateItem from '../components/Roadmap/TemplateItem';
 import TemplateEditorModal from '../components/Roadmap/TemplateEditorModal';
 import SubmitButton from '../components/Roadmap/SubmitButton';
-import DropDown from '../components/Common/DropDown';
+import DropDown from '../components/Common/DropDown/DropDown';
 import { typeReverseFilter } from '../libs/utils/filter';
 
 const RoadmapEditor = () => {

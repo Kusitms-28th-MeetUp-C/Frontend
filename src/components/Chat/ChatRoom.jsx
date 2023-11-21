@@ -171,9 +171,14 @@ const ChatRoom = () => {
           if (response.data.chatMessageList.length === 0) setIsNothing(true);
         }
         if (response.messageType === 'received') {
-          console.log('전송완료');
-          setMsgList((prev) => [...prev, response.data.message]);
-          setMsg('');
+          if (response.data.message.userName === loginState.name) {
+            setMsgList((prev) => [...prev, response.data.message]);
+            setMsg('');
+          }
+
+          if (response.data.message.userName === chatUserState.name) {
+            setMsgList((prev) => [...prev, response.data.message]);
+          }
         }
       },
       headers,

@@ -4,12 +4,12 @@ import Maker from '../components/SearchDetail/Maker';
 import Modal from '../components/Modal/Modal';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MdExpandMore } from 'react-icons/md';
 import UseBtn from '../components/SearchDetail/UseBtn';
 import Axios from '../libs/api';
 import Process from '../components/SearchDetail/Process';
 import BackBtn from '../components/SearchDetail/BackBtn';
 import Title from '../components/Common/Title';
+import ModalDropDown from '../components/Common/DropDown/ModalDropDown';
 
 const RoadmapDetail = () => {
   const navigate = useNavigate();
@@ -43,7 +43,12 @@ const RoadmapDetail = () => {
     await Axios.get('team/list')
       .then((res) => {
         console.log(res);
-        setTeamList([...res.data.data.teamList]);
+        setTeamList([
+          ...res.data.data.teamList.map((el: any, idx: number) => ({
+            id: el.teamId,
+            title: el.title,
+          })),
+        ]);
       })
       .catch((err) => console.error(err));
   };
@@ -56,14 +61,14 @@ const RoadmapDetail = () => {
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
   const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState({
-    teamId: 0,
+    id: 0,
     title: '선택',
   });
 
   const onSubmitTeamModal = async () => {
     await Axios.post('team/roadmap', {
       roadmapId,
-      teamId: selectedTeam.teamId,
+      teamId: selectedTeam.id,
     })
       .then((res) => {
         console.log(res);
@@ -84,12 +89,12 @@ const RoadmapDetail = () => {
   };
 
   return (
-    <div className="w-full min-w-[1250px] py-9 pr-10">
+    <div className="w-full min-w-[1250px] px-10 py-9">
       <BackBtn />
 
       <Title>{mainData.title}</Title>
 
-      <div className="flex justify-between mt-9">
+      <div className="mt-9 flex justify-between">
         <div className="flex w-[74.5%] flex-col gap-7">
           <Process data={processData} />
           <div className="flex justify-between">
@@ -115,35 +120,11 @@ const RoadmapDetail = () => {
           setIsOpen={setIsOpenTeamModal}
           onSubmit={onSubmitTeamModal}
         >
-          <div className="relative w-full">
-            <div
-              className={`flex cursor-pointer items-center justify-between rounded-[10px] bg-[#ECEBFE] px-7 py-3 duration-300 ${
-                isOpenCmbBox ? 'bg-blue4' : ''
-              }`}
-              onClick={() => setIsOpenCmbBox((prev) => !prev)}
-            >
-              <div className="text-base font-bold text-gray2">
-                {selectedTeam.title}
-              </div>
-              <MdExpandMore className="h-8 w-8 text-blue1" />
-            </div>
-            {isOpenCmbBox && (
-              <div className="absolute flex w-full flex-col rounded-[10px] bg-blue5">
-                {teamList?.map((el: any, idx: number) => (
-                  <div
-                    className="cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray2 duration-300 hover:rounded-[10px] hover:bg-blue4"
-                    key={el.teamId}
-                    onClick={() => {
-                      setSelectedTeam({ ...el });
-                      setIsOpenCmbBox((prev) => !prev);
-                    }}
-                  >
-                    {el.title}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ModalDropDown
+            itemList={teamList}
+            selectedItem={selectedTeam}
+            setSelectedItem={setSelectedTeam}
+          />
         </Modal>
       )}
 

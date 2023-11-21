@@ -53,7 +53,7 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   }, [templateType, page, title]);
 
   return (
-    <div className="py-[45px] pr-12">
+    <div className="py-[45px] px-12">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
         <Title>회의록 템플릿</Title>
         <div
