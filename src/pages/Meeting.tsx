@@ -14,8 +14,7 @@ const Meeting = () => {
 
   useEffect(() => {
     setLoading(true);
-    Axios
-      .get('/team')
+    Axios.get('/team')
       .then((res) => {
         setTeamList(res.data.data.teamList);
       })
@@ -50,7 +49,7 @@ const Meeting = () => {
       {teamList.map((team: any) => (
         <div key={team.teamInfo.teamId}>
           {/* 헤딩 섹션 */}
-          <section className="mt-10 mb-6 rounded-2xl bg-white px-6 py-4">
+          <section className="mb-6 mt-10 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
                 title={team.teamInfo.title}
@@ -68,11 +67,7 @@ const Meeting = () => {
           </section>
 
           {/* 로드맵 섹션 */}
-          {team.teamRoadmap && (
-            <Process
-              data={team.teamRoadmap}
-            />
-          )}
+          {team.teamRoadmap && <Process data={team.teamRoadmap} />}
         </div>
       ))}
     </div>
