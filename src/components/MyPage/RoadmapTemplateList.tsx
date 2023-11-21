@@ -46,7 +46,7 @@ const RoadmapTemplateList = ({
           className ? ` ${className}` : ''
         }${listStyle === 'list' ? ' space-y-5' : ' grid grid-cols-2 gap-5'}`}
       >
-        {contentData.content
+        {contentData?.content
           .filter((content: any) => {
             if (listType === 'all') return content;
             return content.sharedType === contentText[listType];

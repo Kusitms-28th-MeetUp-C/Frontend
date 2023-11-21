@@ -6,6 +6,8 @@ import { FaSchool } from 'react-icons/fa';
 import { RiPencilFill } from 'react-icons/ri';
 import Markdown from 'react-markdown';
 import '../styles/github-markdown-light.css';
+import { asBlob } from 'html-docx-js';
+import { saveAs } from 'file-saver';
 
 import PageHeading from '../components/PageHeading';
 import SectionHeadingContent from '../components/SectionHeadingContent';
@@ -16,6 +18,8 @@ import Modal from '../components/Modal/Modal';
 import Axios from '../libs/api';
 import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
+import { marked } from 'marked';
+import { Paragraph, TextRun } from 'docx';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -24,6 +28,7 @@ interface HeadingButtonProps {
 interface ShareIconButtonProps {
   name: string;
   iconUrl: string;
+  onClick?: () => void;
 }
 interface TeamSpaceLinkProps {
   to?: string;
@@ -65,7 +70,7 @@ const PurpleButton = ({ children }: HeadingButtonProps) => {
   );
 };
 
-const ShareIconButton = ({ name, iconUrl }: ShareIconButtonProps) => {
+const ShareIconButton = ({ name, iconUrl, onClick }: ShareIconButtonProps) => {
   return (
     <button className="flex items-center gap-2">
       <div className="flex h-7 w-7 justify-end">
@@ -300,7 +305,7 @@ const Management = () => {
             <SectionHeadingContent
               title={data?.teamInfo.title}
               subtitle={
-                typeFilter(data?.teamInfo.teamType.toLowerCase()) ?? '기타'
+                typeFilter(data?.teamInfo?.teamType?.toLowerCase()) || '기타'
               }
             />
             <div className="flex gap-5">
@@ -334,10 +339,6 @@ const Management = () => {
             <h3 className="text-2xl font-bold">공유하기</h3>
             <div className="flex gap-5">
               <ShareIconButton name="Notion" iconUrl="/icons/notion-icon.png" />
-              <ShareIconButton
-                name="Google Docs"
-                iconUrl="/icons/google-docs-icon.png"
-              />
               <PurpleButton>
                 <span
                   className="flex cursor-pointer items-center gap-1"
