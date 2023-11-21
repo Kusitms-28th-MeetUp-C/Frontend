@@ -24,7 +24,7 @@ const TemplateDetail = () => {
 
   const onSubmitAlertModal = () => {
     setIsOpenAlertModal(false);
-    navigate('/management');
+    navigate('/search-template');
   };
 
   const fetchData = async () => {

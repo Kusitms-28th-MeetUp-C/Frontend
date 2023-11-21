@@ -116,7 +116,7 @@ const OnBoarding = () => {
           </InputWrapper>
         </div>
         <button
-          className="w-full max-w-[196px] rounded-[10px] bg-blue1 px-10 py-3 text-base font-medium text-white"
+          className="w-full max-w-[196px] rounded-[10px] bg-blue1 px-10 py-4 text-base font-medium text-white"
           onClick={onClickBtn}
         >
           작성 완료

@@ -71,7 +71,7 @@ const TemplateSearch = () => {
       onConnect: () => {
         console.log('template-search success');
         subscribe();
-        publish();
+        publish('');
       },
     });
 
@@ -99,7 +99,7 @@ const TemplateSearch = () => {
     console.log('subscribe 실행');
 
     client.current.subscribe(
-      `/sub/chat/${loginState.sessionId}`,
+      `/sub/search/${loginState.sessionId}`,
       (body) => {
         const response = JSON.parse(body.body);
         console.log(response);
@@ -147,7 +147,7 @@ const TemplateSearch = () => {
   };
 
   return (
-    <div className="flex w-full min-w-[1250px] flex-col py-[45px] pr-12">
+    <div className="flex w-full min-w-[1250px] flex-col py-[45px] px-12">
       <Title>회의록 관리</Title>
 
       {/* 검색 창 */}
