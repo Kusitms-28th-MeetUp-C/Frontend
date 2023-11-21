@@ -24,12 +24,16 @@ const Maker = ({ data }: MakerProps) => {
   const [openChatRoomState, setOpenChatRoomState] =
     useRecoilState(OpenChatRoomState);
   const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
-  const [loginState, setLoginState] = useRecoilState(LoginState)
+  const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const onClickChat = () => {
-    setChatUserState({ name: data.name, sessionId: data.sessionId });
-    setOpenChatState(true);
-    setOpenChatRoomState(true);
+    if (loginState.userId === data?.id) {
+      setOpenChatState(true);
+    } else {
+      setChatUserState({ name: data.name, sessionId: data.sessionId });
+      setOpenChatState(true);
+      setOpenChatRoomState(true);
+    }
   };
 
   return (
@@ -49,10 +53,13 @@ const Maker = ({ data }: MakerProps) => {
               {data?.userType}
             </div>
             <Link
-              to={`/user/${data?.id}`}
+              to={
+                loginState.userId === data?.id ? '/mypage' : `/user/${data?.id}`
+              }
               className={`cursor-pointer text-base font-semibold text-gray1 hover:underline `}
             >
               {data?.name}
+              {loginState.userId === data?.id && '(me)'}
             </Link>
           </div>
           <EmailContainer className="break-words text-[11px] font-medium text-gray3">
@@ -63,7 +70,9 @@ const Maker = ({ data }: MakerProps) => {
             onClick={onClickChat}
           >
             <BsFillChatFill className="h-3 w-3 text-blue1" />
-            <div className="text-xs font-semibold text-blue1">커피챗</div>
+            <div className="text-xs font-semibold text-blue1">
+              {loginState.userId === data?.id ? '커피챗 목록' : '커피챗 요청'}
+            </div>
           </button>
         </div>
       </div>

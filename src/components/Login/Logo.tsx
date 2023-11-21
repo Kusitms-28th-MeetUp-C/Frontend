@@ -25,7 +25,7 @@ const LogoTxt = styled.div`
 const Logo = () => {
   return (
     <div className="flex flex-col items-center gap-5">
-      <LogoImg src="/logo/logo-3d.png" className="h-[165px] w-[190px]" />
+      <LogoImg src="/logo/logo-3d.png" className="h-[135px] w-[170px] mb-2" />
       <LogoTypo src="/logo/logo-typo-white.svg" />
       <LogoTxt className="text-xs font-medium text-white">
         쉽고 빠른 회의의 시작, 밋플

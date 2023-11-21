@@ -25,7 +25,7 @@ const ModalDropDown = ({
     <div className="relative w-full">
       <div
         className={`flex cursor-pointer items-center justify-between bg-[#ECEBFE] py-2 pl-5 pr-3 ${
-          isOpenCmbBox ? 'rounded-t-[10px] bg-blue4' : 'rounded-[10px]'
+          isOpenCmbBox ? 'rounded-t-[10px]' : 'rounded-[10px]'
         } ${className}`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
       >
@@ -39,7 +39,8 @@ const ModalDropDown = ({
         />
       </div>
       {isOpenCmbBox && (
-        <div className="absolute flex w-full flex-col rounded-b-[10px] bg-blue5">
+        <div className="absolute flex w-full flex-col rounded-b-[10px] bg-white shadow-md">
+          {/* <div className="m-auto h-[1.5px] w-[95%] bg-gray5" /> */}
           {itemList?.map((el: any, idx: number) => (
             <div
               className={`cursor-pointer overflow-hidden px-7 py-3 text-base font-medium text-gray2 duration-300 ${

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import * as StompJs from '@stomp/stompjs';
 
+import Alert from '../components/Modal/Alert';
 import Search from '../components/Search/Search';
 import Axios from '../libs/api';
 import Title from '../components/Common/Title';
@@ -94,16 +95,14 @@ const TemplateSearch = () => {
   const [search, setSearch] = useState('');
   const [templateData, setTemplateData] = useState({});
   const [isClickDetail, setIsClickDetail] = useState(false);
+  const [isOpenError, setIsOpenError] = useState(false);
+  const [isOpenComplete, setIsOpenComplete] = useState(false);
 
   const [teamList, setTeamList] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState({ id: 0, title: '팀 선택' });
-  const [roadmapList, setRoadmapList] = useState([]);
 
   const [templateId, setTempalteId] = useState(0);
-  const [selectedRoadmap, setSelectedRoadmap] = useState({
-    id: 0,
-    title: '로드맵 선택',
-  });
+  const [selectedRoadmap, setSelectedRoadmap] = useState('');
   const [stepList, setStepList] = useState([]);
   const [selectedStep, setSelectedStep] = useState({
     id: 0,
@@ -120,8 +119,8 @@ const TemplateSearch = () => {
     })
       .then((res) => {
         console.log(res);
-        alert('배정이 완료되었습니다');
-        navigate('/manage');
+        setIsOpenAllotModal(false);
+        setIsOpenComplete(true);
       })
       .catch((err) => console.error(err));
   };
@@ -160,12 +159,37 @@ const TemplateSearch = () => {
       });
   };
 
+  const onClickOption = async () => {
+    await Axios.get('/manage/roadmap', {
+      params: {
+        teamId: selectedTeam.id,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setSelectedRoadmap(res.data.data.title);
+        setStepList([
+          ...res.data.data.stepList.map((el, idx) => ({
+            id: el.stepId,
+            title: `${idx + 1}. ${el.title}`,
+          })),
+        ]);
+        setIsOpenAllotModal((prev) => !prev);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.response.status === 404) {
+          setIsOpenError(true);
+        }
+      });
+  };
+
   useEffect(() => {
     fetchTeamList();
   }, []);
 
   return (
-    <div className="flex w-full min-w-[1250px] flex-col px-12 py-[45px]">
+    <div className="flex w-full min-w-[1000px] flex-col px-12 py-[45px]">
       <Title>회의록 관리</Title>
 
       {/* 검색 창 */}
@@ -173,90 +197,100 @@ const TemplateSearch = () => {
         <Search title={search} setTitle={setSearch} onChange={onChangeSearch} />
       </div>
 
-      <div className="flex w-full flex-1 justify-between">
-        {/* 왼쪽 영역 */}
-        <div className="w-[48%]">
-          {/* 템플릿 리스트 */}
-          <div className="flex flex-col items-center gap-6">
-            {templateList?.map((el, idx) => (
-              <div
-                key={el.templateId}
-                className={`flex w-full cursor-pointer items-center justify-between rounded-[10px] px-5 py-[14px] ${
-                  templateData.templateId === el.templateId
-                    ? 'bg-blue2'
-                    : 'bg-white'
-                }`}
-                onClick={() => onClickList(el.templateId)}
-              >
-                <div
-                  className={`rounded-full px-2 py-[2.5px] text-xs font-semibold ${tagColorFilter(
-                    'text',
-                    el.category,
-                  )} ${tagColorFilter('background', el.category)}`}
-                >
-                  {typeFilter(el.category)}
-                </div>
-                <div
-                  className={`text-sm font-semibold ${
-                    templateData.templateId === el.templateId
-                      ? 'text-white'
-                      : 'text-gray1'
-                  }`}
-                >
-                  {el.title}
-                </div>
-                <div
-                  className={`text-xs font-semibold ${
-                    templateData.templateId === el.templateId
-                      ? 'text-white'
-                      : 'text-gray4'
-                  }`}
-                >
-                  {el.teamTitle || '미지정'}
-                </div>
-              </div>
-            ))}
+      {isLoading ? (
+        <div className="flex flex-1 flex-col h-full items-center justify-center gap-[10px]">
+          <img src="/icons/loading.svg" className="h-[50px] w-[50px]" />
+          <div className="text-2xl font-semibold text-black">Loading...</div>
+        </div>
+      ) : isNothing ? (
+        <div className="flex flex-1 h-full items-center justify-center">
+          <div className="text-2xl font-semibold text-gray1">
+            진행중인 채팅이 없어요
           </div>
         </div>
-
-        {/* 오른쪽 영역 */}
-        {isClickDetail && (
-          <div className="flex w-[48%] flex-col gap-6 rounded-[30px] bg-white p-8">
-            <div className="flex items-center justify-end gap-3">
-              <div className="w-[180px]">
-                <GrayDropDown
-                  itemList={teamList}
-                  selectedItem={selectedTeam}
-                  setSelectedItem={setSelectedTeam}
-                  // className="bg-[#ECEEF8]"
-                />
-              </div>
-              <button
-                className="rounded-[10px] bg-tagLightPurple2 px-6 py-2.5 text-xs font-semibold text-blue1"
-                onClick={() => setIsOpenAllotModal((prev) => !prev)}
-              >
-                배정하기
-              </button>
+      ) : (
+        <div className="flex w-full flex-1 justify-between">
+          {/* 왼쪽 영역 */}
+          <div className="w-[48%]">
+            {/* 템플릿 리스트 */}
+            <div className="flex flex-col items-center gap-6">
+              {templateList?.map((el, idx) => (
+                <div
+                  key={el.templateId}
+                  className={`flex w-full cursor-pointer items-center justify-between rounded-[10px] px-5 py-[14px] ${
+                    templateData.templateId === el.templateId
+                      ? 'bg-blue2'
+                      : 'bg-white'
+                  }`}
+                  onClick={() => onClickList(el.templateId)}
+                >
+                  <div
+                    className={`rounded-full px-2 py-[2.5px] text-xs font-semibold ${tagColorFilter(
+                      'text',
+                      el.category,
+                    )} ${tagColorFilter('background', el.category)}`}
+                  >
+                    {typeFilter(el.category)}
+                  </div>
+                  <div
+                    className={`text-sm font-semibold ${
+                      templateData.templateId === el.templateId
+                        ? 'text-white'
+                        : 'text-gray1'
+                    }`}
+                  >
+                    {el.title}
+                  </div>
+                  <div
+                    className={`text-xs font-semibold ${
+                      templateData.templateId === el.templateId
+                        ? 'text-white'
+                        : 'text-gray4'
+                    }`}
+                  >
+                    {el.teamTitle || '미지정'}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div>{templateData?.content || '내용 없음'}</div>
           </div>
-        )}
-      </div>
+
+          {/* 오른쪽 영역 */}
+          {isClickDetail && (
+            <div className="flex w-[48%] flex-col gap-6 rounded-[30px] bg-white p-8">
+              <div className="flex items-center justify-end gap-3">
+                <div className="w-[180px]">
+                  <GrayDropDown
+                    itemList={teamList}
+                    selectedItem={selectedTeam}
+                    setSelectedItem={setSelectedTeam}
+                    // className="bg-[#ECEEF8]"
+                  />
+                </div>
+                <button
+                  className="rounded-[10px] bg-tagLightPurple2 px-6 py-2.5 text-xs font-semibold text-blue1"
+                  onClick={onClickOption}
+                >
+                  배정하기
+                </button>
+              </div>
+              <div>{templateData?.content || '내용 없음'}</div>
+            </div>
+          )}
+        </div>
+      )}
 
       {isOpenAllotModal && (
         <Modal
-          title="배정할 로드맵과 스텝을 선택해주세요"
+          title="배정할 로드맵의 스텝을 선택해주세요"
           setIsOpen={setIsOpenAllotModal}
           onSubmit={onClickAllot}
-          cancel="취소"
-          submit="배정 완료"
+          cancel="닫기"
+          submit="저장하기"
+          selectedRoadmap={selectedRoadmap}
+          isTemplateSearch
         >
           <div className="flex w-[400px] flex-col gap-5">
-            <ModalDropDown
-              itemList={roadmapList}
-              selectedItem={selectedRoadmap}
-              setSelectedItem={setSelectedRoadmap}
-            />
             <ModalDropDown
               itemList={stepList}
               selectedItem={selectedStep}
@@ -264,6 +298,27 @@ const TemplateSearch = () => {
             />
           </div>
         </Modal>
+      )}
+
+      {isOpenError && (
+        <Alert
+          title="팀에 로드맵이 존재하지 않습니다"
+          setIsOpen={setIsOpenError}
+          btnTxt="확인"
+        />
+      )}
+
+      {isOpenComplete && (
+        <Modal
+          title="배정이 완료되었습니다"
+          setIsOpen={setIsOpenComplete}
+          onSubmit={() => {
+            setIsOpenComplete(false);
+            navigate('/meeting');
+          }}
+          cancel="계속 배정하기"
+          submit="로드맵 관리 이동"
+        />
       )}
     </div>
   );

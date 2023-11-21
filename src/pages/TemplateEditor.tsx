@@ -204,7 +204,7 @@ const TemplateEditor = () => {
         </div>
 
         {/* 입력 상자 영역 */}
-        <div className="flex gap-5">
+        <div className="flex flex-1 gap-5">
           {/* 왼쪽 영역 */}
           <div className="flex flex-1 flex-col space-y-5">
             {/* 제목 입력 헤더 */}
