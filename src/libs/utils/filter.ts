@@ -1,3 +1,15 @@
+export const typeList = [
+  { id: 1, title: 'it' },
+  { id: 2, title: 'team' },
+  { id: 3, title: 'club' },
+  { id: 4, title: 'pt' },
+  { id: 5, title: 'marketing' },
+  { id: 6, title: 'survey_data_analysis' },
+  { id: 7, title: 'corporate_analysis' },
+  { id: 8, title: 'design' },
+  { id: 9, title: 'video' },
+];
+
 export const typeFilter = (type: string) => {
   switch (type) {
     case 'all':

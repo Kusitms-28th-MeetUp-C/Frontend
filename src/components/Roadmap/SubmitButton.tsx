@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Axios from '../../libs/api';
 
 interface SubmitButtonProps {
@@ -6,6 +7,8 @@ interface SubmitButtonProps {
 }
 
 const SubmitButton = ({ roadmap, setErrorMessage }: SubmitButtonProps) => {
+  const navigate = useNavigate();
+
   const fetchCreateRoadmap = () => {
     if (
       roadmap.steps.length === 0 ||
@@ -17,9 +20,7 @@ const SubmitButton = ({ roadmap, setErrorMessage }: SubmitButtonProps) => {
       return;
     }
     console.log('submit roadmap', roadmap);
-    Axios.post('/manage/roadmap', {
-      roadmap,
-    })
+    Axios.post('/manage/roadmap', { ...roadmap })
       .then((res) => {
         console.log(res);
       })
@@ -36,6 +37,7 @@ const SubmitButton = ({ roadmap, setErrorMessage }: SubmitButtonProps) => {
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         fetchCreateRoadmap();
+        navigate('/roadmap?type=all&search=&page=0');
       }}
     >
       작성 완료

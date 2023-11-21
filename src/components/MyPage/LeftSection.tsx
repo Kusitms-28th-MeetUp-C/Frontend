@@ -1,52 +1,62 @@
-import { useEffect, useState } from 'react';
-import Axios from '../../libs/api';
 import MyInfo from '../Common/MyInfo';
+import styled from 'styled-components';
 
-const LeftSection = () => {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
+interface LeftSectionProps {
+  user: any;
+}
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await Axios.get('/mypage');
-        setUser(res.data.data.user);
-        console.log('res user', res.data.data.user);
-      } catch (err) {
-        console.error(err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
+const LeftSectionBlock = styled.section`
+  width: 400px;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: white;
+  padding: 2rem;
+`;
 
-  useEffect(() => {
-    console.log('user', user);
-  }, [user]);
+const SectionHeading = styled.h1`
+  font-size: 1.25rem;
+  font-weight: bold;
+`;
 
-  if (loading) {
-    return <div>loading...</div>;
-  }
+const ProfileInfo = styled.div`
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+`;
 
-  if (error) {
-    return <div>error!</div>;
-  }
+const ProfileDetailInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
 
+const ScoreArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const ProfileEditButton = styled.button`
+  width: 100%;
+  text-align: center;
+  color: #393948;
+`;
+
+const LeftSection = ({ user }: LeftSectionProps) => {
   return (
-    <section className="w-[400px] space-y-5 rounded-2xl bg-white px-8 py-4 shadow">
-      <h1 className="mt-4 text-xl font-bold">내 프로필</h1>
-      <div className="flex items-center gap-5">
+    <LeftSectionBlock className="shadow">
+      <SectionHeading>내 프로필</SectionHeading>
+      <ProfileInfo>
         <MyInfo.Avatar imageUrl={user.profile} />
-        <div className="flex flex-col gap-1">
+        <ProfileDetailInfo>
           <MyInfo.Name userType={user.userType} name={user.name} />
           <MyInfo.Email email={user.email} />
           <MyInfo.ChatButton />
-        </div>
-      </div>
-      <div className="space-y-2">
+        </ProfileDetailInfo>
+      </ProfileInfo>
+      <ScoreArea>
         <MyInfo.ScoreItem
           label="회의록 로드맵 가이드"
           count={user.templateNum}
@@ -63,11 +73,9 @@ const LeftSection = () => {
           countLabel="점"
           isPoint
         />
-      </div>
-      <div className="text-center">
-        <button className="text-sm text-gray2">프로필 수정</button>
-      </div>
-    </section>
+      </ScoreArea>
+      <ProfileEditButton>프로필 수정</ProfileEditButton>
+    </LeftSectionBlock>
   );
 };
 

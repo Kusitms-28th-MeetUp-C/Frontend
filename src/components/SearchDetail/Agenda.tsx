@@ -1,5 +1,3 @@
-import { MdExpandMore } from 'react-icons/md';
-
 interface AgendaProps {
   data: any;
 }

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import TurndownService from 'turndown';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import Axios from '../libs/api';
+import { typeList } from '../libs/utils/filter';
+import DropDown, { selectedItem } from '../components/Common/DropDown';
 
 interface RoundedBoxProps {
   color?: string;
@@ -18,9 +20,9 @@ interface ActionButtonProps {
   children: React.ReactNode;
 }
 
-const Dropdown = styled.div`
-  box-shadow: 5px 4px 10px 0px rgba(0, 0, 0, 0.05);
-`;
+// const Dropdown = styled.div`
+//   box-shadow: 5px 4px 10px 0px rgba(0, 0, 0, 0.05);
+// `;
 
 const RoundedBoxBlock = styled.div`
   box-shadow: 5px 4px 10px 0px rgba(0, 0, 0, 0.05);
@@ -84,6 +86,10 @@ const TemplateEditor = () => {
     templateType: 'club',
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const itemListRef = useRef<selectedItem[]>(typeList);
+  const [selectedItem, setSelectedItem] = useState<selectedItem>(
+    itemListRef.current[0],
+  );
 
   const handleEditorSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -122,6 +128,10 @@ const TemplateEditor = () => {
     setErrorMessage('');
   }, [values]);
 
+  useEffect(() => {
+    setValues({ ...values, templateType: selectedItem.title });
+  }, [selectedItem]);
+
   if (error) {
     return (
       <div className="px-14 py-12">
@@ -141,12 +151,13 @@ const TemplateEditor = () => {
         <h1 className="text-2xl font-bold">템플릿 제작하기</h1>
         {/* 카테고리 드롭다운 */}
         <div className="flex justify-start">
-          <Dropdown className="flex w-40 cursor-pointer items-center justify-between rounded-xl bg-white px-4 py-2 text-gray-600">
-            <span>카테고리</span>
-            <i className="text-xl text-blue1">
-              <MdOutlineKeyboardArrowDown />
-            </i>
-          </Dropdown>
+          <DropDown
+            width={200}
+            itemList={itemListRef.current}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            isCategory
+          />
         </div>
         {/* 입력 상자 영역 */}
         <div className="flex gap-5">

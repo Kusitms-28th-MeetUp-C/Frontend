@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import RoundedBox from '../components/Roadmap/RoundedBox';
 import StepItem from '../components/Roadmap/StepItem';
 import AddButton from '../components/Roadmap/AddButton';
 import TemplateItem from '../components/Roadmap/TemplateItem';
 import TemplateEditorModal from '../components/Roadmap/TemplateEditorModal';
 import SubmitButton from '../components/Roadmap/SubmitButton';
+import DropDown, { selectedItem } from '../components/Common/DropDown';
+import styled from 'styled-components';
+import { typeFilter, typeList } from '../libs/utils/filter';
 
 const RoadmapEditor = () => {
   const [roadmap, setRoadmap] = useState({
@@ -24,6 +27,14 @@ const RoadmapEditor = () => {
   });
   const [stepIndexClicked, setStepIndexClicked] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const itemListRef = useRef<selectedItem[]>(typeList);
+  const [selectedItem, setSelectedItem] = useState<selectedItem>(
+    itemListRef.current[0],
+  );
+
+  useEffect(() => {
+    setRoadmap({ ...roadmap, roadmapType: selectedItem.title });
+  }, [selectedItem]);
 
   return (
     <div className="px-14 py-12">
@@ -32,18 +43,13 @@ const RoadmapEditor = () => {
       </header>
       <main className="mt-5">
         <form>
-          <div className="flex w-40 cursor-pointer items-center justify-between rounded-xl bg-white px-4 py-2">
-            <span className="text-gray3">
-              {roadmap.roadmapType.toUpperCase()}
-            </span>
-            <i className="flex h-3 w-3 items-center">
-              <img
-                src="/icons/arrow-bottom-blue.svg"
-                alt="arrow-bottom-blue"
-                className="w-full"
-              />
-            </i>
-          </div>
+          <DropDown
+            width={200}
+            itemList={itemListRef.current}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            isCategory
+          />
           <div className="mt-5 flex w-full items-start gap-5">
             <div className="flex-1">
               <RoundedBox>

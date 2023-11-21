@@ -30,6 +30,18 @@ const TemplateEditorModal = ({
 }: TemplateEditorModalProps) => {
   const handleModalSubmit = () => {
     const turndownService = new TurndownService();
+    turndownService.addRule('underline', {
+      filter: ['u'],
+      replacement: function (content) {
+        return '__' + content + '__'; // Markdown에서 밑줄을 표현하는 방식으로 변환
+      },
+    });
+    turndownService.addRule('italic', {
+      filter: ['i', 'em'],
+      replacement: function (content) {
+        return '*' + content + '*'; // Markdown에서 기울임꼴을 표현하는 방식으로 변환
+      },
+    });
     Axios({
       method: 'POST',
       url: '/manage/template',
