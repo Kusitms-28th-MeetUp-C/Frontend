@@ -160,6 +160,19 @@ const TemplateSearch = () => {
       });
   };
 
+  const onClickOption = async () => {
+    await Axios.get('/manage/roadmap', {
+      params: {
+        title: selectedTeam.title,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setIsOpenAllotModal((prev) => !prev);
+      })
+      .catch((err) => console.error(err));
+  };
+
   useEffect(() => {
     fetchTeamList();
   }, []);
@@ -233,7 +246,7 @@ const TemplateSearch = () => {
               </div>
               <button
                 className="rounded-[10px] bg-tagLightPurple2 px-6 py-2.5 text-xs font-semibold text-blue1"
-                onClick={() => setIsOpenAllotModal((prev) => !prev)}
+                onClick={onClickOption}
               >
                 배정하기
               </button>
@@ -245,18 +258,18 @@ const TemplateSearch = () => {
 
       {isOpenAllotModal && (
         <Modal
-          title="배정할 로드맵과 스텝을 선택해주세요"
+          title="배정할 로드맵의 스텝을 선택해주세요"
           setIsOpen={setIsOpenAllotModal}
           onSubmit={onClickAllot}
           cancel="취소"
           submit="배정 완료"
         >
           <div className="flex w-[400px] flex-col gap-5">
-            <ModalDropDown
-              itemList={roadmapList}
-              selectedItem={selectedRoadmap}
-              setSelectedItem={setSelectedRoadmap}
-            />
+            <div
+              className={`flex w-full items-center justify-center rounded-[10px] bg-[#ECEBFE] py-3 text-base font-bold text-gray2`}
+            >
+              로드맵 이름
+            </div>
             <ModalDropDown
               itemList={stepList}
               selectedItem={selectedStep}
