@@ -7,9 +7,15 @@ interface PageHeadingProps {
   title: string;
   previous: string;
   hasFilter?: boolean;
+  teamList?: any;
 }
 
-const PageHeading = ({ title, previous, hasFilter }: PageHeadingProps) => {
+const PageHeading = ({
+  title,
+  previous,
+  hasFilter,
+  teamList,
+}: PageHeadingProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [teamEditValues, setTeamEditValues] = useState<any>({
     teamName: '',
@@ -35,10 +41,9 @@ const PageHeading = ({ title, previous, hasFilter }: PageHeadingProps) => {
       {hasFilter && (
         <div className="flex gap-3 pt-7">
           <FilterItem isActive>전체</FilterItem>
-          <FilterItem>미팅남녀</FilterItem>
-          <FilterItem>경영정보시스템 c팀</FilterItem>
-          <FilterItem>팀명</FilterItem>
-          <FilterItem>팀명</FilterItem>
+          {teamList?.map((team: any) => (
+            <FilterItem>{team.teamInfo.title}</FilterItem>
+          ))}
           <FilterItem onClick={() => setIsModalOpen(true)}>+</FilterItem>
         </div>
       )}

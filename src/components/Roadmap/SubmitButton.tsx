@@ -26,11 +26,7 @@ const SubmitButton = ({
       return;
     }
     console.log('submit roadmap', roadmap);
-
-    Axios.post('/manage/roadmap', {
-      ...roadmap,
-      roadmapType,
-    })
+    Axios.post('/manage/roadmap', { ...roadmap })
       .then((res) => {
         console.log(res);
         alert('로드맵 작성이 완료되었습니다');
@@ -49,6 +45,7 @@ const SubmitButton = ({
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         fetchCreateRoadmap();
+        navigate('/roadmap?type=all&search=&page=0');
       }}
     >
       작성 완료

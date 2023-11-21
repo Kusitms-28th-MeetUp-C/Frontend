@@ -45,7 +45,9 @@ const Router = () => {
             <Route path="" element={<Meeting />} />
             <Route path=":teamId">
               <Route path="" element={<MeetingDetail />} />
-              <Route path="template/:templateId" element={<Management />} />
+              <Route path="roadmap/:roadmapId">
+                <Route path="template/:templateId" element={<Management />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/mypage" element={<MyPage />} />
