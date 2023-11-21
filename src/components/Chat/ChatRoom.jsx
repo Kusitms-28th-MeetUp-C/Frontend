@@ -98,6 +98,7 @@ const ChatRoom = () => {
   const myToken = localStorage.getItem('access-token');
   const headers = {
     Authorization: `Bearer ${myToken}`,
+    sessionId: loginState.sessionId,
   };
 
   const connect = () => {
@@ -105,6 +106,7 @@ const ChatRoom = () => {
       brokerURL: 'wss://panpeun.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
+        sessionId: loginState.sessionId,
         transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
       },
 

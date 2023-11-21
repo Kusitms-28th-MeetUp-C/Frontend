@@ -59,6 +59,7 @@ const ChatList = () => {
   const myToken = localStorage.getItem('access-token');
   const headers = {
     Authorization: `Bearer ${myToken}`,
+    sessionId: loginState.sessionId,
   };
 
   const connect = () => {
@@ -66,6 +67,7 @@ const ChatList = () => {
       brokerURL: 'wss://panpeun.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
+        sessionId: loginState.sessionId,
         transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
       },
 
@@ -88,7 +90,8 @@ const ChatList = () => {
     }
 
     client.current.publish({
-      destination: `/pub/chatList`,
+      headers,
+      destination: `/pub/chat/all`,
       body: JSON.stringify({
         userName: loginState.name,
       }),
