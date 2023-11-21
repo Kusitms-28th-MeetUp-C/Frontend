@@ -64,7 +64,7 @@ const TemplateDetail = () => {
   }, [templateId]);
 
   return (
-    <div className="w-full min-w-[1250px] py-9 pr-10">
+    <div className="w-full min-w-[1250px] py-9 px-10">
       <BackBtn />
       <Title>{mainData.title}</Title>
       <div className="mt-9 flex justify-between">
