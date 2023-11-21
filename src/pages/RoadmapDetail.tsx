@@ -89,7 +89,7 @@ const RoadmapDetail = () => {
 
       <Title>{mainData.title}</Title>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-9">
         <div className="flex w-[74.5%] flex-col gap-7">
           <Process data={processData} />
           <div className="flex justify-between">
