@@ -153,9 +153,11 @@ const TemplateEditor = () => {
   };
 
   useEffect(() => {
-    const turndownService = new TurndownService();
-    const markdown = turndownService.turndown(rawContent);
-    setValues({ ...values, content: markdown });
+    // const turndownService = new TurndownService();
+    // const markdown = turndownService.turndown(rawContent);
+    // console.log(markdown);
+    setValues({ ...values, content: rawContent });
+    console.log(rawContent);
   }, [rawContent]);
 
   useEffect(() => {

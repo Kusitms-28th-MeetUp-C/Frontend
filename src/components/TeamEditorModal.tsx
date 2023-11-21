@@ -77,8 +77,8 @@ const TeamEditorModal = ({
     if (apiMode === 'edit') {
       setSelectedItem(
         itemListRef.current.find(
-          (item) => item.title === values.teamCategory.toLowerCase(),
-        )!,
+          (item) => item.title === values?.teamCategory?.toLowerCase(),
+        ) || itemListRef.current[0],
       );
     }
   }, [values.teamCategory]);
