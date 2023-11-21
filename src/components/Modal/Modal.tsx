@@ -9,6 +9,8 @@ interface ModalProps {
   className?: string;
   isCreate?: boolean;
   disabledOnClick?: boolean;
+  isTemplateSearch?: boolean;
+  selectedRoadmap?: string
 }
 
 const Modal = ({
@@ -22,6 +24,8 @@ const Modal = ({
   className,
   isCreate,
   disabledOnClick,
+  isTemplateSearch,
+  selectedRoadmap
 }: ModalProps) => {
   return (
     <div
@@ -40,13 +44,21 @@ const Modal = ({
           e.stopPropagation();
         }}
       >
-        <div
-          className={`text-xl font-semibold text-gray1 ${
-            children ? '' : 'mb-10 mt-8'
-          } `}
-        >
-          {title}
-        </div>
+        {isTemplateSearch ? (
+          <div className="text-xl font-semibold leading-7 text-gray1 text-center">
+            <span className="text-tagLightPurple1">{`'${selectedRoadmap}'`}</span>의
+            <br />
+            스텝을 선택해주세요
+          </div>
+        ) : (
+          <div
+            className={`text-xl font-semibold text-gray1 ${
+              children ? '' : 'mb-10 mt-8'
+            } `}
+          >
+            {title}
+          </div>
+        )}
         {children}
         <div className="flex items-center gap-[18px] ">
           <button

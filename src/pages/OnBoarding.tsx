@@ -1,7 +1,9 @@
-import DropDown from '../components/Common/DropDown';
+import DropDown from '../components/Common/DropDown/DropDown';
 import { useState } from 'react';
 import Axios from '../libs/api';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../states/LoginState';
 
 interface InputTitleProps {
   children: React.ReactNode;
@@ -52,6 +54,8 @@ const OnBoarding = () => {
     title: '포지션을 선택해주세요',
   });
 
+  const [loginState, setLoginState] = useRecoilState(LoginState);
+
   const onClickBtn = async () => {
     if (userName && teamName && userType.id !== 0) {
       await Axios.post(
@@ -71,6 +75,7 @@ const OnBoarding = () => {
         .then((res) => {
           console.log(res);
           alert('회원가입을 축하드립니다');
+          setLoginState((prev: any) => ({ ...prev, name: res.data.data.name }));
           navigate('/');
         })
         .catch((err) => console.error(err));
@@ -111,7 +116,7 @@ const OnBoarding = () => {
           </InputWrapper>
         </div>
         <button
-          className="w-full max-w-[196px] rounded-[10px] bg-blue1 px-10 py-3 text-base font-medium text-white"
+          className="w-full max-w-[196px] rounded-[10px] bg-blue1 px-10 py-4 text-base font-medium text-white"
           onClick={onClickBtn}
         >
           작성 완료

@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import RoundedBox from '../components/Roadmap/RoundedBox';
 import StepItem from '../components/Roadmap/StepItem';
 import AddButton from '../components/Roadmap/AddButton';
 import TemplateItem from '../components/Roadmap/TemplateItem';
 import TemplateEditorModal from '../components/Roadmap/TemplateEditorModal';
 import SubmitButton from '../components/Roadmap/SubmitButton';
-import DropDown from '../components/Common/DropDown';
-import { typeReverseFilter } from '../libs/utils/filter';
+import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
+import styled from 'styled-components';
+import { typeReverseFilter, typeFilter, typeList } from '../libs/utils/filter';
 
 const RoadmapEditor = () => {
   const categoryList = [
@@ -71,6 +72,14 @@ const RoadmapEditor = () => {
   });
   const [stepIndexClicked, setStepIndexClicked] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const itemListRef = useRef<selectedItem[]>(typeList);
+  const [selectedItem, setSelectedItem] = useState<selectedItem>(
+    itemListRef.current[0],
+  );
+
+  useEffect(() => {
+    setRoadmap({ ...roadmap, roadmapType: selectedItem.title });
+  }, [selectedItem]);
 
   return (
     <div className="px-14 py-12">
@@ -86,14 +95,13 @@ const RoadmapEditor = () => {
       </header>
       <main className="mt-5">
         <form>
-          <div className="w-[210px]">
-            <DropDown
-              selectedItem={roadmapType}
-              setSelectedItem={setRoadmapType}
-              itemList={categoryList}
-              className={'py-[8px]'}
-            />
-          </div>
+          <DropDown
+            width={200}
+            itemList={itemListRef.current}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            isCategory
+          />
           <div className="mt-5 flex w-full items-start gap-5">
             <div className="flex-1">
               <RoundedBox>

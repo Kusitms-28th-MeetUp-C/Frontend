@@ -6,30 +6,43 @@ import {
   OpenChatRoomState,
 } from '../../states/ChatState';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components';
+import { LoginState } from '../../states/LoginState';
 
 interface MakerProps {
   data: any;
 }
+
+const EmailContainer = styled.div`
+  @media (max-width: 1536px) {
+    width: 125px;
+  }
+`;
 
 const Maker = ({ data }: MakerProps) => {
   const [openChatState, setOpenChatState] = useRecoilState(OpenChatState);
   const [openChatRoomState, setOpenChatRoomState] =
     useRecoilState(OpenChatRoomState);
   const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
+  const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const onClickChat = () => {
-    setChatUserState({ name: data.name, sessionId: data.sessionId });
-    setOpenChatState(true);
-    setOpenChatRoomState(true);
+    if (loginState.userId === data?.id) {
+      setOpenChatState(true);
+    } else {
+      setChatUserState({ name: data.name, sessionId: data.sessionId });
+      setOpenChatState(true);
+      setOpenChatRoomState(true);
+    }
   };
 
   return (
     <div className="flex flex-col rounded-[20px] bg-white px-6 py-7">
       <div className="mb-[26px] text-xl font-bold text-gray1">메이커 소개</div>
       <div className="mb-[22px] flex items-center gap-4">
-        <div className="flex h-[78px] w-[78px] items-center justify-center overflow-hidden rounded-full bg-gray6">
+        <div className="flex h-[78px] w-[78px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray6">
           {data?.profile ? (
-            <img src={data?.profile} />
+            <img src={data?.profile} className="h-full w-full object-cover" />
           ) : (
             <BsFillPersonFill className="h-14 w-14 text-gray3" />
           )}
@@ -40,21 +53,26 @@ const Maker = ({ data }: MakerProps) => {
               {data?.userType}
             </div>
             <Link
-              to="#"
-              className="cursor-pointer text-base font-semibold text-gray1 hover:underline"
+              to={
+                loginState.userId === data?.id ? '/mypage' : `/user/${data?.id}`
+              }
+              className={`cursor-pointer text-base font-semibold text-gray1 hover:underline `}
             >
               {data?.name}
+              {loginState.userId === data?.id && '(me)'}
             </Link>
           </div>
-          <div className="text-[11px] font-medium text-gray3">
+          <EmailContainer className="break-words text-[11px] font-medium text-gray3">
             {data?.email}
-          </div>
+          </EmailContainer>
           <button
             className="flex w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#ECEBFE] py-1.5"
             onClick={onClickChat}
           >
             <BsFillChatFill className="h-3 w-3 text-blue1" />
-            <div className="text-xs font-semibold text-blue1">커피챗</div>
+            <div className="text-xs font-semibold text-blue1">
+              {loginState.userId === data?.id ? '커피챗 목록' : '커피챗 요청'}
+            </div>
           </button>
         </div>
       </div>

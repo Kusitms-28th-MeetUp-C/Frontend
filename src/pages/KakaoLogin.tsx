@@ -58,6 +58,7 @@ const KakaoLogin = () => {
           localStorage.setItem('access-token', data.accessToken);
           setLoginState({
             isLogin: true,
+            userId: data.userId,
             sessionId: data.sessionId,
             profile: data.picture,
             name: data.name,
@@ -65,7 +66,7 @@ const KakaoLogin = () => {
           Axios.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${data.accessToken}`;
-          navigate(`${data.isFirst ? '/signUp' : '/'}`);
+          navigate(`${data.isFirst ? '/signUp' : '/template'}`);
         })
         .catch((err) => console.error(err));
     }

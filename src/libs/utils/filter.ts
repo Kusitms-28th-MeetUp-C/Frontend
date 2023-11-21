@@ -1,5 +1,19 @@
+export const typeList = [
+  { id: 1, title: 'it' },
+  { id: 2, title: 'team' },
+  { id: 3, title: 'club' },
+  { id: 4, title: 'pt' },
+  { id: 5, title: 'marketing' },
+  { id: 6, title: 'survey_data_analysis' },
+  { id: 7, title: 'corporate_analysis' },
+  { id: 8, title: 'design' },
+  { id: 9, title: 'video' },
+];
+
 export const typeFilter = (type: string) => {
-  switch (type) {
+  const formatType = type.toLowerCase();
+
+  switch (formatType) {
     case 'all':
       return '전체';
     case 'it':
@@ -49,8 +63,10 @@ export const typeReverseFilter = (type: string) => {
 };
 
 export const tagColorFilter = (option: string, type: string) => {
+  const formatType = type.toLowerCase();
+
   if (option === 'icon' || option === 'text') {
-    switch (type) {
+    switch (formatType) {
       case 'it':
         return 'text-tagPurple1';
       case 'team':
@@ -73,7 +89,7 @@ export const tagColorFilter = (option: string, type: string) => {
   }
 
   if (option === 'background') {
-    switch (type) {
+    switch (formatType) {
       case 'it':
         return 'bg-tagPurple2';
       case 'team':

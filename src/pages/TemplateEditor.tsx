@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import TurndownService from 'turndown';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import Axios from '../libs/api';
-import DropDown from '../components/Common/DropDown';
-import { typeReverseFilter } from '../libs/utils/filter';
+import { typeList, typeReverseFilter } from '../libs/utils/filter';
+import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import { useNavigate } from 'react-router-dom';
 
 interface RoundedBoxProps {
@@ -85,53 +85,14 @@ const TemplateEditor = () => {
     templateType: '',
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [templateType, setTemplateType] = useState({
-    id: 0,
-    title: '카테고리',
-  });
+  const itemListRef = useRef<selectedItem[]>(typeList);
+  const [selectedItem, setSelectedItem] = useState<selectedItem>(
+    itemListRef.current[0],
+  );
   const [estimatedTime, setEstimatedTime] = useState({
     id: 0,
     title: '소요시간',
   });
-  const categoryList = [
-    {
-      id: 1,
-      title: 'IT 프로젝트',
-    },
-    {
-      id: 2,
-      title: '팀플',
-    },
-    {
-      id: 3,
-      title: '동아리/학회',
-    },
-    {
-      id: 4,
-      title: '자유주제 PT',
-    },
-
-    {
-      id: 5,
-      title: '마케팅',
-    },
-    {
-      id: 6,
-      title: '설문 및 데이터 분석',
-    },
-    {
-      id: 7,
-      title: '기업 분석',
-    },
-    {
-      id: 8,
-      title: '디자인 프로젝트',
-    },
-    {
-      id: 9,
-      title: '영상 프로젝트',
-    },
-  ];
 
   const estimatedTimeList = [
     {
@@ -175,7 +136,6 @@ const TemplateEditor = () => {
     }
     const newData = {
       ...values,
-      templateType: typeReverseFilter(templateType.title),
       estimatedTime: Number(estimatedTime.title.slice(0, 2)),
     };
 
@@ -202,6 +162,10 @@ const TemplateEditor = () => {
     setErrorMessage('');
   }, [values]);
 
+  useEffect(() => {
+    setValues({ ...values, templateType: selectedItem.title });
+  }, [selectedItem]);
+
   if (error) {
     return (
       <div className="px-14 py-12">
@@ -222,14 +186,13 @@ const TemplateEditor = () => {
 
         {/* 카테고리 드롭다운 */}
         <div className="flex items-center gap-6">
-          <div className="w-[210px]">
-            <DropDown
-              selectedItem={templateType}
-              setSelectedItem={setTemplateType}
-              itemList={categoryList}
-              className={'py-[8px]'}
-            />
-          </div>
+          <DropDown
+            width={200}
+            itemList={itemListRef.current}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            isCategory
+          />
           <div className="w-[210px]">
             <DropDown
               selectedItem={estimatedTime}
@@ -241,7 +204,7 @@ const TemplateEditor = () => {
         </div>
 
         {/* 입력 상자 영역 */}
-        <div className="flex gap-5">
+        <div className="flex flex-1 gap-5">
           {/* 왼쪽 영역 */}
           <div className="flex flex-1 flex-col space-y-5">
             {/* 제목 입력 헤더 */}

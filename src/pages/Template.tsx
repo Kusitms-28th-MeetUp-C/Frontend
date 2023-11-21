@@ -11,6 +11,7 @@ import InfoBox from '../components/Search/InfoBox';
 import { FaQuestion } from 'react-icons/fa6';
 
 import { tagColorFilter, typeFilter } from '../libs/utils/filter';
+import Title from '../components/Common/Title';
 
 interface TemplateProps {
   MoveToTop: () => void;
@@ -52,14 +53,9 @@ const Template = ({ MoveToTop }: TemplateProps) => {
   }, [templateType, page, title]);
 
   return (
-    <div className="py-[45px] pr-12">
+    <div className="py-[45px] px-12">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
-        <div
-          className="text-[28px] font-bold text-gray1"
-          onClick={() => console.log(tagColorFilter('background', 'marketing'))}
-        >
-          회의록 템플릿
-        </div>
+        <Title>회의록 템플릿</Title>
         <div
           className="flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-white"
           onMouseOver={() => setIsHover(true)}
@@ -69,7 +65,8 @@ const Template = ({ MoveToTop }: TemplateProps) => {
         </div>
         {isHover && (
           <InfoBox>
-            유사한 목적의 회의를 먼저 경험한 사용자들이 공유한 회의록 템플릿입니다. 템플릿을 통해 빠르고 쉽게 회의를 설계하세요!
+            유사한 목적의 회의를 먼저 경험한 사용자들이 공유한 회의록
+            템플릿입니다. 템플릿을 통해 빠르고 쉽게 회의를 설계하세요!
           </InfoBox>
         )}
       </div>

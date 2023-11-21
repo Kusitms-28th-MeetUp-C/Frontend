@@ -8,6 +8,7 @@ import ListItems from '../components/Search/ListItems';
 import InfoBox from '../components/Search/InfoBox';
 import { typeFilter } from '../libs/utils/filter';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import Title from '../components/Common/Title';
 
 interface RoadmapProps {
   MoveToTop: () => void;
@@ -49,9 +50,9 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
   }, [roadmapType, page, title]);
 
   return (
-    <div className="py-[45px] pr-12">
+    <div className="py-[45px] px-12">
       <div className="mb-6 flex h-10 items-center gap-[10px]">
-        <div className="text-[28px] font-bold text-gray1">로드맵 템플릿</div>
+        <Title>로드맵 템플릿</Title>
         <div
           className="flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-white"
           onMouseOver={() => setIsHover(true)}

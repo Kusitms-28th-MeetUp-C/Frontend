@@ -8,6 +8,7 @@ export const LoginState = atom({
   key: 'login',
   default: {
     isLogin: false,
+    sessionId: '',
     userId: 0,
     name: '',
     profile: '',

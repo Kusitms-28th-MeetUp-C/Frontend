@@ -6,6 +6,7 @@ import PageHeading from '../components/PageHeading';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import TeamEditorModal from '../components/TeamEditorModal';
 import Axios from '../libs/api';
+import { typeFilter } from '../libs/utils/filter';
 
 interface StepSectionProps {
   stepData: any;
@@ -17,7 +18,7 @@ const StepSection = ({ stepData, team }: StepSectionProps) => {
     <section className="rounded-2xl bg-white px-6 py-4">
       {/* Step 상단 제목 */}
       <div className="flex justify-between gap-3">
-        <div className="flex flex-1 justify-between rounded-2xl bg-tagPurple2 px-3 py-2">
+        <div className="flex flex-1 justify-between rounded-2xl bg-[#E0E1FC] px-3 py-2">
           <span className="text-xl font-semibold">
             <b className="font-bold">Step {stepData.step}.</b>&nbsp;
             {stepData.title}
@@ -43,7 +44,7 @@ const StepSection = ({ stepData, team }: StepSectionProps) => {
             className="ml-6 mt-5 list-disc text-lg text-gray-600 underline"
           >
             <Link
-              to={`/meeting/${team.teamId}/template/${template.templateId}?team=${team.title}&roadmap=${team.roadmap.title}`}
+              to={`/meeting/${team.teamId}/roadmap/${team.roadmap.roadmapId}/template/${template.templateId}?team=${team.title}`}
             >
               {template.title}
             </Link>
@@ -69,6 +70,19 @@ const MeetingDetail = () => {
     teamSpace2: '',
     teamSpace3: '',
   });
+  const [teamList, setTeamList] = useState<any>([]);
+
+  useEffect(() => {
+    Axios.get('/team')
+      .then((res) => {
+        setTeamList(res.data.data.teamList);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     if (params.teamId) {
@@ -123,14 +137,19 @@ const MeetingDetail = () => {
       {/* 회의 관리 상세 */}
       <div className="px-14 py-12">
         {/* 제목 섹션 */}
-        <PageHeading title="나의 회의 관리" previous="관리" hasFilter />
+        <PageHeading
+          title="나의 회의 관리"
+          previous="관리"
+          teamList={teamList}
+          hasFilter
+        />
         <div className="flex flex-col space-y-5">
           {/* 헤딩 섹션 */}
           <section className="mt-6 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
                 title={team.title}
-                subtitle={team.teamType}
+                subtitle={typeFilter(team.teamType?.toLowerCase()) ?? '기타'}
               />
               <button onClick={() => setIsModalOpen(true)}>
                 <img src="/icons/edit-icon.svg" alt="수정 버튼" />
@@ -146,10 +165,8 @@ const MeetingDetail = () => {
               </span>
             </div>
           </section>
-
           {/* 로드맵 섹션 */}
           <Process data={team.roadmap} isShowTitle />
-
           {/* Step 섹션 모음 */}
           {team.roadmap.roadmapList.map((stepData: any) => (
             <StepSection
@@ -169,6 +186,7 @@ const MeetingDetail = () => {
           teamName={team.title}
           setIsOpen={() => setIsModalOpen(false)}
           apiMode="edit"
+          initialTeamCategory={team.teamType.toLowerCase()}
         />
       )}
     </>

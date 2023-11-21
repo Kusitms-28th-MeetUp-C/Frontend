@@ -1,5 +1,8 @@
 import Axios from '../libs/api';
 import Modal from '../components/Modal/Modal';
+import DropDown, { selectedItem } from './Common/DropDown';
+import { useEffect, useRef, useState } from 'react';
+import { typeList } from '../libs/utils/filter';
 
 interface TeamEditorModalProps {
   teamId?: number;
@@ -8,6 +11,7 @@ interface TeamEditorModalProps {
   setValues: any;
   values: any;
   apiMode?: string;
+  initialTeamCategory?: string;
 }
 
 interface InputLabelProps {
@@ -57,7 +61,28 @@ const TeamEditorModal = ({
   values,
   setValues,
   apiMode = 'create',
+  initialTeamCategory = 'it',
 }: TeamEditorModalProps) => {
+  const itemListRef = useRef<selectedItem[]>(typeList);
+  const [selectedItem, setSelectedItem] = useState<selectedItem>(
+    itemListRef.current.find((item) => item.title === initialTeamCategory) ??
+      itemListRef.current[0],
+  );
+
+  useEffect(() => {
+    setValues({ ...values, teamCategory: selectedItem.title });
+  }, [selectedItem]);
+
+  useEffect(() => {
+    if (apiMode === 'edit') {
+      setSelectedItem(
+        itemListRef.current.find(
+          (item) => item.title === values.teamCategory.toLowerCase(),
+        )!,
+      );
+    }
+  }, [values.teamCategory]);
+
   const parseLabelFromUrl = (url: string) => {
     if (url.includes('figma')) {
       return 'figma';
@@ -140,16 +165,13 @@ const TeamEditorModal = ({
               placeholder="팀 이름을 입력하세요"
               autocomplete="off"
             />
-            <InputLabel
-              name="teamCategory"
-              value={values.teamCategory}
-              onChange={(e) =>
-                setValues({ ...values, teamCategory: e.target.value })
-              }
-              labelId="team-category"
-              labelText="팀 카테고리"
-              placeholder="팀 카테고리를 입력하세요"
-              autocomplete="off"
+            <DropDown
+              width={200}
+              color="lightBlue"
+              itemList={itemListRef.current}
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
+              isCategory
             />
           </div>
           <div className="mt-5">

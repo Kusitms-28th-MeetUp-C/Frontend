@@ -6,6 +6,7 @@ import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import Process from '../components/SearchDetail/Process';
+import { typeFilter } from '../libs/utils/filter';
 
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);
@@ -14,8 +15,7 @@ const Meeting = () => {
 
   useEffect(() => {
     setLoading(true);
-    Axios
-      .get('/team')
+    Axios.get('/team')
       .then((res) => {
         setTeamList(res.data.data.teamList);
       })
@@ -45,16 +45,23 @@ const Meeting = () => {
   return (
     <div className="px-14 py-12">
       {/* 제목 섹션 */}
-      <PageHeading title="나의 회의 관리" previous="관리" hasFilter />
+      <PageHeading
+        title="나의 회의 관리"
+        previous="관리"
+        teamList={teamList}
+        hasFilter
+      />
       {/* 팀 선택 섹션 */}
       {teamList.map((team: any) => (
         <div key={team.teamInfo.teamId}>
           {/* 헤딩 섹션 */}
-          <section className="mt-10 mb-6 rounded-2xl bg-white px-6 py-4">
+          <section className="mb-6 mt-10 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
                 title={team.teamInfo.title}
-                subtitle={team.teamInfo.teamType}
+                subtitle={
+                  typeFilter(team.teamInfo.teamType?.toLowerCase()) ?? '기타'
+                }
               />
               {team.teamRoadmap && (
                 <Link
@@ -68,11 +75,7 @@ const Meeting = () => {
           </section>
 
           {/* 로드맵 섹션 */}
-          {team.teamRoadmap && (
-            <Process
-              data={team.teamRoadmap}
-            />
-          )}
+          {team.teamRoadmap && <Process data={team.teamRoadmap} />}
         </div>
       ))}
     </div>

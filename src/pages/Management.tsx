@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import Modal from '../components/Modal/Modal';
 import Axios from '../libs/api';
 import Process from '../components/SearchDetail/Process';
+import { typeFilter } from '../libs/utils/filter';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -58,7 +59,7 @@ interface ReviewModalProps {
 
 const PurpleButton = ({ children }: HeadingButtonProps) => {
   return (
-    <button className="rounded-xl bg-tagPurple2 px-4 py-3 font-semibold text-blue1">
+    <button className="rounded-xl bg-[#E0E1FC] px-4 py-3 font-semibold text-blue1">
       {children}
     </button>
   );
@@ -194,7 +195,7 @@ const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
 const Management = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [progress] = useState(50);
+  const [progress, setProgress] = useState(0);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -247,14 +248,16 @@ const Management = () => {
       if (!params) return;
       const data = {
         templateId: Number(params.templateId),
-        roadmapTitle: searchParams.get('roadmap'),
+        roadmapId: Number(params.roadmapId),
         teamTitle: searchParams.get('team'),
       };
       try {
-        const res = await Axios.get('/manage/template/team', {
+        const res = await Axios('/manage/template/team', {
           params: data,
         });
+        console.log(res.data);
         setData(res.data.data);
+        setProgress(res.data.roadmapInfo.progressingNum);
       } catch (err) {
         console.error(err);
       }
@@ -296,7 +299,9 @@ const Management = () => {
           <div className="flex w-full justify-between">
             <SectionHeadingContent
               title={data?.teamInfo.title}
-              subtitle={data?.teamInfo.teamType}
+              subtitle={
+                typeFilter(data?.teamInfo.teamType.toLowerCase()) ?? '기타'
+              }
             />
             <div className="flex gap-5">
               <PurpleButton>원본 데이터 보기</PurpleButton>
@@ -353,7 +358,7 @@ const Management = () => {
           {/* 템플릿 내용 */}
           <div className="mt-6 flex flex-col space-y-6">
             <div className="flex flex-col space-y-6">
-              <div className="rounded-2xl bg-tagPurple2 px-6 py-4 text-xl font-medium shadow-lg">
+              <div className="rounded-2xl bg-[#E0E1FC] px-6 py-4 text-xl font-medium shadow-lg">
                 <span className="font-bold">템플릿 내용</span>
               </div>
               <div className="w-full rounded-2xl px-6 py-4 leading-6 shadow-lg">
