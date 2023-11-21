@@ -4,6 +4,9 @@ import SideNavBar from './SideNavBar';
 import TopNavBar from './TopNavBar';
 import Footer from './Footer';
 
+import { useRecoilState } from 'recoil';
+import { OpenChatState, OpenChatRoomState } from '../../states/ChatState';
+
 interface Props {
   children: React.ReactNode;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -17,8 +20,14 @@ const Layout = ({ children, containerRef, moveToTop }: Props) => {
   const includedFooter = ['/', '/login', '/article', '/signUp'];
   const isFullScreen = includedFooter.includes(currentPath);
 
+  const [openChatState, setOpenChatState] = useRecoilState(OpenChatState);
+  const [openChatRoomState, setOpenChatRoomState] =
+    useRecoilState(OpenChatRoomState);
+
   useEffect(() => {
     moveToTop();
+    setOpenChatState(false);
+    setOpenChatRoomState(false);
   }, [currentPath]);
 
   return (

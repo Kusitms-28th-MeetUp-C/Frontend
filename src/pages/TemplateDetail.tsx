@@ -17,7 +17,7 @@ const TemplateDetail = () => {
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
   const [mainData, setMainData] = useState<any>({});
   const [infoData, setInfoData] = useState<any>({});
-  const [agendaData, setAgendaData] = useState<any>([]);
+  const [agendaData, setAgendaData] = useState('');
   const [templateData, setTemplateData] = useState<any>([]);
   const [roadmapData, setRoadmapData] = useState({});
   const [userData, setUserData] = useState<any>({});
@@ -39,6 +39,7 @@ const TemplateDetail = () => {
         setMainData({ title: response.title });
         setInfoData({ ...response.templateIntro });
         setTemplateData([...response.relatedTemplate]);
+        setAgendaData(response.templateContent);
         setRoadmapData({ ...response.roadmapIdAndConnectRoadmap });
         setUserData({ ...response.user });
       })
@@ -46,7 +47,7 @@ const TemplateDetail = () => {
   };
 
   const onClickUseBtn = async () => {
-    await Axios.get('template/save/user', {
+    await Axios.get('manage/template/save/user', {
       params: {
         templateId,
       },
@@ -66,7 +67,7 @@ const TemplateDetail = () => {
     <div className="w-full min-w-[1250px] py-9 pr-10">
       <BackBtn />
       <Title>{mainData.title}</Title>
-      <div className="flex justify-between">
+      <div className="mt-9 flex justify-between">
         <div className="w-[22%]">
           <Info data={infoData} />
         </div>
