@@ -17,7 +17,7 @@ const TemplateDetail = () => {
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
   const [mainData, setMainData] = useState<any>({});
   const [infoData, setInfoData] = useState<any>({});
-  const [agendaData, setAgendaData] = useState<any>([]);
+  const [agendaData, setAgendaData] = useState('');
   const [templateData, setTemplateData] = useState<any>([]);
   const [roadmapData, setRoadmapData] = useState({});
   const [userData, setUserData] = useState<any>({});
@@ -39,6 +39,7 @@ const TemplateDetail = () => {
         setMainData({ title: response.title });
         setInfoData({ ...response.templateIntro });
         setTemplateData([...response.relatedTemplate]);
+        setAgendaData(response.templateContent);
         setRoadmapData({ ...response.roadmapIdAndConnectRoadmap });
         setUserData({ ...response.user });
       })
