@@ -60,7 +60,7 @@ const Meeting = () => {
               <SectionHeadingContent
                 title={team.teamInfo.title}
                 subtitle={
-                  typeFilter(team.teamInfo.teamType?.toLowerCase()) ?? '기타'
+                  typeFilter(team?.teamInfo?.teamType?.toLowerCase()) || '기타'
                 }
               />
               {team.teamRoadmap && (

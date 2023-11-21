@@ -148,8 +148,8 @@ const MeetingDetail = () => {
           <section className="mt-6 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
-                title={team.title}
-                subtitle={typeFilter(team.teamType?.toLowerCase()) ?? '기타'}
+                title={team?.title}
+                subtitle={typeFilter(team?.teamType?.toLowerCase()) || '기타'}
               />
               <button onClick={() => setIsModalOpen(true)}>
                 <img src="/icons/edit-icon.svg" alt="수정 버튼" />
@@ -158,17 +158,17 @@ const MeetingDetail = () => {
             <div className="mt-4 flex justify-between rounded-md bg-[#E0E1FC] px-4 py-2">
               <span className="font-semibold">
                 프로젝트 목표 :&nbsp;
-                <span className="font-medium">{team.introduction}</span>
+                <span className="font-medium">{team?.introduction}</span>
               </span>
               <span>
-                {team.roadmap.startTime} - {team.roadmap.endTime}
+                {team?.roadmap.startTime} - {team?.roadmap.endTime}
               </span>
             </div>
           </section>
           {/* 로드맵 섹션 */}
-          <Process data={team.roadmap} isShowTitle />
+          <Process data={team?.roadmap} isShowTitle />
           {/* Step 섹션 모음 */}
-          {team.roadmap.roadmapList.map((stepData: any) => (
+          {team?.roadmap.roadmapList.map((stepData: any) => (
             <StepSection
               key={stepData.stepId}
               stepData={stepData}
@@ -180,13 +180,13 @@ const MeetingDetail = () => {
       {/* 팀 수정 모달 */}
       {isModalOpen && (
         <TeamEditorModal
-          teamId={team.teamId}
+          teamId={team?.teamId}
           values={teamEditValues}
           setValues={setTeamEditValues}
-          teamName={team.title}
+          teamName={team?.title}
           setIsOpen={() => setIsModalOpen(false)}
           apiMode="edit"
-          initialTeamCategory={team.teamType.toLowerCase()}
+          initialTeamCategory={team?.teamType?.toLowerCase()}
         />
       )}
     </>

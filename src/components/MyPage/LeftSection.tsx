@@ -49,27 +49,27 @@ const LeftSection = ({ user }: LeftSectionProps) => {
     <LeftSectionBlock className="shadow">
       <SectionHeading>내 프로필</SectionHeading>
       <ProfileInfo>
-        <MyInfo.Avatar imageUrl={user.profile} />
+        <MyInfo.Avatar imageUrl={user?.profile} />
         <ProfileDetailInfo>
-          <MyInfo.Name userType={user.userType} name={user.name} />
-          <MyInfo.Email email={user.email} />
+          <MyInfo.Name userType={user?.userType} name={user?.name} />
+          <MyInfo.Email email={user?.email} />
           <MyInfo.ChatButton />
         </ProfileDetailInfo>
       </ProfileInfo>
       <ScoreArea>
         <MyInfo.ScoreItem
           label="회의록 로드맵 가이드"
-          count={user.templateNum}
+          count={user?.templateNum}
           countLabel="개"
         />
         <MyInfo.ScoreItem
           label="로드맵 템플릿 기여도"
-          count={user.roadmapNum}
+          count={user?.roadmapNum}
           countLabel="개"
         />
         <MyInfo.ScoreItem
           label="나의 포인트"
-          count={user.point}
+          count={user?.point}
           countLabel="점"
           isPoint
         />
