@@ -1,5 +1,5 @@
 interface AgendaProps {
-  data: any;
+  data: string;
 }
 
 const Agenda = ({ data }: AgendaProps) => {
@@ -37,13 +37,14 @@ const Agenda = ({ data }: AgendaProps) => {
   ];
 
   return (
-    <div className="mb-8 flex flex-col items-center gap-8 rounded-[20px] bg-white px-8 py-9">
-      {sampleData.map((el, idx) => (
+    <div className="mb-8 flex flex-col gap-8 rounded-[20px] bg-white px-8 py-9">
+      {data}
+      {/* {sampleData.map((el, idx) => (
         <div className="flex flex-col gap-[10px] text-gray1" key={idx}>
           <div className="text-base font-semibold">{el.title}</div>
           <div className="text-xs font-medium leading-[18px]">{el.content}</div>
         </div>
-      ))}
+      ))} */}
       <div className="text-center text-xs font-medium text-gray4">
         템플릿 사용 시, 안건을 수정할 수 있어요
       </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MdExpandMore } from 'react-icons/md';
 import styled from 'styled-components';
-import { typeFilter } from '../../libs/utils/filter';
+import { typeFilter } from '../../../libs/utils/filter';
 
 // selectedItem 보낼 때에 반드시 객체로 보내주세요. id를 함께 관리해야하는 컴포넌트가 있어서 그래용
 // selectedItem의 default값은 {id: 0, title: "박스에 나타내고 싶은 기본멘트"} 로 설정하면 됩니다
@@ -17,6 +17,7 @@ interface DropDownProps {
   width?: number;
   isCategory?: boolean;
   color?: 'lightBlue' | 'white';
+  className?: string;
 }
 
 interface DropDownBlockProps {
@@ -57,6 +58,7 @@ const DropDown = ({
   width,
   isCategory,
   color = 'white',
+  className,
 }: DropDownProps) => {
   const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
 
@@ -66,7 +68,7 @@ const DropDown = ({
         color={color}
         className={`flex cursor-pointer items-center justify-between px-4 py-2 ${
           isOpenCmbBox ? 'rounded-t-[15px] bg-blue4' : 'rounded-[15px]'
-        }`}
+        } ${className}`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
       >
         <div className="text-sm text-gray3">

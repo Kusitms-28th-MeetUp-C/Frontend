@@ -7,17 +7,14 @@ const { persistAtom } = recoilPersist();
 export const OpenChatState = atom({
   key: 'openChat',
   default: false,
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const OpenChatRoomState = atom({
   key: 'openChatRoom',
   default: false,
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const ChatUserState = atom({
   key: 'chatUser',
   default: { name: '', sessionId: '' },
-  effects_UNSTABLE: [persistAtom],
 });

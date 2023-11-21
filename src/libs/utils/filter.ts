@@ -11,7 +11,9 @@ export const typeList = [
 ];
 
 export const typeFilter = (type: string) => {
-  switch (type) {
+  const formatType = type.toLowerCase();
+
+  switch (formatType) {
     case 'all':
       return '전체';
     case 'it':
@@ -21,7 +23,7 @@ export const typeFilter = (type: string) => {
     case 'club':
       return '동아리/학회';
     case 'pt':
-      return '자유주제PT';
+      return '자유주제 PT';
     case 'marketing':
       return '마케팅';
     case 'survey_data_analysis':
@@ -35,9 +37,36 @@ export const typeFilter = (type: string) => {
   }
 };
 
+export const typeReverseFilter = (type: string) => {
+  switch (type) {
+    case '전체':
+      return 'all';
+    case 'IT 프로젝트':
+      return 'it';
+    case '팀플':
+      return 'team';
+    case '동아리/학회':
+      return 'club';
+    case '자유주제 PT':
+      return 'pt';
+    case '마케팅':
+      return 'marketing';
+    case '설문 및 데이터 분석':
+      return 'survey_data_analysis';
+    case '기업 분석':
+      return 'corporate_analysis';
+    case '디자인 프로젝트':
+      return 'design';
+    case '영상 프로젝트':
+      return 'video';
+  }
+};
+
 export const tagColorFilter = (option: string, type: string) => {
+  const formatType = type.toLowerCase();
+
   if (option === 'icon' || option === 'text') {
-    switch (type) {
+    switch (formatType) {
       case 'it':
         return 'text-tagPurple1';
       case 'team':
@@ -60,7 +89,7 @@ export const tagColorFilter = (option: string, type: string) => {
   }
 
   if (option === 'background') {
-    switch (type) {
+    switch (formatType) {
       case 'it':
         return 'bg-tagPurple2';
       case 'team':

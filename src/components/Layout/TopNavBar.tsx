@@ -8,7 +8,7 @@ import { TbLogout } from 'react-icons/tb';
 import { RiPencilFill } from 'react-icons/ri';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { OpenChatState, OpenChatRoomState } from '../../states/ChatState';
@@ -128,7 +128,10 @@ const TopNavBar = () => {
           >
             <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
               {loginState.profile ? (
-                <img src={loginState.profile} />
+                <img
+                  src={loginState.profile}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <BsFillPersonFill className="text-xl text-gray3" />
               )}

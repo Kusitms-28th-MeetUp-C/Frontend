@@ -4,8 +4,9 @@ import TurndownService from 'turndown';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import Axios from '../libs/api';
-import { typeList } from '../libs/utils/filter';
-import DropDown, { selectedItem } from '../components/Common/DropDown';
+import { typeList, typeReverseFilter } from '../libs/utils/filter';
+import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
+import { useNavigate } from 'react-router-dom';
 
 interface RoundedBoxProps {
   color?: string;
@@ -19,10 +20,6 @@ interface ActionButtonProps {
   className?: string;
   children: React.ReactNode;
 }
-
-// const Dropdown = styled.div`
-//   box-shadow: 5px 4px 10px 0px rgba(0, 0, 0, 0.05);
-// `;
 
 const RoundedBoxBlock = styled.div`
   box-shadow: 5px 4px 10px 0px rgba(0, 0, 0, 0.05);
@@ -40,7 +37,7 @@ const RoundedBox = ({
 
   return (
     <RoundedBoxBlock
-      className={`rounded-xl px-6 py-3 text-gray-600${backgroundColor[color]}${
+      className={`rounded-xl px-6 py-3 text-gray-600 ${backgroundColor[color]}${
         className ? ` ${className}` : ''
       }`}
     >
@@ -77,19 +74,53 @@ const ActionButton = ({
 };
 
 const TemplateEditor = () => {
+  const navigate = useNavigate();
+
   const [rawContent, setRawContent] = useState('');
   const [error, setError] = useState(null);
   const [values, setValues] = useState<any>({
     title: '',
     content: '',
     introduction: '',
-    templateType: 'club',
+    templateType: '',
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
   const itemListRef = useRef<selectedItem[]>(typeList);
   const [selectedItem, setSelectedItem] = useState<selectedItem>(
     itemListRef.current[0],
   );
+  const [estimatedTime, setEstimatedTime] = useState({
+    id: 0,
+    title: '소요시간',
+  });
+
+  const estimatedTimeList = [
+    {
+      id: 1,
+      title: '10m',
+    },
+    {
+      id: 2,
+      title: '20m',
+    },
+    {
+      id: 3,
+      title: '30m',
+    },
+    {
+      id: 4,
+      title: '40m',
+    },
+
+    {
+      id: 5,
+      title: '50m',
+    },
+    {
+      id: 6,
+      title: '60m',
+    },
+  ];
 
   const handleEditorSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,7 +128,7 @@ const TemplateEditor = () => {
       values.title === '' ||
       values.content === '' ||
       values.introduction === '' ||
-      values.templateType === ''
+      values.templateType === 'it'
     ) {
       console.log('모든 항목을 입력해주세요.');
       setErrorMessage('모든 항목을 입력해주세요.');
@@ -105,8 +136,9 @@ const TemplateEditor = () => {
     }
     const newData = {
       ...values,
-      estimatedTime: 30,
+      estimatedTime: Number(estimatedTime.title.slice(0, 2)),
     };
+
     Axios({
       method: 'POST',
       url: '/manage/template',
@@ -114,6 +146,8 @@ const TemplateEditor = () => {
     })
       .then((res) => {
         console.log(res);
+        alert('작성이 완료되었습니다');
+        navigate('/template');
       })
       .catch((err) => setError(err));
   };
@@ -149,8 +183,9 @@ const TemplateEditor = () => {
       <div className="flex flex-col space-y-5">
         {/* 제목 */}
         <h1 className="text-2xl font-bold">템플릿 제작하기</h1>
+
         {/* 카테고리 드롭다운 */}
-        <div className="flex justify-start">
+        <div className="flex items-center gap-6">
           <DropDown
             width={200}
             itemList={itemListRef.current}
@@ -158,7 +193,16 @@ const TemplateEditor = () => {
             setSelectedItem={setSelectedItem}
             isCategory
           />
+          <div className="w-[210px]">
+            <DropDown
+              selectedItem={estimatedTime}
+              setSelectedItem={setEstimatedTime}
+              itemList={estimatedTimeList}
+              className={'py-[8px]'}
+            />
+          </div>
         </div>
+
         {/* 입력 상자 영역 */}
         <div className="flex gap-5">
           {/* 왼쪽 영역 */}
@@ -206,7 +250,6 @@ const TemplateEditor = () => {
               />
             </RoundedBox>
           </div>
-          {}
         </div>
       </div>
       {/* 버튼 영역 */}

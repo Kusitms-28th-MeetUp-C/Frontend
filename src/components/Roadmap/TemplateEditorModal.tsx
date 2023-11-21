@@ -11,6 +11,7 @@ interface TemplateEditorModalProps {
   templateValues: any;
   setTemplateValues: any;
   roadmap: any;
+  roadmapType: string | undefined;
   setRoadmap: any;
   stepIndexClicked: number | null;
   templateNames: any[];
@@ -27,6 +28,7 @@ const TemplateEditorModal = ({
   stepIndexClicked,
   templateNames,
   setTemplateNames,
+  roadmapType,
 }: TemplateEditorModalProps) => {
   const handleModalSubmit = () => {
     const turndownService = new TurndownService();
@@ -47,6 +49,8 @@ const TemplateEditorModal = ({
       url: '/manage/template',
       data: {
         ...templateValues,
+        roadmapType,
+        templateType: roadmapType,
         content: turndownService.turndown(templateValues.content),
       },
     }).then((res) => {

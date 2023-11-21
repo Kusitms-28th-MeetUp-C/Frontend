@@ -53,12 +53,14 @@ const ChatList = () => {
 
   const [chatList, setChatList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isNothing, setIsNothing] = useState(false);
 
   // Socket
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
   const headers = {
     Authorization: `Bearer ${myToken}`,
+    sessionId: loginState.sessionId,
   };
 
   const connect = () => {
@@ -66,6 +68,7 @@ const ChatList = () => {
       brokerURL: 'wss://panpeun.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
+        sessionId: loginState.sessionId,
         transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
       },
 
@@ -88,7 +91,8 @@ const ChatList = () => {
     }
 
     client.current.publish({
-      destination: `/pub/chatList`,
+      headers,
+      destination: `/pub/chat/all`,
       body: JSON.stringify({
         userName: loginState.name,
       }),
@@ -105,6 +109,7 @@ const ChatList = () => {
         console.log(response);
         setChatList([...response.data.chatList]);
         setIsLoading(false);
+        if (response.data.chatList.length === 0) setIsNothing(true);
       },
       headers,
     );
@@ -121,7 +126,7 @@ const ChatList = () => {
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden py-7 pl-6 pr-3">
-      <div className="mb-9 flex items-center gap-2">
+      <div className="mb-9 flex items-center gap-2" onClick={() => publish()}>
         <BsFillChatFill className="text-2xl text-blue1" />
         <div className="text-2xl font-bold text-black">커피챗 목록</div>
       </div>
@@ -130,6 +135,12 @@ const ChatList = () => {
         <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
           <img src="/icons/loading.svg" />
           <div className="text-xs font-semibold text-black">Loading...</div>
+        </div>
+      ) : isNothing ? (
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <div className="text-xs font-semibold text-gray1">
+            진행중인 채팅이 없어요
+          </div>
         </div>
       ) : (
         <ListContainer>

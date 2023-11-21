@@ -5,25 +5,70 @@ import AddButton from '../components/Roadmap/AddButton';
 import TemplateItem from '../components/Roadmap/TemplateItem';
 import TemplateEditorModal from '../components/Roadmap/TemplateEditorModal';
 import SubmitButton from '../components/Roadmap/SubmitButton';
-import DropDown, { selectedItem } from '../components/Common/DropDown';
+import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import styled from 'styled-components';
-import { typeFilter, typeList } from '../libs/utils/filter';
+import { typeReverseFilter, typeFilter, typeList } from '../libs/utils/filter';
 
 const RoadmapEditor = () => {
+  const categoryList = [
+    {
+      id: 1,
+      title: 'IT 프로젝트',
+    },
+    {
+      id: 2,
+      title: '팀플',
+    },
+    {
+      id: 3,
+      title: '동아리/학회',
+    },
+    {
+      id: 4,
+      title: '자유주제 PT',
+    },
+
+    {
+      id: 5,
+      title: '마케팅',
+    },
+    {
+      id: 6,
+      title: '설문 및 데이터 분석',
+    },
+    {
+      id: 7,
+      title: '기업 분석',
+    },
+    {
+      id: 8,
+      title: '디자인 프로젝트',
+    },
+    {
+      id: 9,
+      title: '영상 프로젝트',
+    },
+  ];
+  const [roadmapType, setRoadmapType] = useState({
+    id: 0,
+    title: '카테고리',
+  });
+
   const [roadmap, setRoadmap] = useState({
     title: '',
     introduction: '',
     steps: [],
-    roadmapType: 'it',
+    roadmapType: '',
   });
+
   const [templateNames, setTemplateNames] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [templateValues, setTemplateValues] = useState<any>({
     title: '',
     content: '',
     introduction: '',
-    templateType: 'it',
-    estimatedTime: 30,
+    templateType: '',
+    estimatedTime: 0,
   });
   const [stepIndexClicked, setStepIndexClicked] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -39,7 +84,14 @@ const RoadmapEditor = () => {
   return (
     <div className="px-14 py-12">
       <header>
-        <h1 className="text-3xl font-bold">로드맵 작성하기</h1>
+        <h1
+          className="text-3xl font-bold"
+          onClick={() =>
+            console.log(roadmap, typeReverseFilter(roadmapType.title))
+          }
+        >
+          로드맵 작성하기
+        </h1>
       </header>
       <main className="mt-5">
         <form>
@@ -112,6 +164,7 @@ const RoadmapEditor = () => {
                               />
                             </>
                           )}
+
                           {isModalOpen && (
                             <TemplateEditorModal
                               setIsOpen={setIsModalOpen}
@@ -119,6 +172,7 @@ const RoadmapEditor = () => {
                                 setIsModalOpen(false);
                               }}
                               templateValues={templateValues}
+                              roadmapType={typeReverseFilter(roadmapType.title)}
                               setTemplateValues={setTemplateValues}
                               roadmap={roadmap}
                               setRoadmap={setRoadmap}
@@ -139,6 +193,7 @@ const RoadmapEditor = () => {
                 </span>
                 <SubmitButton
                   roadmap={roadmap}
+                  roadmapType={typeReverseFilter(roadmapType.title)}
                   setErrorMessage={setErrorMessage}
                 />
               </div>

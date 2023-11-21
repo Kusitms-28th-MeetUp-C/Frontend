@@ -14,7 +14,7 @@ import LoginPage from './pages/Login';
 import GoogleLogin from './pages/GoogleLogin';
 import KakaoLogin from './pages/KakaoLogin';
 import TemplateEditor from './pages/TemplateEditor';
-import TemplateSearch from './pages/TemplateSearch';
+import TemplateSearch from './pages/TemplateSearch.jsx';
 import RoadmapEditor from './pages/RoadmapEditor';
 import Main from './pages/Main';
 import Article from './pages/Article';

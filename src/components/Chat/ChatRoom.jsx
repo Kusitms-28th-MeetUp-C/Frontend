@@ -92,12 +92,14 @@ const ChatRoom = () => {
 
   const [msg, setMsg] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isNothing, setIsNothing] = useState(false);
 
   // Socket
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
   const headers = {
     Authorization: `Bearer ${myToken}`,
+    sessionId: loginState.sessionId,
   };
 
   const connect = () => {
@@ -105,6 +107,7 @@ const ChatRoom = () => {
       brokerURL: 'wss://panpeun.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
+        sessionId: loginState.sessionId,
         transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
       },
 
@@ -165,11 +168,17 @@ const ChatRoom = () => {
           setMsgList([...response.data.chatMessageList]);
           setUserData({ ...response.data.user });
           setIsLoading(false);
+          if (response.data.chatMessageList.length === 0) setIsNothing(true);
         }
         if (response.messageType === 'received') {
-          console.log('전송완료');
-          setMsgList((prev) => [...prev, response.data.message]);
-          setMsg('');
+          if (response.data.message.userName === loginState.name) {
+            setMsgList((prev) => [...prev, response.data.message]);
+            setMsg('');
+          }
+
+          if (response.data.message.userName === chatUserState.name) {
+            setMsgList((prev) => [...prev, response.data.message]);
+          }
         }
       },
       headers,
@@ -241,6 +250,12 @@ const ChatRoom = () => {
         <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
           <img src="/icons/loading.svg" />
           <div className="text-xs font-semibold text-black">Loading...</div>
+        </div>
+      ) : isNothing ? (
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <div className="text-xs font-semibold text-gray1">
+            {userData.name}님한테 커피챗을 보내보세요!
+          </div>
         </div>
       ) : (
         <BubbleContainer ref={containerRef}>
