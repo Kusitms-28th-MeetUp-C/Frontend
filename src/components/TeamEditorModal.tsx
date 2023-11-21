@@ -1,6 +1,6 @@
 import Axios from '../libs/api';
 import Modal from '../components/Modal/Modal';
-import DropDown, { selectedItem } from './Common/DropDown';
+import DropDown, { selectedItem } from './Common/DropDown/DropDown';
 import { useEffect, useRef, useState } from 'react';
 import { typeList } from '../libs/utils/filter';
 
