@@ -198,14 +198,14 @@ const TemplateSearch = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex flex-1 flex-col h-full items-center justify-center gap-[10px]">
-          <img src="/icons/loading.svg" className="h-[50px] w-[50px]" />
-          <div className="text-2xl font-semibold text-black">Loading...</div>
+        <div className="flex h-full flex-1 flex-col items-center justify-center gap-[10px]">
+          <img src="/icons/loading.svg" className="h-[30px] w-[30px]" />
+          <div className="text-xl font-semibold text-black">Loading...</div>
         </div>
       ) : isNothing ? (
-        <div className="flex flex-1 h-full items-center justify-center">
-          <div className="text-2xl font-semibold text-gray1">
-            진행중인 채팅이 없어요
+        <div className="flex h-full flex-1 items-center justify-center">
+          <div className="text-xl font-semibold text-gray1">
+            해당하는 회의록이 없습니다
           </div>
         </div>
       ) : (

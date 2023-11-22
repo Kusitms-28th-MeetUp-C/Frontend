@@ -34,6 +34,8 @@ export const typeFilter = (type: string) => {
       return '디자인 프로젝트';
     case 'video':
       return '영상 프로젝트';
+    case 'etc':
+      return '타입 미지정';
   }
 };
 
