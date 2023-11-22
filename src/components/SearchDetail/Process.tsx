@@ -71,7 +71,7 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
         <div className="absolute left-[7%] top-[28px] z-0 h-[5px] w-[87%] bg-blue3" />
         {data?.processingNum && (
           <div
-            className={`z-1 absolute left-[7%] top-[25px] h-[5px] bg-blue1`}
+            className={`z-1 absolute left-[7%] top-[25px] h-[5px] bg-blue1 ${processingRatio}`}
           />
         )}
       </div>

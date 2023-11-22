@@ -4,6 +4,7 @@ import Axios from '../libs/api';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
+import Alert from '../components/Modal/Alert';
 
 interface InputTitleProps {
   children: React.ReactNode;
@@ -74,14 +75,20 @@ const OnBoarding = () => {
       )
         .then((res) => {
           console.log(res);
-          alert('회원가입을 축하드립니다');
           setLoginState((prev: any) => ({ ...prev, name: res.data.data.name }));
-          navigate('/');
+          setIsOpenAlert(true);
         })
         .catch((err) => console.error(err));
     } else {
       alert('내용을 입력해주세요');
     }
+  };
+
+  // Alert창
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const onSubmitAlert = () => {
+    setIsOpenAlert(false);
+    navigate('/template');
   };
 
   return (
@@ -122,6 +129,14 @@ const OnBoarding = () => {
           작성 완료
         </button>
       </div>
+      {isOpenAlert && (
+        <Alert
+          title="회원가입을 축하드립니다"
+          setIsOpen={setIsOpenAlert}
+          onSubmit={onSubmitAlert}
+          btnTxt="확인"
+        />
+      )}
     </div>
   );
 };
