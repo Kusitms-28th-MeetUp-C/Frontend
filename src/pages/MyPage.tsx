@@ -12,7 +12,7 @@ const MyPageBlock = styled.div`
   padding-bottom: 1.5rem;
   padding-right: 1.5rem;
   padding-left: 1.5rem;
-  gap: 2rem;
+  gap: 1.5rem;
 `;
 
 const MyPage = () => {
@@ -26,6 +26,13 @@ const MyPage = () => {
   const [contentData, setContentData] = useState<any>(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isEditScreen, setIsEditScreen] = useState(false);
+  const [values, setValues] = useState({
+    profile: '',
+    email: '',
+    name: '',
+    userType: '',
+  });
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -73,6 +80,26 @@ const MyPage = () => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    setValues({
+      profile: user?.profile,
+      email: user?.email,
+      name: user?.name,
+      userType: user?.userType,
+    });
+  }, [user]);
+
+  const handleProfileEdit = async () => {
+    try {
+      const { email, ...reqData } = values;
+      const res = await Axios.post('/update', reqData);
+      console.log(res);
+      setIsEditScreen(false);
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   if (loading) {
     return <div>loading...</div>;
   }
@@ -83,7 +110,14 @@ const MyPage = () => {
 
   return (
     <MyPageBlock>
-      <LeftSection user={user} />
+      <LeftSection
+        user={user}
+        isEditScreen={isEditScreen}
+        setIsEditScreen={setIsEditScreen}
+        values={values}
+        setValues={setValues}
+        handleProfileEdit={handleProfileEdit}
+      />
       <RightSection
         listType={listType}
         setListType={setListType}
