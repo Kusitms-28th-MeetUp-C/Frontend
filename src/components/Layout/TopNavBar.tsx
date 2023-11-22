@@ -167,7 +167,7 @@ const TopNavBar = () => {
                     isMobile ? 'h-[16.8px] w-[16.8px]' : 'h-7 w-7'
                   } items-center justify-center overflow-hidden rounded-full bg-white`}
                 >
-                  {loginState.profile ? (
+                  {loginState.profile && loginState.profile !== 'Unknown' ? (
                     <img
                       src={loginState.profile}
                       className="h-full w-full object-cover"

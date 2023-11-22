@@ -56,7 +56,7 @@ const Maker = ({ data, isMobile }: MakerProps) => {
             isMobile ? 'h-[70px] w-[70px]' : 'h-[78px] w-[78px]'
           } shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray6`}
         >
-          {data?.profile ? (
+          {data?.profile && data?.profile !== 'Unknown' ? (
             <img src={data?.profile} className="h-full w-full object-cover" />
           ) : (
             <BsFillPersonFill className="h-14 w-14 text-gray3" />
