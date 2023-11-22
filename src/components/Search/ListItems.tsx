@@ -3,9 +3,12 @@ import { BiSolidTimeFive } from 'react-icons/bi';
 import { HiTemplate } from 'react-icons/hi';
 
 import { MdNavigateNext } from 'react-icons/md';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+
 import { tagColorFilter, typeFilter } from '../../libs/utils/filter';
 import styled from 'styled-components';
+import { LoginState } from '../../states/LoginState';
 
 interface ListItemsProps {
   data: any[];
@@ -23,15 +26,28 @@ const ListContainer = styled.div`
 `;
 
 const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
+  const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const [loginState, setLoginState] = useRecoilState(LoginState);
+
+  const onClickList = (id: number) => {
+    if (loginState.isLogin) {
+      navigate(`${currentPath}/${id}`);
+    } else {
+      alert('로그인이 필요한 서비스입니다');
+      navigate('/login');
+    }
+  };
 
   return (
     <ListContainer className="3xl:grid-cols-4 mb-14 grid grid-cols-1 gap-9 lg:grid-cols-2">
       {data?.map((el) => (
-        <Link
-          to={`${currentPath}/${isRoadmap ? el?.roadmapId : el?.templateId}`}
+        <button
           key={isRoadmap ? el?.roadmapId : el?.templateId}
+          onClick={() =>
+            onClickList(isRoadmap ? el?.roadmapId : el?.templateId)
+          }
           className="flex min-w-[330px] flex-col gap-5 rounded-[20px] bg-white p-[26px]"
         >
           <div
@@ -78,7 +94,7 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
                 </>
               ) : (
                 <>
-                  <BiSolidTimeFive className="text-tagLightPurple1 text-xl" />
+                  <BiSolidTimeFive className="text-xl text-tagLightPurple1" />
                   <div className="text-[14px] font-semibold text-[#8A929F]">
                     {el?.estimatedTime}m
                   </div>
@@ -93,7 +109,7 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
               <MdNavigateNext style={{ color: '#8A929F' }} />
             </div>
           </div>
-        </Link>
+        </button>
       ))}
     </ListContainer>
   );

@@ -26,6 +26,7 @@ interface ShareIconButtonProps {
   iconUrl: string;
   onClick?: () => void;
 }
+
 interface TeamSpaceLinkProps {
   to?: string;
   name: string;

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaCompass } from 'react-icons/fa';
 import { MdNavigateNext } from 'react-icons/md';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../../states/LoginState';
 
 interface SectionTitleProps {
   children: React.ReactNode;
@@ -14,7 +16,7 @@ interface ListProps {
 }
 
 interface ListItemProps {
-  to?: string;
+  to: string;
   children: React.ReactNode;
 }
 
@@ -48,20 +50,29 @@ const List = ({ children }: ListProps) => {
 
 const ListItem = ({ to, children }: ListItemProps) => {
   const location = useLocation();
-  const [isActive, setIsActive] = useState(false);
+  const pathname = location.pathname;
+  // const [isActive, setIsActive] = useState(false);
 
-  useEffect(() => {
-    if (to) {
-      const pathname = location.pathname;
-      setIsActive(pathname.includes(to));
+  const navigate = useNavigate();
+  const [loginState, setLoginState] = useRecoilState(LoginState);
+
+  const onClickCategory = (to: string) => {
+    if (
+      !loginState.isLogin &&
+      (to === '/meeting' || to === '/search-template')
+    ) {
+      alert('로그인이 필요한 서비스입니다');
+      navigate('/login');
+    } else {
+      navigate(to);
     }
-  }, [to, location, isActive]);
+  };
 
   return (
-    <Link
-      to={to ? to : '#'}
+    <button
+      onClick={() => onClickCategory(to)}
       className={`flex w-full cursor-pointer items-center justify-between rounded-l-full py-2 pl-5 pr-2 text-[14px]  duration-300 ${
-        isActive
+        pathname.includes(to)
           ? 'bg-[#EEEEFB] font-bold text-[#5257D6]'
           : 'font-semibold text-white hover:bg-[#EEEEFB] hover:text-[#5257D6]'
       }`}
@@ -71,10 +82,10 @@ const ListItem = ({ to, children }: ListItemProps) => {
         style={{
           width: '25px',
           height: '25px',
-          visibility: `${isActive ? 'visible' : 'hidden'}`,
+          visibility: `${pathname.includes(to) ? 'visible' : 'hidden'}`,
         }}
       />
-    </Link>
+    </button>
   );
 };
 

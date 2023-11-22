@@ -83,13 +83,12 @@ const TopNavBar = () => {
           >
             서비스 소개
           </Link>
-          <button
-            id="template"
+          <Link
+            to="/template"
             className={`text-xl font-semibold text-gray3 duration-300`}
-            onClick={onClickLoginCategory}
           >
             템플릿 탐색
-          </button>
+          </Link>
           <button
             id="meeting"
             className={`text-xl font-semibold text-gray3 duration-300`}

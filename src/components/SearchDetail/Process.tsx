@@ -8,12 +8,12 @@ interface ProcessProps {
 }
 
 const Process = ({ data, isShowTitle }: ProcessProps) => {
-  // const processingRatio =
-  //   `w-[${
-  //     ((data.processingNum && data.processingNum - 1) /
-  //       (data.processingNum && data.roadmapList.length - 1)) *
-  //     87
-  //   }%]` || 'w-[0%]';
+  const processingRatio =
+    `w-[${
+      ((data?.processingNum && data?.processingNum - 1) /
+        (data?.processingNum && data?.roadmapList.length - 1)) *
+      87
+    }%]` || 'w-[0%]';
 
   return (
     <div
@@ -28,7 +28,7 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
       <div className="relative flex w-full justify-between">
         {data?.roadmapList?.map((el: any, idx: number) => (
           <div className=" flex w-[14%] flex-col items-center">
-            <div className="z-20 mb-[14px] flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white">
+            <div className="z-20 mb-[14px] flex h-[60px] w-[60px] items-center justify-center bg-white">
               {data?.processingNum !== idx + 1 ? (
                 <div
                   className={`flex h-7 w-7 items-center justify-center rounded-full text-base font-bold text-white ${
@@ -68,12 +68,12 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
           </div>
         ))}
 
-        <div className="absolute left-[7%] top-[25px] z-0 h-[5px] w-[87%] bg-blue3" />
-        {/* {data.processingNum && (
+        <div className="absolute left-[7%] top-[28px] z-0 h-[5px] w-[87%] bg-blue3" />
+        {data?.processingNum && (
           <div
-            className={`z-1 absolute left-[7%] top-[25px] h-[5px] bg-blue1`}
+            className={`z-1 absolute left-[7%] top-[25px] h-[5px] bg-blue1 ${processingRatio}`}
           />
-        )} */}
+        )}
       </div>
     </div>
   );
