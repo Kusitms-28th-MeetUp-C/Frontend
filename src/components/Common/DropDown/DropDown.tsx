@@ -66,7 +66,7 @@ const DropDown = ({
     <DropDownBlock width={width} color={color} className="relative">
       <DropDownContent
         color={color}
-        className={`flex cursor-pointer items-center justify-between px-4 py-2 ${
+        className={`flex cursor-pointer items-center justify-between px-4 py-1 ${
           isOpenCmbBox ? 'rounded-t-[15px] bg-blue4' : 'rounded-[15px]'
         } ${className}`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
