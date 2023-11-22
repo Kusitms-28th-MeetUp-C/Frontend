@@ -17,16 +17,20 @@ interface DropDownProps {
   width?: number;
   isCategory?: boolean;
   color?: 'lightBlue' | 'white';
+  borderRadius?: number;
   className?: string;
 }
 
 interface DropDownBlockProps {
   width?: number;
   color?: 'lightBlue' | 'white';
+  borderRadius?: number;
 }
 
 interface DropDownContentProps {
   color?: 'lightBlue' | 'white';
+  borderRadius?: number;
+  isOpenCmbBox?: boolean;
 }
 
 interface DropDownMenuProps {
@@ -35,6 +39,10 @@ interface DropDownMenuProps {
 
 const DropDownBlock = styled.div<DropDownBlockProps>`
   ${(props) => (props.width ? `width: ${props.width}px` : 'width: 100%')};
+  ${(props) =>
+    props.borderRadius
+      ? `border-radius: ${props.borderRadius}px`
+      : 'border-radius: 15px'};
 `;
 
 const DropDownContent = styled.div<DropDownContentProps>`
@@ -42,6 +50,10 @@ const DropDownContent = styled.div<DropDownContentProps>`
     props.color === 'lightBlue'
       ? 'background-color: #EBEEF9'
       : props.color === 'white' && 'background-color: white'};
+  ${(props) =>
+    props.isOpenCmbBox
+      ? `border-radius: ${props.borderRadius}px ${props.borderRadius}px 0 0`
+      : `border-radius: ${props.borderRadius}px`};
 `;
 
 const DropDownMenu = styled.div<DropDownMenuProps>`
@@ -58,17 +70,23 @@ const DropDown = ({
   width,
   isCategory,
   color = 'white',
+  borderRadius,
   className,
 }: DropDownProps) => {
   const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
 
   return (
-    <DropDownBlock width={width} color={color} className="relative">
+    <DropDownBlock
+      width={width}
+      color={color}
+      borderRadius={borderRadius}
+      className="relative"
+    >
       <DropDownContent
         color={color}
-        className={`flex cursor-pointer items-center justify-between px-4 py-1 ${
-          isOpenCmbBox ? 'rounded-t-[15px] bg-blue4' : 'rounded-[15px]'
-        } ${className}`}
+        borderRadius={borderRadius}
+        isOpenCmbBox={isOpenCmbBox}
+        className={`flex cursor-pointer items-center justify-between px-4 py-1 ${className}`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
       >
         <div className="text-sm text-gray3">

@@ -53,6 +53,7 @@ const Meeting = () => {
       {teamList?.map((team: any) => (
         <div key={team.teamInfo.teamId}>
           {/* 헤딩 섹션 */}
+
           <div className="mb-6 mt-10 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
@@ -80,6 +81,7 @@ const Meeting = () => {
       {/* 모달 */}
       {isModalOpen && (
         <TeamEditorModal
+          teamName="새로운"
           setIsOpen={() => setIsModalOpen(false)}
           values={teamEditValues}
           setValues={setTeamEditValues}
