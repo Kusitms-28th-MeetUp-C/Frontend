@@ -1,54 +1,16 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import RoundedBox from '../components/Roadmap/RoundedBox';
 import StepItem from '../components/Roadmap/StepItem';
 import AddButton from '../components/Roadmap/AddButton';
 import TemplateItem from '../components/Roadmap/TemplateItem';
-import TemplateEditorModal from '../components/Roadmap/TemplateEditorModal';
+import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
 import SubmitButton from '../components/Roadmap/SubmitButton';
 import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
-import styled from 'styled-components';
-import { typeReverseFilter, typeFilter, typeList } from '../libs/utils/filter';
+import { typeReverseFilter, typeList } from '../libs/utils/filter';
+import { produce } from 'immer';
+import Axios from '../libs/api';
 
 const RoadmapEditor = () => {
-  const categoryList = [
-    {
-      id: 1,
-      title: 'IT 프로젝트',
-    },
-    {
-      id: 2,
-      title: '팀플',
-    },
-    {
-      id: 3,
-      title: '동아리/학회',
-    },
-    {
-      id: 4,
-      title: '자유주제 PT',
-    },
-
-    {
-      id: 5,
-      title: '마케팅',
-    },
-    {
-      id: 6,
-      title: '설문 및 데이터 분석',
-    },
-    {
-      id: 7,
-      title: '기업 분석',
-    },
-    {
-      id: 8,
-      title: '디자인 프로젝트',
-    },
-    {
-      id: 9,
-      title: '영상 프로젝트',
-    },
-  ];
   const [roadmapType, setRoadmapType] = useState({
     id: 0,
     title: '카테고리',
@@ -70,6 +32,7 @@ const RoadmapEditor = () => {
     templateType: '',
     estimatedTime: 0,
   });
+  const [content, setContent] = useState('');
   const [stepIndexClicked, setStepIndexClicked] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const itemListRef = useRef<selectedItem[]>(typeList);
@@ -80,6 +43,41 @@ const RoadmapEditor = () => {
   useEffect(() => {
     setRoadmap({ ...roadmap, roadmapType: selectedItem.title });
   }, [selectedItem]);
+
+  const handleModalSubmit = () => {
+    Axios({
+      method: 'POST',
+      url: '/manage/template',
+      data: {
+        ...templateValues,
+        templateType: selectedItem.title,
+        content: content,
+      },
+    }).then((res) => {
+      setIsModalOpen(false);
+      const newTemplateNames = produce(templateNames, (draft: any[]) => {
+        draft.push({
+          templateId: res.data.data.templateId,
+          title: res.data.data.title,
+        });
+      });
+      setTemplateNames(newTemplateNames);
+      const newRoadmap = produce(roadmap, (draft: any) => {
+        if (stepIndexClicked === null) return;
+        draft.steps[stepIndexClicked].templateIdList.push(
+          res.data.data.templateId,
+        );
+      });
+      setRoadmap(newRoadmap);
+      setTemplateValues({
+        title: '',
+        content: '',
+        introduction: '',
+        templateType: 'it',
+        estimatedTime: 0,
+      });
+    });
+  };
 
   return (
     <div className="px-14 py-12">
@@ -164,21 +162,18 @@ const RoadmapEditor = () => {
                               />
                             </>
                           )}
-
                           {isModalOpen && (
                             <TemplateEditorModal
                               setIsOpen={setIsModalOpen}
-                              onCancel={() => {
-                                setIsModalOpen(false);
-                              }}
+                              onCancel={() => setIsModalOpen(false)}
+                              onSubmit={handleModalSubmit}
+                              content={content}
+                              setContent={setContent}
                               templateValues={templateValues}
-                              roadmapType={typeReverseFilter(roadmapType.title)}
                               setTemplateValues={setTemplateValues}
-                              roadmap={roadmap}
-                              setRoadmap={setRoadmap}
-                              stepIndexClicked={stepIndexClicked}
-                              templateNames={templateNames}
-                              setTemplateNames={setTemplateNames}
+                              title="템플릿 추가하기"
+                              submitText="추가"
+                              cancelText="취소"
                             />
                           )}
                         </div>
