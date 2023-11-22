@@ -209,6 +209,10 @@ const TemplateSearch = () => {
             title: `${idx + 1}. ${el.title}`,
           })),
         ]);
+        setSelectedStep({
+          id: 0,
+          title: '스텝 선택',
+        });
         setIsOpenAllotModal((prev) => !prev);
       })
       .catch((err) => {

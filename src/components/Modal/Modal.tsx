@@ -77,10 +77,16 @@ const Modal = ({
           </div>
         )}
         {children}
-        <div className="flex items-center gap-4 ">
+        <div
+          className={`flex items-center ${isMobile ? 'gap-[18px]' : 'gap-4'}`}
+        >
           <button
-            className={`flex h-[40px] w-[110px] items-center justify-center rounded-[10px] bg-blue5 text-sm font-semibold text-gray2 duration-300 ${
+            className={`flex items-center justify-center rounded-[10px] bg-blue5 font-semibold text-gray2 duration-300 ${
               isCreate && 'hover:bg-blue1 hover:font-bold hover:text-white'
+            } ${
+              isMobile
+                ? 'h-[40px] w-[110px] text-xs'
+                : 'h-[52px] w-[156px] text-base'
             }`}
             onClick={isCreate ? onCancel : () => setIsOpen(false)}
           >
@@ -88,10 +94,14 @@ const Modal = ({
           </button>
           <button
             type="submit"
-            className={`h-[40px] w-[110px] rounded-[10px] text-sm duration-300 ${
+            className={`rounded-[10px] duration-300 ${
               isCreate
                 ? 'bg-blue5 font-semibold text-gray2 hover:bg-blue1 hover:font-bold hover:text-white'
                 : 'bg-blue1 font-bold text-white'
+            } ${
+              isMobile
+                ? 'h-[40px] w-[110px] text-xs'
+                : 'h-[52px] w-[156px] text-base'
             }`}
             onClick={onSubmit}
           >
