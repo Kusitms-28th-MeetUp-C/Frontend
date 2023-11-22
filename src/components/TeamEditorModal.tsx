@@ -6,12 +6,14 @@ import { typeList } from '../libs/utils/filter';
 
 interface TeamEditorModalProps {
   teamId?: number;
-  teamName?: string;
   setIsOpen: () => void;
   setValues: any;
   values: any;
   apiMode?: string;
   initialTeamCategory?: string;
+  title: string;
+  submitText: string;
+  cancelText: string;
 }
 
 interface InputLabelProps {
@@ -56,12 +58,14 @@ const InputLabel = ({
 
 const TeamEditorModal = ({
   teamId,
-  teamName,
   setIsOpen,
   values,
   setValues,
   apiMode = 'create',
   initialTeamCategory = 'it',
+  title,
+  submitText,
+  cancelText,
 }: TeamEditorModalProps) => {
   const itemListRef = useRef<selectedItem[]>(typeList);
   const [selectedItem, setSelectedItem] = useState<selectedItem>(
@@ -144,11 +148,11 @@ const TeamEditorModal = ({
 
   return (
     <Modal
-      title={`${teamName} 팀 정보 수정`}
+      title={title}
       setIsOpen={setIsOpen}
       onSubmit={handleEditSubmit}
-      cancel="취소"
-      submit="정보 수정"
+      cancel={cancelText}
+      submit={submitText}
       className="px-32"
     >
       <form>
