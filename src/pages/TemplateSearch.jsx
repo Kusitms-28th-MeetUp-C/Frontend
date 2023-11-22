@@ -1,18 +1,18 @@
 import { useEffect, useState, useRef } from 'react';
-import { IoIosArrowDown } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import * as StompJs from '@stomp/stompjs';
 
 import Alert from '../components/Modal/Alert';
 import Search from '../components/Search/Search';
 import Axios from '../libs/api';
 import Title from '../components/Common/Title';
-import { useRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
 import { tagColorFilter, typeFilter } from '../libs/utils/filter';
 import GrayDropDown from '../components/Common/DropDown/GrayDropDown';
 import Modal from '../components/Modal/Modal';
 import ModalDropDown from '../components/Common/DropDown/ModalDropDown';
-import { useNavigate } from 'react-router-dom';
+import '../styles/github-markdown-light.css';
 
 const TemplateSearch = () => {
   // =======================Socket=======================
@@ -30,7 +30,7 @@ const TemplateSearch = () => {
 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: 'wss://panpeun.shop/ws',
+      brokerURL: 'wss://gachonmail.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
         sessionId: loginState.sessionId,
@@ -74,7 +74,14 @@ const TemplateSearch = () => {
         console.log(response);
         setTemplateList([...response.data.searchResult]);
         setIsLoading(false);
-        if (response.data.searchResult.length === 0) setIsNothing(true);
+
+        if (response.data.searchResult.length === 0) {
+          setIsNothing(true);
+        } else {
+          setIsNothing(false);
+          setIsClickDetail(false);
+          setTemplateData({});
+        }
       },
       headers,
     );
@@ -145,18 +152,24 @@ const TemplateSearch = () => {
       });
   };
 
-  const onClickList = async (templateId) => {
-    setIsClickDetail(true);
-    setTempalteId(templateId);
+  const onClickList = async (id) => {
+    if (templateId === id) {
+      setIsClickDetail(false);
+      setTemplateData({});
+      setTempalteId(0);
+    } else {
+      setIsClickDetail(true);
+      setTempalteId(id);
 
-    await Axios.get(`/manage/template/${templateId}`)
-      .then((res) => {
-        console.log(res);
-        setTemplateData({ ...res.data.data });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      await Axios.get(`/manage/template/${id}`)
+        .then((res) => {
+          console.log(res);
+          setTemplateData({ ...res.data.data });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   const onClickOption = async () => {
@@ -189,7 +202,7 @@ const TemplateSearch = () => {
   }, []);
 
   return (
-    <div className="flex w-full min-w-[1000px] flex-col px-12 py-[45px]">
+    <div className="flex h-full w-full min-w-[1000px] flex-col px-12 py-[45px]">
       <Title>회의록 관리</Title>
 
       {/* 검색 창 */}
@@ -198,14 +211,14 @@ const TemplateSearch = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex flex-1 flex-col h-full items-center justify-center gap-[10px]">
-          <img src="/icons/loading.svg" className="h-[50px] w-[50px]" />
-          <div className="text-2xl font-semibold text-black">Loading...</div>
+        <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
+          <img src="/icons/loading.svg" className="h-[30px] w-[30px]" />
+          <div className="text-xl font-semibold text-black">Loading...</div>
         </div>
       ) : isNothing ? (
-        <div className="flex flex-1 h-full items-center justify-center">
-          <div className="text-2xl font-semibold text-gray1">
-            진행중인 채팅이 없어요
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-xl font-semibold text-gray1">
+            해당하는 회의록이 없습니다
           </div>
         </div>
       ) : (
@@ -274,7 +287,12 @@ const TemplateSearch = () => {
                   배정하기
                 </button>
               </div>
-              <div>{templateData?.content || '내용 없음'}</div>
+              <div
+                className="markdown-body"
+                dangerouslySetInnerHTML={{
+                  __html: templateData?.content || '내용 없음',
+                }}
+              />
             </div>
           )}
         </div>

@@ -1,25 +1,21 @@
+import { useEffect, useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from 'react-circular-progressbar';
 import { FaSchool } from 'react-icons/fa';
 import { RiPencilFill } from 'react-icons/ri';
-import Markdown from 'react-markdown';
-import '../styles/github-markdown-light.css';
-import { asBlob } from 'html-docx-js';
-import { saveAs } from 'file-saver';
 
 import PageHeading from '../components/PageHeading';
 import SectionHeadingContent from '../components/SectionHeadingContent';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { useEffect, useState } from 'react';
 import Modal from '../components/Modal/Modal';
 import Axios from '../libs/api';
 import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
-import { marked } from 'marked';
-import { Paragraph, TextRun } from 'docx';
+import '../styles/github-markdown-light.css';
+import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -30,6 +26,7 @@ interface ShareIconButtonProps {
   iconUrl: string;
   onClick?: () => void;
 }
+
 interface TeamSpaceLinkProps {
   to?: string;
   name: string;
@@ -204,12 +201,15 @@ const Management = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
   const [values, setValues] = useState<any>({
     teamId: 1,
     content: '',
     rating: 0,
   });
   const [roadmap, setRoadmap] = useState<any>(null);
+  const [content, setContent] = useState<string>('');
+  const [templateValues, setTemplateValues] = useState<any>({});
 
   const spaceLink: any = {
     NOTION: {
@@ -233,17 +233,34 @@ const Management = () => {
   };
 
   const handleDownload = () => {
-    const markdownText = data?.content;
+    const htmlText = data?.content;
 
-    const blob = new Blob([markdownText], { type: 'text/markdown' });
+    const blob = new Blob([htmlText], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${data?.teamInfo.title}.md`;
+    link.download = `${data?.teamInfo.title}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  };
+
+  const handleTemplateEdit = () => {
+    const fetchTemplateEdit = async () => {
+      const reqData = {
+        templateId: Number(params.templateId),
+        content: content,
+      };
+      try {
+        await Axios.post('/manage/template/update', reqData);
+        setData({ ...data, content: content });
+        setIsEditorOpen(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTemplateEdit();
   };
 
   useEffect(() => {
@@ -260,7 +277,6 @@ const Management = () => {
         const res = await Axios('/manage/template/team', {
           params: data,
         });
-        console.log(res.data);
         setData(res.data.data);
         setProgress(res.data.roadmapInfo.progressingNum);
       } catch (err) {
@@ -280,8 +296,8 @@ const Management = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data.roadmapInfo.roadmapList);
       setValues({ ...values, templateId: data.originalTemplateId });
+      setContent(data.content);
     }
   }, [data]);
 
@@ -359,11 +375,24 @@ const Management = () => {
           {/* 템플릿 내용 */}
           <div className="mt-6 flex flex-col space-y-6">
             <div className="flex flex-col space-y-6">
-              <div className="rounded-2xl bg-[#E0E1FC] px-6 py-4 text-xl font-medium shadow-lg">
+              <div className="flex items-center justify-between rounded-2xl bg-[#E0E1FC] px-6 py-4 text-xl font-medium shadow-lg">
                 <span className="font-bold">템플릿 내용</span>
+                <button
+                  onClick={() => setIsEditorOpen(true)}
+                  className="h-7 w-7 overflow-hidden"
+                >
+                  <img
+                    src="/icons/edit-icon-purple.svg"
+                    alt="수정 버튼"
+                    className="w-full object-cover"
+                  />
+                </button>
               </div>
               <div className="w-full rounded-2xl px-6 py-4 leading-6 shadow-lg">
-                <Markdown className="markdown-body">{data?.content}</Markdown>
+                <div
+                  className="markdown-body"
+                  dangerouslySetInnerHTML={{ __html: data?.content }}
+                ></div>
               </div>
             </div>
           </div>
@@ -459,6 +488,22 @@ const Management = () => {
             values={values}
             setValues={setValues}
             setIsOpen={() => setIsModalOpen(false)}
+          />
+        )}
+        {/* 템플릿 수정 모달 */}
+        {isEditorOpen && (
+          <TemplateEditorModal
+            setIsOpen={setIsEditorOpen}
+            onCancel={() => setIsEditorOpen(false)}
+            templateValues={templateValues}
+            setTemplateValues={setTemplateValues}
+            onSubmit={handleTemplateEdit}
+            title="템플릿 수정하기"
+            submitText="수정"
+            cancelText="취소"
+            content={content}
+            setContent={setContent}
+            mode="edit"
           />
         )}
       </div>

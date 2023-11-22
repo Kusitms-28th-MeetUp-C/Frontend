@@ -46,9 +46,9 @@ const Modal = ({
       >
         {isTemplateSearch ? (
           <div className="text-xl font-semibold leading-7 text-gray1 text-center">
-            <span className="text-tagLightPurple1">{`'${selectedRoadmap}'`}</span>의
+            <span className="text-tagLightPurple1">{`'${selectedRoadmap}'`}</span>에서
             <br />
-            스텝을 선택해주세요
+            배정할 스텝을 선택해주세요
           </div>
         ) : (
           <div
