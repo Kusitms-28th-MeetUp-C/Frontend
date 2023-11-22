@@ -7,6 +7,7 @@ import { MdNavigateNext } from 'react-icons/md';
 interface InfoProps {
   isRoadmap?: boolean;
   data: any;
+  isMobile?: boolean;
 }
 
 interface InfoItemProps {
@@ -71,14 +72,22 @@ const InfoItem = ({ children, category }: InfoItemProps) => {
   );
 };
 
-const Info = ({ isRoadmap, data }: InfoProps) => {
+const Info = ({ isRoadmap, data, isMobile }: InfoProps) => {
   return (
-    <div className="w-full rounded-[20px] bg-gray9 p-6">
-      <div className="mb-7 flex items-center justify-between">
-        <div className="text-xl font-bold text-gray1">
+    <div className={`w-full rounded-[20px] bg-gray9 p-6 ${isMobile && 'mb-4'}`}>
+      <div className={`mb-7 flex items-center justify-between`}>
+        <div
+          className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray1`}
+        >
           {isRoadmap ? '로드맵 소개' : '템플릿 소개'}
         </div>
-        <div className="text-[14px] font-semibold text-gray3">{data.date}</div>
+        <div
+          className={`${
+            isMobile ? 'text-[10px]' : 'text-[14px]'
+          } font-semibold text-gray3`}
+        >
+          {data.date}
+        </div>
       </div>
       <li className="mb-6 flex flex-wrap justify-between gap-2">
         {!isRoadmap && (
@@ -95,7 +104,11 @@ const Info = ({ isRoadmap, data }: InfoProps) => {
         )}
       </li>
 
-      <div className="mb-5 text-[15px] font-medium leading-6 text-black">
+      <div
+        className={`mb-5 ${
+          isMobile ? 'text-xs' : 'text-[15px]'
+        } font-medium leading-6 text-black`}
+      >
         {data.introduction}
       </div>
 

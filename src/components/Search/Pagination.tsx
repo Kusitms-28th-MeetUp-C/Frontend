@@ -6,6 +6,7 @@ interface PaginationProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
   MoveToTop: () => void;
+  isMobile?: boolean;
 }
 
 const Pagination = ({
@@ -13,6 +14,7 @@ const Pagination = ({
   setPage,
   totalPages,
   MoveToTop,
+  isMobile,
 }: PaginationProps) => {
   const pageCnt = 5;
   const [startPage, setStartPage] = useState(0);
@@ -54,14 +56,22 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex w-full items-center justify-center gap-4">
+    <div
+      className={`flex w-full items-center justify-center ${
+        isMobile ? 'gap-[10px]' : 'gap-4'
+      }`}
+    >
       <img
         src="/icons/firstPage.svg"
-        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        className={`${
+          isMobile ? 'h-[10px] w-[10px]' : 'h-5 w-5'
+        } cursor-pointer text-gray3`}
         onClick={onClickFirst}
       />
       <BsFillCaretLeftFill
-        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        className={`${
+          isMobile ? 'h-[10px] w-[10px]' : 'h-5 w-5'
+        } cursor-pointer text-gray3`}
         onClick={onClickNext}
       />
       {Array.from({ length: totalPages }, (v, i) => i)
@@ -74,20 +84,24 @@ const Pagination = ({
               MoveToTop();
               setPage(el);
             }}
-            className={`w-7 text-center text-xl font-semibold ${
-              page === el ? 'text-gray2' : 'text-gray4'
-            }`}
+            className={`text-center ${
+              isMobile ? 'w-3 text-xs' : 'w-7 text-xl'
+            } font-semibold ${page === el ? 'text-gray2' : 'text-gray4'}`}
           >
             {el + 1}
           </button>
         ))}
       <BsFillCaretRightFill
-        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        className={`${
+          isMobile ? 'h-[10px] w-[10px]' : 'h-5 w-5'
+        } cursor-pointer text-gray3`}
         onClick={onClickPrev}
       />
       <img
         src="/icons/lastPage.svg"
-        className={`h-[20px] w-[20px] cursor-pointer text-gray3`}
+        className={`${
+          isMobile ? 'h-[10px] w-[10px]' : 'h-5 w-5'
+        } cursor-pointer text-gray3`}
         onClick={onClickLast}
       />
     </div>

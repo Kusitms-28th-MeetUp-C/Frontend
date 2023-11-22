@@ -49,17 +49,37 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
     fetchRoadmap();
   }, [roadmapType, page, title]);
 
+  // 반응형
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = windowWidth <= 500;
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setWindowWidth(window.innerWidth));
+    // clean up 이벤트 리스너
+    return () => {
+      window.removeEventListener('resize', () =>
+        setWindowWidth(window.innerWidth),
+      );
+    };
+  }, []);
+
   return (
-    <div className="py-[45px] px-12">
-      <div className="mb-6 flex h-10 items-center gap-[10px]">
-        <Title>로드맵 템플릿</Title>
-        <div
-          className="flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-white"
-          onMouseOver={() => setIsHover(true)}
-          onMouseOut={() => setIsHover(false)}
-        >
-          <FaQuestion className="text-[10px] text-blue2" />
-        </div>
+    <div className={isMobile ? 'px-6 py-4' : 'px-12 py-[45px]'}>
+      <div
+        className={`${
+          isMobile ? 'mb-4' : 'mb-6 h-10 gap-[10px]'
+        } flex items-center`}
+      >
+        <Title isMobile={isMobile}>로드맵 템플릿</Title>
+        {!isMobile && (
+          <div
+            className="flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-white"
+            onMouseOver={() => setIsHover(true)}
+            onMouseOut={() => setIsHover(false)}
+          >
+            <FaQuestion className="text-[10px] text-blue2" />
+          </div>
+        )}
         {isHover && (
           <InfoBox>
             같은 카테고리의 프로젝트를 먼저 경험한 사용자들이 공유한
@@ -68,20 +88,32 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
         )}
       </div>
 
-      <div className="mb-6">
-        <Search setTitle={setTitle} setPage={setPage} />
-      </div>
-      <Filter type={roadmapType} setType={setRaodmapType} setPage={setPage} />
-      <div className="mb-5 text-sm font-semibold text-gray4">
-        {typeFilter(roadmapType)} {title && `"${title}" 검색결과`} 총 {totalCnt}
-        건
-      </div>
-      <ListItems isRoadmap data={listData} />
+      <Search
+        title={title}
+        isMobile={isMobile}
+        setTitle={setTitle}
+        setPage={setPage}
+      />
+
+      <Filter
+        isMobile={isMobile}
+        type={roadmapType}
+        setType={setRaodmapType}
+        setPage={setPage}
+      />
+      {!isMobile && (
+        <div className="mb-5 text-sm font-semibold text-gray4">
+          {typeFilter(roadmapType)} {title && `"${title}" 검색결과`} 총{' '}
+          {totalCnt}건
+        </div>
+      )}
+      <ListItems isMobile={isMobile} isRoadmap data={listData} />
       <Pagination
         page={page}
         setPage={setPage}
         totalPages={totalPages}
         MoveToTop={MoveToTop}
+        isMobile={isMobile}
       />
     </div>
   );

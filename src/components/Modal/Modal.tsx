@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 interface ModalProps {
   title: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,7 +12,7 @@ interface ModalProps {
   isCreate?: boolean;
   disabledOnClick?: boolean;
   isTemplateSearch?: boolean;
-  selectedRoadmap?: string
+  selectedRoadmap?: string;
 }
 
 const Modal = ({
@@ -25,8 +27,20 @@ const Modal = ({
   isCreate,
   disabledOnClick,
   isTemplateSearch,
-  selectedRoadmap
+  selectedRoadmap,
 }: ModalProps) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = windowWidth <= 500;
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setWindowWidth(window.innerWidth));
+    return () => {
+      window.removeEventListener('resize', () =>
+        setWindowWidth(window.innerWidth),
+      );
+    };
+  }, []);
+
   return (
     <div
       className="fixed left-0 top-0 z-[100] flex h-full w-full items-center justify-center"
@@ -37,7 +51,9 @@ const Modal = ({
       }}
     >
       <div
-        className={`z-[101] flex flex-col items-center gap-10 rounded-[20px] bg-white px-[34px] py-10 duration-300${
+        className={`z-[101] flex flex-col items-center ${
+          isMobile ? 'gap-5 py-8' : 'gap-10 py-10'
+        } rounded-[20px] bg-white px-[34px] duration-300${
           className ? ` ${className}` : ''
         }`}
         onClick={(e) => {
@@ -45,25 +61,32 @@ const Modal = ({
         }}
       >
         {isTemplateSearch ? (
-          <div className="text-xl font-semibold leading-7 text-gray1 text-center">
-            <span className="text-tagLightPurple1">{`'${selectedRoadmap}'`}</span>에서
+          <div className="text-center text-xl font-semibold leading-7 text-gray1">
+            <span className="text-tagLightPurple1">{`'${selectedRoadmap}'`}</span>
+            에서
             <br />
             배정할 스텝을 선택해주세요
           </div>
         ) : (
           <div
-            className={`text-xl font-semibold text-gray1 ${
-              children ? '' : 'mb-10 mt-8'
-            } `}
+            className={`font-semibold text-gray1 ${
+              !children && (isMobile ? 'my-3' : 'my-6')
+            } ${isMobile ? 'text-sm' : 'text-xl'} `}
           >
             {title}
           </div>
         )}
         {children}
-        <div className="flex items-center gap-[18px] ">
+        <div
+          className={`flex items-center ${isMobile ? 'gap-[18px]' : 'gap-4'}`}
+        >
           <button
-            className={`flex h-[52px] w-[156px] items-center justify-center rounded-[10px] bg-blue5 text-base font-semibold text-gray2 duration-300 ${
+            className={`flex  items-center justify-center rounded-[10px] bg-blue5 font-semibold text-gray2 duration-300 ${
               isCreate && 'hover:bg-blue1 hover:font-bold hover:text-white'
+            } ${
+              isMobile
+                ? 'h-[40px] w-[110px] text-xs'
+                : 'h-[52px] w-[156px] text-base'
             }`}
             onClick={isCreate ? onCancel : () => setIsOpen(false)}
           >
@@ -71,10 +94,14 @@ const Modal = ({
           </button>
           <button
             type="submit"
-            className={`h-[52px] w-[156px] rounded-[10px] text-base duration-300 ${
+            className={`rounded-[10px] duration-300 ${
               isCreate
                 ? 'bg-blue5 font-semibold text-gray2 hover:bg-blue1 hover:font-bold hover:text-white'
                 : 'bg-blue1 font-bold text-white'
+            } ${
+              isMobile
+                ? 'h-[40px] w-[110px] text-xs'
+                : 'h-[52px] w-[156px] text-base'
             }`}
             onClick={onSubmit}
           >

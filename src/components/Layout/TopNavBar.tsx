@@ -8,12 +8,14 @@ import { TbLogout } from 'react-icons/tb';
 import { RiPencilFill } from 'react-icons/ri';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { OpenChatState, OpenChatRoomState } from '../../states/ChatState';
+import styled from 'styled-components';
 
 const TopNavBar = () => {
+  // ==================== 변수 =============================
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -26,6 +28,21 @@ const TopNavBar = () => {
   const [openChatRoomState, setOpenChatRoomState] =
     useRecoilState(OpenChatRoomState);
 
+  // 반응형
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = windowWidth <= 500;
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setWindowWidth(window.innerWidth));
+    // clean up 이벤트 리스너
+    return () => {
+      window.removeEventListener('resize', () =>
+        setWindowWidth(window.innerWidth),
+      );
+    };
+  }, []);
+
+  // ======================= 함수 =======================
   const onClickLogout = async () => {
     await Axios.patch('user/signout')
       .then((res) => {
@@ -60,114 +77,201 @@ const TopNavBar = () => {
   };
 
   return (
-    <div className="flex h-[65px] items-center justify-between bg-white px-8">
-      <div className="flex items-center">
-        <Link
-          to="/"
-          className={`flex items-center gap-4 ${
-            currentPath === '/signUp' && 'pointer-events-none'
-          }`}
+    <>
+      <div className={`${isMobile && 'flex flex-col items-center'}`}>
+        <div
+          className={`flex ${
+            isMobile ? 'h-[40px] px-3' : 'h-[65px] px-8'
+          } w-full items-center justify-between bg-white `}
         >
-          <img src="/logo/logo.svg" alt="logo" className="h-6" />
-          <img src="/logo/logo-typo-black.svg" />
-        </Link>
-      </div>
-
-      {(currentPath === '/' || currentPath === '/article') && (
-        <div className="flex items-center gap-14">
-          <Link
-            to="/"
-            className={`${
-              currentPath === '/' && 'border-b-4 border-tagLightPurple1'
-            } text-xl font-semibold text-gray3 duration-300`}
-          >
-            서비스 소개
-          </Link>
-          <Link
-            to="/template"
-            className={`text-xl font-semibold text-gray3 duration-300`}
-          >
-            템플릿 탐색
-          </Link>
-          <button
-            id="meeting"
-            className={`text-xl font-semibold text-gray3 duration-300`}
-            onClick={onClickLoginCategory}
-          >
-            나의 회의 관리
-          </button>
-          <Link
-            to="/article"
-            className={`${
-              currentPath === '/article' && 'border-b-4 border-tagLightPurple1'
-            } text-xl font-semibold text-gray3 duration-300`}
-          >
-            아티클
-          </Link>
-        </div>
-      )}
-
-      {currentPath !== '/signUp' && (
-        <div className="flex items-center gap-3">
-          {loginState.isLogin && (
-            <button
-              className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 py-2 text-white"
-              onClick={() => setIsClickCreate(true)}
+          <div className="flex items-center">
+            <Link
+              to="/"
+              className={`flex items-center ${
+                currentPath === '/signUp' && 'pointer-events-none'
+              } ${isMobile ? 'gap-[6px]' : 'gap-4'}`}
             >
-              <div className="text-sm font-semibold">템플릿 업로드</div>
-              <RiPencilFill className="text-sm" />
-            </button>
+              <img
+                src="/logo/logo.svg"
+                alt="logo"
+                className={isMobile ? 'h-4' : 'h-6'}
+              />
+              <img
+                src="/logo/logo-typo-black.svg"
+                className={isMobile ? 'h-3' : ''}
+              />
+            </Link>
+          </div>
+
+          {(currentPath === '/' || currentPath === '/article') && !isMobile && (
+            <div className="flex items-center gap-14">
+              <Link
+                to="/"
+                className={`${
+                  currentPath === '/' &&
+                  'border-b-[3px] border-tagLightPurple1 font-bold text-gray1'
+                } py-2 text-xl font-semibold text-gray3 duration-300`}
+              >
+                서비스 소개
+              </Link>
+              <Link
+                to="/template"
+                className={`py-2 text-xl font-semibold text-gray3 duration-300`}
+              >
+                템플릿 탐색
+              </Link>
+              <button
+                id="meeting"
+                className={`py-2 text-xl font-semibold text-gray3 duration-300`}
+                onClick={onClickLoginCategory}
+              >
+                나의 회의 관리
+              </button>
+              <Link
+                to="/article"
+                className={`${
+                  currentPath === '/article' &&
+                  'border-b-[3px] border-tagLightPurple1 font-bold text-gray1'
+                } py-2 text-xl font-semibold text-gray3 duration-300`}
+              >
+                아티클
+              </Link>
+            </div>
           )}
 
-          <Link
-            to={loginState.isLogin ? '/mypage' : '/login'}
-            className={`flex h-10 items-center justify-center gap-2 rounded-[10px] ${
-              currentPath === '/mypage' ? ' bg-blue4' : ' bg-blue5'
-            }  px-2`}
-          >
-            <div className="flex h-[28px] w-[28px] items-center justify-center overflow-hidden rounded-full bg-white">
-              {loginState.profile ? (
-                <img
-                  src={loginState.profile}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <BsFillPersonFill className="text-xl text-gray3" />
+          {currentPath !== '/signUp' && (
+            <div
+              className={`flex items-center ${isMobile ? 'gap-2' : 'gap-3'}`}
+            >
+              {loginState.isLogin && !isMobile && (
+                <button
+                  className="flex h-10 items-center justify-center gap-2 rounded-[10px] bg-blue1 px-3 py-2 text-white"
+                  onClick={() => setIsClickCreate(true)}
+                >
+                  <div className="text-sm font-semibold">템플릿 업로드</div>
+                  <RiPencilFill className="text-sm" />
+                </button>
+              )}
+
+              <Link
+                to={loginState.isLogin ? '/mypage' : '/login'}
+                className={`flex items-center justify-center ${
+                  isMobile
+                    ? 'h-6 gap-[4.4px] rounded-[5px] px-[4.8px]'
+                    : 'h-10 gap-2 rounded-[10px] px-2'
+                }  ${currentPath === '/mypage' ? ' bg-blue4' : ' bg-blue5'}  `}
+              >
+                <div
+                  className={`flex ${
+                    isMobile ? 'h-[16.8px] w-[16.8px]' : 'h-7 w-7'
+                  } items-center justify-center overflow-hidden rounded-full bg-white`}
+                >
+                  {loginState.profile ? (
+                    <img
+                      src={loginState.profile}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <BsFillPersonFill
+                      className={`${
+                        isMobile ? 'text-[10.8px]' : 'text-xl'
+                      } text-gray3`}
+                    />
+                  )}
+                </div>
+                <div
+                  className={`text-gray2 ${
+                    isMobile
+                      ? 'text-[10px] font-medium'
+                      : 'text-base font-semibold'
+                  }`}
+                >
+                  {loginState.isLogin
+                    ? `${loginState.name || '이름없음'}`
+                    : '로그인'}
+                </div>
+              </Link>
+
+              {loginState.isLogin && (
+                <button
+                  className={`flex items-center justify-center duration-300 ${
+                    isMobile
+                      ? 'h-6 w-6 rounded-[5px]'
+                      : ' h-10 w-10 rounded-[10px]'
+                  } ${
+                    openChatState
+                      ? 'bg-[#606DE9] text-white'
+                      : 'bg-[#EBEEF9] text-[#495565]'
+                  }`}
+                  onClick={() => {
+                    setOpenChatState((prev: boolean) => !prev);
+                    setOpenChatRoomState(false);
+                  }}
+                >
+                  <BsFillChatFill
+                    className={
+                      isMobile ? 'text-sm  text-gray3' : 'text-xl text-gray3'
+                    }
+                  />
+                </button>
+              )}
+
+              {loginState.isLogin && (
+                <button
+                  className={`flex items-center justify-center bg-[#EBEEF9] ${
+                    isMobile
+                      ? 'h-6 w-6 rounded-[5px]'
+                      : ' h-10 w-10 rounded-[10px]'
+                  }`}
+                  onClick={() => setIsClickLogout((prev) => !prev)}
+                >
+                  <TbLogout
+                    className={
+                      isMobile ? 'text-lg  text-gray3' : 'text-2xl text-gray3'
+                    }
+                  />
+                </button>
               )}
             </div>
-            <div className="text-base font-semibold text-gray2">
-              {loginState.isLogin
-                ? `${loginState.name || '이름없음'}`
-                : '로그인'}
-            </div>
-          </Link>
-
-          {loginState.isLogin && (
-            <button
-              className={`flex h-10 w-10 items-center justify-center rounded-[10px] duration-300  ${
-                openChatState
-                  ? 'bg-[#606DE9] text-white'
-                  : 'bg-[#EBEEF9] text-[#495565]'
-              }`}
-              onClick={() => {
-                setOpenChatState((prev: boolean) => !prev);
-                setOpenChatRoomState(false);
-              }}
-            >
-              <BsFillChatFill className="text-xl" />
-            </button>
-          )}
-
-          {loginState.isLogin && (
-            <button
-              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-[#EBEEF9]"
-              onClick={() => setIsClickLogout((prev) => !prev)}
-            >
-              <TbLogout className="text-2xl text-gray3" />
-            </button>
           )}
         </div>
-      )}
+
+        {(currentPath === '/' || currentPath === '/article') && isMobile && (
+          <div className="flex w-full items-center justify-center gap-6 bg-white">
+            <Link
+              to="/"
+              className={`${
+                currentPath === '/' &&
+                'gray1 border-b-2 border-tagLightPurple1 font-bold text-gray1'
+              } py-1 text-[10px] font-semibold text-gray3  duration-300`}
+            >
+              서비스 소개
+            </Link>
+            <Link
+              to="/template"
+              className={`py-1 text-[10px] font-semibold text-gray3 duration-300`}
+            >
+              템플릿 탐색
+            </Link>
+            <button
+              id="meeting"
+              className={`py-1 text-[10px] font-semibold text-gray3 duration-300`}
+              onClick={onClickLoginCategory}
+            >
+              나의 회의 관리
+            </button>
+            <Link
+              to="/article"
+              className={`${
+                currentPath === '/article' &&
+                'gray1 border-b-2 border-tagLightPurple1 font-bold text-gray1'
+              } py-1 text-[10px] font-semibold text-gray3 duration-300`}
+            >
+              아티클
+            </Link>
+          </div>
+        )}
+      </div>
 
       {openChatState && (
         <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
@@ -196,7 +300,7 @@ const TopNavBar = () => {
           onSubmit={onClickRoadmap}
         />
       )}
-    </div>
+    </>
   );
 };
 
