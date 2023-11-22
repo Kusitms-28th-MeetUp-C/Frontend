@@ -1,18 +1,18 @@
 import { useEffect, useState, useRef } from 'react';
-import { IoIosArrowDown } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import * as StompJs from '@stomp/stompjs';
 
 import Alert from '../components/Modal/Alert';
 import Search from '../components/Search/Search';
 import Axios from '../libs/api';
 import Title from '../components/Common/Title';
-import { useRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
 import { tagColorFilter, typeFilter } from '../libs/utils/filter';
 import GrayDropDown from '../components/Common/DropDown/GrayDropDown';
 import Modal from '../components/Modal/Modal';
 import ModalDropDown from '../components/Common/DropDown/ModalDropDown';
-import { useNavigate } from 'react-router-dom';
+import '../styles/github-markdown-light.css';
 
 const TemplateSearch = () => {
   // =======================Socket=======================
@@ -287,7 +287,12 @@ const TemplateSearch = () => {
                   배정하기
                 </button>
               </div>
-              <div>{templateData?.content || '내용 없음'}</div>
+              <div
+                className="markdown-body"
+                dangerouslySetInnerHTML={{
+                  __html: templateData?.content || '내용 없음',
+                }}
+              />
             </div>
           )}
         </div>
