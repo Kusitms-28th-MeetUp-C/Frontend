@@ -26,6 +26,7 @@ import Title from '../components/Common/Title';
 import PurpleButton from '../components/Common/Button/PurpleButton';
 import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import TurndownService from 'turndown';
+import SectionHeadingContent from '../components/SectionHeadingContent';
 
 
 interface HeadingButtonProps {

@@ -211,10 +211,6 @@ const MeetingDetail = () => {
           title="팀 수정하기"
           submitText="수정 완료"
           cancelText="취소"
-          teamName={teamData?.title}
-          setIsOpen={() => setIsModalOpen(false)}
-          apiMode="edit"
-          initialTeamCategory={teamData?.teamType?.toLowerCase()}
         />
       )}
     </>
