@@ -7,17 +7,26 @@ import { Link } from 'react-router-dom';
 interface MoreItemsProps {
   isRoadmap?: boolean;
   data: any;
+  isMobile?: boolean;
 }
 
-const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
+const MoreItems = ({ isRoadmap, data, isMobile }: MoreItemsProps) => {
   return (
-    <div className="rounded-[20px] bg-white px-8 py-8">
-      <div className="mb-6  text-xl font-bold text-black">
+    <div className="rounded-[20px] bg-white px-6 py-7">
+      <div
+        className={`mb-6  ${
+          isMobile ? 'text-[17px]' : 'text-xl'
+        } font-bold text-black`}
+      >
         {isRoadmap
           ? 'IT프로젝트 다른 로드맵 모아보기'
           : 'IT프로젝트 다른 템플릿 모아보기'}
       </div>
-      <div className="flex flex-wrap justify-between gap-4">
+      <div
+        className={`flex ${
+          isMobile ? 'flex-col' : 'flex-wrap justify-between'
+        } gap-4`}
+      >
         {data?.map((el: any, idx: number) => (
           <Link
             to={`/${
@@ -25,7 +34,9 @@ const MoreItems = ({ isRoadmap, data }: MoreItemsProps) => {
                 ? 'roadmap/' + el.roadmapId
                 : 'template/' + el.templateId
             }`}
-            className="w-[48%] rounded-[20px] bg-[#EBEEF9] p-5"
+            className={`${
+              isMobile ? 'w-full' : 'w-[48%]'
+            } rounded-[20px] bg-[#EBEEF9] p-5`}
             key={el.templateId}
           >
             <div className="mb-[14px] flex items-center justify-between">

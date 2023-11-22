@@ -13,6 +13,7 @@ import { LoginState } from '../../states/LoginState';
 interface ListItemsProps {
   data: any[];
   isRoadmap?: boolean;
+  isMobile?: boolean;
 }
 
 const ListContainer = styled.div`
@@ -25,7 +26,7 @@ const ListContainer = styled.div`
   }
 `;
 
-const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
+const ListItems = ({ data, isRoadmap, isMobile }: ListItemsProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -41,14 +42,20 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
   };
 
   return (
-    <ListContainer className="3xl:grid-cols-4 mb-14 grid grid-cols-1 gap-9 lg:grid-cols-2">
+    <ListContainer
+      className={`3xl:grid-cols-4 grid grid-cols-1 ${
+        isMobile ? 'mb-6 gap-5' : 'mb-14 gap-9 '
+      } lg:grid-cols-2`}
+    >
       {data?.map((el) => (
         <button
           key={isRoadmap ? el?.roadmapId : el?.templateId}
           onClick={() =>
             onClickList(isRoadmap ? el?.roadmapId : el?.templateId)
           }
-          className="flex min-w-[330px] flex-col gap-5 rounded-[20px] bg-white p-[26px]"
+          className={`flex ${
+            isMobile ? 'gap-3.5' : 'min-w-[330px] gap-5'
+          } flex-col rounded-[20px] bg-white p-[26px]`}
         >
           <div
             className={`flex w-fit items-center gap-1 rounded-full px-3 py-1 ${tagColorFilter(
@@ -75,10 +82,22 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
             </div>
           )}
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-[10px]">
-              <FaPeopleGroup className="text-xl text-tagSkyblue1" />
-              <div className="mr-[10px] text-[14px] font-semibold text-[#8A929F]">
+          <div className="flex w-full items-center justify-between">
+            <div
+              className={`flex items-center ${
+                isMobile ? 'gap-1' : 'gap-[10px]'
+              }`}
+            >
+              <FaPeopleGroup
+                className={`${
+                  isMobile ? 'text-base' : 'text-xl'
+                } text-tagSkyblue1`}
+              />
+              <div
+                className={`${
+                  isMobile ? 'mr-1.5 text-[10px]' : 'mr-[10px] text-[14px]'
+                } font-semibold text-[#8A929F]`}
+              >
                 {el?.count}팀 사용 중
               </div>
 
@@ -86,16 +105,30 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
                 <>
                   <img
                     src="/icons/stair.svg"
-                    className="h-5 w-5 text-tagSkyblue1"
+                    className={`${
+                      isMobile ? 'h-2.5 w-2.5' : 'h-5 w-5'
+                    } text-tagSkyblue1`}
                   />
-                  <div className="text-sm font-semibold text-gray3">
+                  <div
+                    className={`${
+                      isMobile ? 'mr-1 text-[10px]' : 'mr-[10px] text-[14px]'
+                    } font-semibold text-[#8A929F]`}
+                  >
                     {el?.step} steps
                   </div>
                 </>
               ) : (
                 <>
-                  <BiSolidTimeFive className="text-xl text-tagLightPurple1" />
-                  <div className="text-[14px] font-semibold text-[#8A929F]">
+                  <BiSolidTimeFive
+                    className={`${
+                      isMobile ? 'text-base' : 'text-xl'
+                    } text-tagLightPurple1`}
+                  />
+                  <div
+                    className={`${
+                      isMobile ? 'mr-1 text-[10px]' : 'mr-[10px] text-[14px]'
+                    } font-semibold text-[#8A929F]`}
+                  >
                     {el?.estimatedTime}m
                   </div>
                 </>
@@ -103,7 +136,11 @@ const ListItems = ({ data, isRoadmap }: ListItemsProps) => {
             </div>
 
             <div className="flex cursor-pointer items-center gap-0.5">
-              <div className="cursor-pointer text-[14px] font-semibold text-[#8A929F]">
+              <div
+                className={`${
+                  isMobile ? 'text-[10px]' : 'mr-[10px] text-[14px]'
+                } font-semibold  text-[#8A929F]`}
+              >
                 자세히보기
               </div>
               <MdNavigateNext style={{ color: '#8A929F' }} />

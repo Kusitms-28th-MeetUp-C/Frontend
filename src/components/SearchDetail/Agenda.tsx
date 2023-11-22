@@ -3,9 +3,10 @@ import '../../styles/github-markdown-light.css';
 
 interface AgendaProps {
   data: string;
+  isMobile?: boolean;
 }
 
-const Agenda = ({ data }: AgendaProps) => {
+const Agenda = ({ data, isMobile }: AgendaProps) => {
   return (
     <div className="mb-8 flex flex-col gap-8 rounded-[20px] bg-white px-8 py-9">
       <div

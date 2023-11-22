@@ -64,24 +64,56 @@ const TemplateDetail = () => {
     fetchData();
   }, [templateId]);
 
+  // 반응형
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = windowWidth <= 500;
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setWindowWidth(window.innerWidth));
+    // clean up 이벤트 리스너
+    return () => {
+      window.removeEventListener('resize', () =>
+        setWindowWidth(window.innerWidth),
+      );
+    };
+  }, []);
+
   return (
-    <div className="w-full min-w-[1250px] px-10 py-9">
-      <BackBtn />
-      <Title>{mainData.title}</Title>
-      <div className="mt-9 flex justify-between">
-        <div className="w-[22%]">
-          <Info data={infoData} />
+    <div
+      className={`w-full ${
+        isMobile ? 'px-6 py-6' : 'min-w-[1250px] px-10 py-9'
+      }`}
+    >
+      <BackBtn isMobile={isMobile} />
+      <Title isMobile={isMobile}>{mainData.title}</Title>
+
+      {isMobile ? (
+        <div className="mt-4 flex w-full flex-col">
+          <UseBtn isMobile={isMobile} onClickBtn={onClickUseBtn}>
+            템플릿 사용하기
+          </UseBtn>
+          <Info isMobile={isMobile} data={infoData} />
+          <Agenda isMobile={isMobile} data={agendaData} />
+          <LinkedRoadmap isMobile={isMobile} data={roadmapData} />
+          <Maker isMobile={isMobile} data={userData} />
+          <MoreItems isMobile={isMobile} data={templateData} />
         </div>
-        <div className="w-[49%]">
-          <Agenda data={agendaData} />
-          <MoreItems data={templateData} />
+      ) : (
+        <div className="mt-9 flex justify-between">
+          <div className="w-[22%]">
+            <Info data={infoData} />
+          </div>
+          <div className="w-[49%]">
+            <Agenda data={agendaData} />
+            <MoreItems data={templateData} />
+          </div>
+          <div className="w-[22%]">
+            <UseBtn onClickBtn={onClickUseBtn}>템플릿 사용하기</UseBtn>
+            <LinkedRoadmap data={roadmapData} />
+            <Maker data={userData} />
+          </div>
         </div>
-        <div className="w-[22%]">
-          <UseBtn onClickBtn={onClickUseBtn}>템플릿 사용하기</UseBtn>
-          <LinkedRoadmap data={roadmapData} />
-          <Maker data={userData} />
-        </div>
-      </div>
+      )}
 
       {/* 모달창 */}
       {isOpenAlertModal && (
