@@ -107,9 +107,10 @@ const TopNavBar = () => {
               <Link
                 to="/"
                 className={`${
-                  currentPath === '/' &&
-                  'border-b-[3px] border-tagLightPurple1 font-bold text-gray1'
-                } py-2 text-xl font-semibold text-gray3 duration-300`}
+                  currentPath === '/'
+                    ? 'border-b-[3px] border-tagLightPurple1 font-bold text-gray1'
+                    : 'text-gray3'
+                } py-2 text-xl font-semibold duration-300`}
               >
                 서비스 소개
               </Link>
@@ -129,9 +130,10 @@ const TopNavBar = () => {
               <Link
                 to="/article"
                 className={`${
-                  currentPath === '/article' &&
-                  'border-b-[3px] border-tagLightPurple1 font-bold text-gray1'
-                } py-2 text-xl font-semibold text-gray3 duration-300`}
+                  currentPath === '/article'
+                    ? 'border-b-[3px] border-tagLightPurple1 font-bold text-gray1'
+                    : 'text-gray3'
+                } py-2 text-xl font-semibold duration-300`}
               >
                 아티클
               </Link>
@@ -165,7 +167,7 @@ const TopNavBar = () => {
                     isMobile ? 'h-[16.8px] w-[16.8px]' : 'h-7 w-7'
                   } items-center justify-center overflow-hidden rounded-full bg-white`}
                 >
-                  {loginState.profile ? (
+                  {loginState.profile && loginState.profile !== 'Unknown' ? (
                     <img
                       src={loginState.profile}
                       className="h-full w-full object-cover"
@@ -208,9 +210,10 @@ const TopNavBar = () => {
                   }}
                 >
                   <BsFillChatFill
-                    className={
-                      isMobile ? 'text-sm  text-gray3' : 'text-xl text-gray3'
-                    }
+                    className={`
+                      ${isMobile ? 'text-sm' : 'text-xl'}
+                      ${openChatState ? 'text-white' : 'text-gray3'}
+                    `}
                   />
                 </button>
               )}
@@ -273,7 +276,7 @@ const TopNavBar = () => {
       </div>
 
       {openChatState && (
-        <div className="absolute right-10 top-24 z-[100] h-[82%] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
+        <div className="absolute right-10 top-[86px] z-[100] h-[85vh] w-[20%] min-w-[360px] rounded-[20px] bg-white shadow-lg duration-300">
           {!openChatRoomState ? <ChatList /> : <ChatRoom />}
         </div>
       )}

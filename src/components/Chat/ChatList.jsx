@@ -157,7 +157,7 @@ const ChatList = () => {
               }}
             >
               <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray6">
-                {el.profile ? (
+                {el?.profile && el?.profile !== 'Unknown' ? (
                   <img src={el.profile} className="object-cover" />
                 ) : (
                   <BsFillPersonFill className="text-3xl text-gray3" />

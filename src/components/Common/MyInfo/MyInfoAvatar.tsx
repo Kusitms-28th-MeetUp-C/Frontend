@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
+import { BsFillPersonFill } from 'react-icons/bs';
 
 interface MyInfoAvatarProps {
   imageUrl: string;
@@ -78,9 +79,17 @@ const MyInfoAvatar = ({
   }
 
   return (
-    <MyInfoAvatarBlock>
-      <MyInfoAvatarImage src={imageUrl} alt="프로필 이미지" />
-    </MyInfoAvatarBlock>
+    <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-zinc-300">
+      {imageUrl && imageUrl !== 'Unknown' ? (
+        <img
+          src={imageUrl}
+          alt="프로필 이미지"
+          className="w-full object-cover"
+        />
+      ) : (
+        <BsFillPersonFill className="text-[50px] text-gray3" />
+      )}
+    </div>
   );
 };
 

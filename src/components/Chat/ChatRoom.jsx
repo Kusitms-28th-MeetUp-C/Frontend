@@ -225,7 +225,7 @@ const ChatRoom = () => {
           {'<'}
         </button>
         <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray6">
-          {userData.profile ? (
+          {userData?.profile && userData?.profile !== 'Unknown' ? (
             <img src={userData.profile} />
           ) : (
             <BsFillPersonFill className="text-3xl text-gray3" />
