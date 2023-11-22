@@ -363,6 +363,8 @@ const Management = () => {
       <div className="flex-1 flex-col space-y-6 px-14 py-12">
         {/* 페이지 제목 */}
 
+        <PageHeading title={data?.templateName} previous="관리" />
+
         <BackBtn />
         <Title>{data?.templateName}</Title>
         {/* 헤딩 섹션 */}
@@ -391,7 +393,6 @@ const Management = () => {
             </div>
           </div>
         </section>
-
         {/* 로드맵 섹션 */}
         <section className="rounded-2xl bg-white py-8">
           <h3 className="mb-5 text-center text-2xl font-bold">

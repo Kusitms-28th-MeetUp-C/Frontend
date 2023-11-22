@@ -13,7 +13,6 @@ import Title from '../components/Common/Title';
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);
 
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [teamEditValues, setTeamEditValues] = useState<any>({
     teamName: '',
