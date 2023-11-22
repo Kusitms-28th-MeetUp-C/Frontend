@@ -49,8 +49,6 @@ const SectionTitle = ({ children, isSearch }: SectionTitleProps) => {
 
 const ListItem = ({ to, children }: ListItemProps) => {
   const location = useLocation();
-  const pathname = location.pathname;
-
   const navigate = useNavigate();
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
@@ -70,7 +68,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
     <button
       onClick={() => onClickCategory(to)}
       className={`flex w-full items-center justify-between rounded-full py-[6px] pl-[15px] pr-2 duration-300 ${
-        pathname.includes(to)
+        location.pathname.startsWith(to)
           ? 'bg-[#EEEEFB] font-bold text-[#5257D6]'
           : 'font-semibold text-white hover:bg-[#EEEEFB] hover:text-[#5257D6]'
       }`}
@@ -79,7 +77,9 @@ const ListItem = ({ to, children }: ListItemProps) => {
       <MdNavigateNext
         style={{
           fontSize: '16px',
-          visibility: `${pathname.includes(to) ? 'visible' : 'hidden'}`,
+          visibility: `${
+            location.pathname.startsWith(to) ? 'visible' : 'hidden'
+          }`,
         }}
       />
     </button>
