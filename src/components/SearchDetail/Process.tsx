@@ -66,7 +66,7 @@ const Process = ({ data, isShowTitle }: ProcessProps) => {
             <div className="flex flex-col items-center gap-3">
               {el?.templateList.map((el: any, idx: number) => (
                 <div
-                  className="flex w-full items-center justify-center rounded-full bg-gray7 px-1.5 py-1 text-center text-[14px] font-semibold text-gray3"
+                  className="flex w-full items-center justify-center rounded-[15px] bg-gray7 px-1.5 py-1 text-center text-[14px] font-semibold text-gray3"
                   key={idx}
                 >
                   {el.title}

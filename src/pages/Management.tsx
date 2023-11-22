@@ -21,9 +21,12 @@ import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
 import '../styles/github-markdown-light.css';
 import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
+import BackBtn from '../components/SearchDetail/BackBtn';
+import Title from '../components/Common/Title';
 import PurpleButton from '../components/Common/Button/PurpleButton';
 import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import TurndownService from 'turndown';
+
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -359,7 +362,36 @@ const Management = () => {
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex-col space-y-6 px-14 py-12">
         {/* 페이지 제목 */}
-        <PageHeading title={data?.templateName} previous="관리" />
+
+        <BackBtn />
+        <Title>{data?.templateName}</Title>
+        {/* 헤딩 섹션 */}
+        <section className="flex justify-between rounded-2xl bg-white px-6 py-4">
+          <div className="flex w-full justify-between">
+            <SectionHeadingContent
+              title={data?.teamInfo.title}
+              subtitle={
+                typeFilter(data?.teamInfo?.teamType?.toLowerCase()) || '기타'
+              }
+            />
+            <div className="flex gap-5">
+              <PurpleButton>원본 데이터 보기</PurpleButton>
+              <PurpleButton>
+                <span className="flex items-center gap-1">
+                  <span>밋플에 작성하기</span>
+                  <i className="h-4 w-4">
+                    <img
+                      src="/icons/edit-icon-purple.svg"
+                      alt="수정 아이콘"
+                      className="w-full"
+                    />
+                  </i>
+                </span>
+              </PurpleButton>
+            </div>
+          </div>
+        </section>
+
         {/* 로드맵 섹션 */}
         <section className="rounded-2xl bg-white py-8">
           <h3 className="mb-5 text-center text-2xl font-bold">
