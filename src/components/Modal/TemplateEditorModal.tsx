@@ -20,13 +20,13 @@ const ModalBlock = styled(Modal)`
   margin-top: 1.25rem;
   width: 100%;
   max-width: 700px;
-  overflow: scroll;
+  overflow: y-scroll;
 `;
 
 const Form = styled.form`
   width: 100%;
   height: 400px;
-  overflow: scroll;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -44,7 +44,7 @@ const Input = styled.input`
 
 const ContentEditor = styled(ReactQuill)`
   flex: 1;
-  overflow: scroll;
+  overflow: hidden;
   border-bottom: 1.5px solid #cccccc;
 `;
 

@@ -76,6 +76,7 @@ const RoadmapEditor = () => {
         templateType: 'it',
         estimatedTime: 0,
       });
+      setContent('');
     });
   };
 

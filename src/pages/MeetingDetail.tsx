@@ -205,10 +205,12 @@ const MeetingDetail = () => {
           teamId={teamData?.teamId}
           values={teamEditValues}
           setValues={setTeamEditValues}
-          teamName={teamData?.title}
           setIsOpen={() => setIsModalOpen(false)}
           apiMode="edit"
-          initialTeamCategory={teamData?.teamType?.toLowerCase()}
+          initialTeamCategory={team?.teamType?.toLowerCase()}
+          title="팀 수정하기"
+          submitText="수정 완료"
+          cancelText="취소"
         />
       )}
     </>

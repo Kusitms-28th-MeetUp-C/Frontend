@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import Axios from '../libs/api';
 import PageHeading from '../components/PageHeading';
-import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
@@ -81,7 +80,6 @@ const Meeting = () => {
       {/* 모달 */}
       {isModalOpen && (
         <TeamEditorModal
-          teamName="새로운"
           setIsOpen={() => setIsModalOpen(false)}
           values={teamEditValues}
           setValues={setTeamEditValues}

@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaCompass } from 'react-icons/fa';
 import { MdNavigateNext } from 'react-icons/md';
 import { useRecoilState } from 'recoil';
@@ -65,7 +63,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
     <button
       onClick={() => onClickCategory(to)}
       className={`flex w-full cursor-pointer items-center justify-between rounded-l-full py-2 pl-5 pr-2 text-[14px]  duration-300 ${
-        pathname.includes(to)
+        pathname.startsWith(to)
           ? 'bg-[#EEEEFB] font-bold text-[#5257D6]'
           : 'font-semibold text-white hover:bg-[#EEEEFB] hover:text-[#5257D6]'
       }`}
@@ -75,7 +73,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
         style={{
           width: '25px',
           height: '25px',
-          visibility: `${pathname.includes(to) ? 'visible' : 'hidden'}`,
+          visibility: `${pathname.startsWith(to) ? 'visible' : 'hidden'}`,
         }}
       />
     </button>

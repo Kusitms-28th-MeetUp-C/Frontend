@@ -1,80 +1,46 @@
-import MyInfo from '../Common/MyInfo';
 import styled from 'styled-components';
+
+import ProfileScreen from './ProfileScreen';
+import ProfileEditScreen from './ProfileEditScreen';
 
 interface LeftSectionProps {
   user: any;
+  isEditScreen: boolean;
+  setIsEditScreen: any;
+  values: any;
+  setValues: any;
+  handleProfileEdit: any;
 }
 
 const LeftSectionBlock = styled.section`
-  width: 400px;
+  width: 500px;
   border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   background-color: white;
   padding: 2rem;
+  box-shadow: 4px 4px 20px 0px rgba(82, 87, 214, 0.05);
 `;
 
-const SectionHeading = styled.h1`
-  font-size: 1.25rem;
-  font-weight: bold;
-`;
-
-const ProfileInfo = styled.div`
-  display: flex;
-  align-items: start;
-  gap: 1rem;
-`;
-
-const ProfileDetailInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-`;
-
-const ScoreArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const ProfileEditButton = styled.button`
-  width: 100%;
-  text-align: center;
-  color: #393948;
-`;
-
-const LeftSection = ({ user }: LeftSectionProps) => {
+const LeftSection = ({
+  user,
+  isEditScreen,
+  setIsEditScreen,
+  values,
+  setValues,
+  handleProfileEdit,
+}: LeftSectionProps) => {
   return (
-    <LeftSectionBlock className="shadow">
-      <SectionHeading>내 프로필</SectionHeading>
-      <ProfileInfo>
-        <MyInfo.Avatar imageUrl={user?.profile} />
-        <ProfileDetailInfo>
-          <MyInfo.Name userType={user?.userType} name={user?.name} />
-          <MyInfo.Email email={user?.email} />
-          <MyInfo.ChatButton />
-        </ProfileDetailInfo>
-      </ProfileInfo>
-      <ScoreArea>
-        <MyInfo.ScoreItem
-          label="회의록 로드맵 가이드"
-          count={user?.templateNum}
-          countLabel="개"
+    <LeftSectionBlock>
+      {isEditScreen ? (
+        <ProfileEditScreen
+          user={user}
+          setIsEditScreen={setIsEditScreen}
+          values={values}
+          setValues={setValues}
+          handleProfileEdit={handleProfileEdit}
         />
-        <MyInfo.ScoreItem
-          label="로드맵 템플릿 기여도"
-          count={user?.roadmapNum}
-          countLabel="개"
-        />
-        <MyInfo.ScoreItem
-          label="나의 포인트"
-          count={user?.point}
-          countLabel="점"
-          isPoint
-        />
-      </ScoreArea>
-      <ProfileEditButton>프로필 수정</ProfileEditButton>
+      ) : (
+        <ProfileScreen user={user} setIsEditScreen={setIsEditScreen} />
+      )}
     </LeftSectionBlock>
   );
 };

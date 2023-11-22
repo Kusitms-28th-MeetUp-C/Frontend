@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import styled from 'styled-components';
 import {
   CircularProgressbarWithChildren,
@@ -7,15 +12,18 @@ import {
 } from 'react-circular-progressbar';
 import { FaSchool } from 'react-icons/fa';
 import { RiPencilFill } from 'react-icons/ri';
+import { LuDownload } from 'react-icons/lu';
 
 import PageHeading from '../components/PageHeading';
-import SectionHeadingContent from '../components/SectionHeadingContent';
 import Modal from '../components/Modal/Modal';
 import Axios from '../libs/api';
 import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
 import '../styles/github-markdown-light.css';
 import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
+import PurpleButton from '../components/Common/Button/PurpleButton';
+import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
+import TurndownService from 'turndown';
 import BackBtn from '../components/SearchDetail/BackBtn';
 import Title from '../components/Common/Title';
 
@@ -60,14 +68,6 @@ interface ReviewModalProps {
   setValues?: any;
   setIsOpen: () => void;
 }
-
-const PurpleButton = ({ children }: HeadingButtonProps) => {
-  return (
-    <button className="rounded-xl bg-[#E0E1FC] px-4 py-3 font-semibold text-blue1">
-      {children}
-    </button>
-  );
-};
 
 const ShareIconButton = ({ name, iconUrl, onClick }: ShareIconButtonProps) => {
   return (
@@ -198,6 +198,7 @@ const ReviewModal = ({ values, setValues, setIsOpen }: ReviewModalProps) => {
 
 const Management = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState<any>(null);
@@ -212,6 +213,22 @@ const Management = () => {
   const [roadmap, setRoadmap] = useState<any>(null);
   const [content, setContent] = useState<string>('');
   const [templateValues, setTemplateValues] = useState<any>({});
+  const itemListRef = useRef<selectedItem[]>([
+    { id: 1, title: '파일 형식' },
+    { id: 2, title: 'markdown' },
+    { id: 2, title: 'html' },
+  ]);
+  const [selectedItem, setSelectedItem] = useState<selectedItem>(
+    itemListRef.current[0],
+  );
+
+  const turndownService = new TurndownService();
+  turndownService.addRule('u', {
+    filter: ['u'],
+    replacement: function (content) {
+      return '<u>' + content + '</u>';
+    },
+  });
 
   const spaceLink: any = {
     NOTION: {
@@ -232,37 +249,6 @@ const Management = () => {
       bgColor: '#FFFFFF',
       textColor: '#1C79F7',
     },
-  };
-
-  const handleDownload = () => {
-    const htmlText = data?.content;
-
-    const blob = new Blob([htmlText], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${data?.teamInfo.title}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleTemplateEdit = () => {
-    const fetchTemplateEdit = async () => {
-      const reqData = {
-        templateId: Number(params.templateId),
-        content: content,
-      };
-      try {
-        await Axios.post('/manage/template/update', reqData);
-        setData({ ...data, content: content });
-        setIsEditorOpen(false);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchTemplateEdit();
   };
 
   useEffect(() => {
@@ -303,6 +289,65 @@ const Management = () => {
     }
   }, [data]);
 
+  const handleDownload = () => {
+    if (selectedItem.id === 1) {
+      alert('파일 형식을 선택해주세요.');
+      return;
+    }
+    let content = data?.content;
+    let fileType;
+    let fileFullType;
+    if (selectedItem.title === 'html') {
+      fileType = 'html';
+      fileFullType = 'text/html';
+    } else {
+      fileType = 'md';
+      fileFullType = 'text/markdown';
+
+      content = turndownService.turndown(content);
+    }
+    const blob = new Blob([content], { type: fileFullType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${data?.teamInfo.title}.${fileType}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleTemplateEdit = () => {
+    const fetchTemplateEdit = async () => {
+      const reqData = {
+        templateId: Number(params.templateId),
+        content: content,
+      };
+      try {
+        await Axios.post('/manage/template/update', reqData);
+        setData({ ...data, content: content });
+        setIsEditorOpen(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTemplateEdit();
+  };
+
+  const handleDownloadTemplate = () => {
+    const htmlText = data?.content;
+
+    const blob = new Blob([htmlText], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${data?.teamInfo.title}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className="px-14 py-12">
@@ -316,6 +361,7 @@ const Management = () => {
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex-col space-y-6 px-14 py-12">
         {/* 페이지 제목 */}
+        <PageHeading title={data?.templateName} previous="관리" />
         <BackBtn />
         <Title>{data?.templateName}</Title>
         {/* 헤딩 섹션 */}
@@ -355,21 +401,43 @@ const Management = () => {
         <section className="rounded-2xl bg-white px-8 py-8">
           {/* 템플릿 수정 헤딩 */}
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold">공유하기</h3>
-            <div className="flex gap-5">
-              <ShareIconButton name="Notion" iconUrl="/icons/notion-icon.png" />
-              <PurpleButton>
-                <span
-                  className="flex cursor-pointer items-center gap-1"
-                  onClick={handleDownload}
-                >
-                  <span>다운로드</span>
+            <div className="flex gap-2">
+              <PurpleButton
+                textSize="0.875rem"
+                onClick={() => setIsEditorOpen(true)}
+              >
+                <span className="flex items-center gap-1">
+                  <span>수정하기</span>
                   <i className="h-4 w-4">
                     <img
-                      src="/icons/copy-icon-purple.svg"
-                      alt="복사 아이콘"
-                      className="w-full"
+                      src="/icons/edit-icon-purple.svg"
+                      alt="수정 아이콘"
+                      className="w-full object-cover"
                     />
+                  </i>
+                </span>
+              </PurpleButton>
+              <PurpleButton
+                textSize="0.875rem"
+                onClick={() => navigate(`/template/${data.originalTemplateId}`)}
+              >
+                원본 데이터 보기
+              </PurpleButton>
+            </div>
+            <div className="flex items-center gap-2">
+              <DropDown
+                width={150}
+                color="lightBlue"
+                itemList={itemListRef.current}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+                className="overflow-hidden shadow"
+              />
+              <PurpleButton textSize="0.875rem" onClick={handleDownload}>
+                <span className="flex cursor-pointer items-center gap-2">
+                  <span>다운로드</span>
+                  <i>
+                    <LuDownload />
                   </i>
                 </span>
               </PurpleButton>
@@ -377,27 +445,10 @@ const Management = () => {
           </div>
           {/* 템플릿 내용 */}
           <div className="mt-6 flex flex-col space-y-6">
-            <div className="flex flex-col space-y-6">
-              <div className="flex items-center justify-between rounded-2xl bg-[#E0E1FC] px-6 py-4 text-xl font-medium shadow-lg">
-                <span className="font-bold">템플릿 내용</span>
-                <button
-                  onClick={() => setIsEditorOpen(true)}
-                  className="h-7 w-7 overflow-hidden"
-                >
-                  <img
-                    src="/icons/edit-icon-purple.svg"
-                    alt="수정 버튼"
-                    className="w-full object-cover"
-                  />
-                </button>
-              </div>
-              <div className="w-full rounded-2xl px-6 py-4 leading-6 shadow-lg">
-                <div
-                  className="markdown-body"
-                  dangerouslySetInnerHTML={{ __html: data?.content }}
-                ></div>
-              </div>
-            </div>
+            <div
+              className="markdown-body"
+              dangerouslySetInnerHTML={{ __html: data?.content }}
+            ></div>
           </div>
         </section>
       </div>

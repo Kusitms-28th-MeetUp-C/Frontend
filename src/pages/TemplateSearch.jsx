@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import * as StompJs from '@stomp/stompjs';
 
+import PurpleButton from '../components/Common/Button/PurpleButton';
 import Alert from '../components/Modal/Alert';
 import Search from '../components/Search/Search';
 import Axios from '../libs/api';
@@ -13,6 +14,7 @@ import GrayDropDown from '../components/Common/DropDown/GrayDropDown';
 import Modal from '../components/Modal/Modal';
 import ModalDropDown from '../components/Common/DropDown/ModalDropDown';
 import '../styles/github-markdown-light.css';
+import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
 
 const TemplateSearch = () => {
   // =======================Socket=======================
@@ -115,8 +117,15 @@ const TemplateSearch = () => {
     id: 0,
     title: '스텝 선택',
   });
-
   const [isOpenAllotModal, setIsOpenAllotModal] = useState(false);
+  const [isTemplateEditModal, setIsTemplateEditModal] = useState(false);
+  const [content, setContent] = useState('');
+
+  useEffect(() => {
+    if (templateData.content) {
+      setContent(templateData.content);
+    }
+  }, [templateData]);
 
   const onClickAllot = async () => {
     await Axios.post('/manage/template/team', {
@@ -201,6 +210,24 @@ const TemplateSearch = () => {
       });
   };
 
+  const handleTemplateEdit = () => {
+    const fetchTemplateEdit = async () => {
+      const reqData = {
+        templateId: templateData.templateId,
+        content: content,
+      };
+      try {
+        const res = await Axios.post('/manage/template/update', reqData);
+        console.log(res);
+        setIsTemplateEditModal(false);
+        setTemplateData({ ...templateData, content: content });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTemplateEdit();
+  };
+
   useEffect(() => {
     fetchTeamList();
   }, []);
@@ -275,21 +302,27 @@ const TemplateSearch = () => {
           {/* 오른쪽 영역 */}
           {isClickDetail && (
             <div className="flex w-[48%] flex-col gap-6 rounded-[30px] bg-white p-8">
-              <div className="flex items-center justify-end gap-3">
-                <div className="w-[180px]">
-                  <GrayDropDown
-                    itemList={teamList}
-                    selectedItem={selectedTeam}
-                    setSelectedItem={setSelectedTeam}
-                    // className="bg-[#ECEEF8]"
-                  />
-                </div>
-                <button
-                  className="rounded-[10px] bg-tagLightPurple2 px-6 py-2.5 text-xs font-semibold text-blue1"
-                  onClick={onClickOption}
+              <div className="flex items-center justify-between">
+                <PurpleButton
+                  textSize="0.75rem"
+                  onClick={() => setIsTemplateEditModal(true)}
                 >
-                  배정하기
-                </button>
+                  <img src="/icons/edit-icon-purple.svg" alt="수정 아이콘" />
+                  <span>수정하기</span>
+                </PurpleButton>
+                <div className="flex items-center justify-end gap-3">
+                  <div className="w-[180px]">
+                    <GrayDropDown
+                      itemList={teamList}
+                      selectedItem={selectedTeam}
+                      setSelectedItem={setSelectedTeam}
+                      // className="bg-[#ECEEF8]"
+                    />
+                  </div>
+                  <PurpleButton textSize="0.75rem" onClick={onClickOption}>
+                    배정하기
+                  </PurpleButton>
+                </div>
               </div>
               <div
                 className="markdown-body"
@@ -340,6 +373,20 @@ const TemplateSearch = () => {
           }}
           cancel="계속 배정하기"
           submit="로드맵 관리 이동"
+        />
+      )}
+
+      {isTemplateEditModal && (
+        <TemplateEditorModal
+          setIsOpen={setIsTemplateEditModal}
+          onCancel={() => setIsTemplateEditModal(false)}
+          onSubmit={handleTemplateEdit}
+          content={content}
+          setContent={setContent}
+          title="템플릿 수정하기"
+          submitText="수정 완료"
+          cancelText="취소"
+          mode="edit"
         />
       )}
     </div>
