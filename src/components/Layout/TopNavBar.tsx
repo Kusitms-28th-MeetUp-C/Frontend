@@ -12,7 +12,6 @@ import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { OpenChatState, OpenChatRoomState } from '../../states/ChatState';
-import styled from 'styled-components';
 
 const TopNavBar = () => {
   // ==================== 변수 =============================
