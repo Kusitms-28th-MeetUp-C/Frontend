@@ -20,12 +20,6 @@ interface ListItemProps {
   children: React.ReactNode;
 }
 
-const ResNavBar = styled.div`
-  /* @media (max-width: 600px) {
-    display: none;
-  } */
-`;
-
 const SectionTitle = ({ children, isSearch }: SectionTitleProps) => {
   return (
     <div className="px-6">
@@ -51,7 +45,6 @@ const List = ({ children }: ListProps) => {
 const ListItem = ({ to, children }: ListItemProps) => {
   const location = useLocation();
   const pathname = location.pathname;
-  // const [isActive, setIsActive] = useState(false);
 
   const navigate = useNavigate();
   const [loginState, setLoginState] = useRecoilState(LoginState);
@@ -91,7 +84,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
 
 const SideNavBar = () => {
   return (
-    <ResNavBar className="flex h-[calc(100vh-65px)] w-[216px] flex-col rounded-tr-[20px] bg-blue1 pb-5 pt-[30px]">
+    <div className="flex h-[calc(100vh-65px)] w-[216px] flex-col rounded-tr-[20px] bg-blue1 pb-5 pt-[30px]">
       <div className="mb-[50px]">
         <SectionTitle isSearch>탐색</SectionTitle>
         <List>
@@ -106,7 +99,7 @@ const SideNavBar = () => {
           <ListItem to="/search-template">회의록 관리</ListItem>
         </List>
       </div>
-    </ResNavBar>
+    </div>
   );
 };
 

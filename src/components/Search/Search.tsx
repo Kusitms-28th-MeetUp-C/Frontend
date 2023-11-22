@@ -7,6 +7,7 @@ interface SearchProps {
   setPage?: React.Dispatch<React.SetStateAction<number>>;
   className?: string;
   onChange?: (arg0: string) => void;
+  isMobile?: boolean;
 }
 
 const Search = ({
@@ -15,6 +16,7 @@ const Search = ({
   className,
   setPage,
   onChange,
+  isMobile,
 }: SearchProps) => {
   const [search, setSearch] = useState('');
 
@@ -30,13 +32,17 @@ const Search = ({
 
   return (
     <form
-      className={`mb-6 flex w-full max-w-[550px] items-center justify-between rounded-[20px] bg-white px-5 py-2 ${
+      className={`${
+        isMobile ? 'mb-4' : 'mb-6'
+      } flex w-full max-w-[550px] items-center justify-between rounded-[20px] bg-white px-5 py-2 ${
         className && className
       }`}
       onSubmit={onSubmitSearch}
     >
       <input
-        className="w-[90%] border-none text-base outline-none"
+        className={`w-[90%] border-none outline-none ${
+          isMobile ? 'text-sm' : 'text-base'
+        }`}
         value={search}
         onChange={(e) => {
           setSearch(e.target.value);

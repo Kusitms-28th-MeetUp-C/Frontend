@@ -2,11 +2,18 @@ import React from 'react';
 
 interface TitleProps {
   children: React.ReactNode;
+  isMobile?: boolean;
 }
 
-const Title = ({ children }: TitleProps) => {
+const Title = ({ children, isMobile }: TitleProps) => {
   return (
-    <div className="text-[28px] font-bold text-gray1">{children}</div>
+    <div
+      className={`${
+        isMobile ? 'text-2xl' : 'text-[28px]'
+      } font-bold text-gray1`}
+    >
+      {children}
+    </div>
   );
 };
 
