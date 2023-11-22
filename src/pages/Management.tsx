@@ -16,6 +16,8 @@ import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
 import '../styles/github-markdown-light.css';
 import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
+import BackBtn from '../components/SearchDetail/BackBtn';
+import Title from '../components/Common/Title';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -314,7 +316,8 @@ const Management = () => {
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex-col space-y-6 px-14 py-12">
         {/* 페이지 제목 */}
-        <PageHeading title={data?.templateName} previous="관리" />
+        <BackBtn />
+        <Title>{data?.templateName}</Title>
         {/* 헤딩 섹션 */}
         <section className="flex justify-between rounded-2xl bg-white px-6 py-4">
           <div className="flex w-full justify-between">
