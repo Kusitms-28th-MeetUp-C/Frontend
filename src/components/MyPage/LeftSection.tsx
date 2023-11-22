@@ -1,15 +1,22 @@
 import styled from 'styled-components';
 
+import { Dispatch, SetStateAction } from 'react';
+
 import ProfileScreen from './ProfileScreen';
 import ProfileEditScreen from './ProfileEditScreen';
+import { selectedItem } from '../Common/DropDown/DropDown';
 
 interface LeftSectionProps {
   user: any;
   isEditScreen: boolean;
-  setIsEditScreen: any;
+  setIsEditScreen: (isEditScreen: boolean) => void;
   values: any;
   setValues: any;
-  handleProfileEdit: any;
+  handleProfileEdit: () => void;
+  itemList: selectedItem[];
+  selectedItem: selectedItem;
+  setSelectedItem: Dispatch<SetStateAction<selectedItem>>;
+  handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const LeftSectionBlock = styled.section`
@@ -27,19 +34,26 @@ const LeftSection = ({
   values,
   setValues,
   handleProfileEdit,
+  itemList,
+  selectedItem,
+  setSelectedItem,
+  handleImageUpload,
 }: LeftSectionProps) => {
   return (
     <LeftSectionBlock>
-      {isEditScreen ? (
+      {!isEditScreen ? (
+        <ProfileScreen user={user} setIsEditScreen={setIsEditScreen} />
+      ) : (
         <ProfileEditScreen
           user={user}
-          setIsEditScreen={setIsEditScreen}
           values={values}
           setValues={setValues}
           handleProfileEdit={handleProfileEdit}
+          itemList={itemList}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          handleImageUpload={handleImageUpload}
         />
-      ) : (
-        <ProfileScreen user={user} setIsEditScreen={setIsEditScreen} />
       )}
     </LeftSectionBlock>
   );

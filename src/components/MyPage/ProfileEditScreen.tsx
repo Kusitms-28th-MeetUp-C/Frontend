@@ -1,16 +1,21 @@
+import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import MyInfo from '../Common/MyInfo';
 import SectionHeading from './SectionHeading';
 import Input from './Input';
 import BottomTextButton from './BottomTextButton';
+import DropDown, { selectedItem } from '../Common/DropDown/DropDown';
 
 interface ProfileEditScreenProps {
   user: any;
-  setIsEditScreen: any;
   values: any;
   setValues: any;
   handleProfileEdit: any;
+  itemList: selectedItem[];
+  selectedItem: selectedItem;
+  setSelectedItem: Dispatch<SetStateAction<selectedItem>>;
+  handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ProfileArea = styled.div`
@@ -53,16 +58,23 @@ const BottomSubText = styled.p`
 
 const ProfileEditScreen = ({
   user,
-  setIsEditScreen,
   values,
   setValues,
   handleProfileEdit,
+  itemList,
+  selectedItem,
+  setSelectedItem,
+  handleImageUpload,
 }: ProfileEditScreenProps) => {
   return (
     <>
       <SectionHeading textAlign="center">프로필 수정</SectionHeading>
       <ProfileArea>
-        <MyInfo.Avatar imageUrl={user?.profile} />
+        <MyInfo.Avatar
+          imageUrl={user?.profile}
+          handleImageUpload={handleImageUpload}
+          hasPlus
+        />
       </ProfileArea>
       <InputArea>
         <Input
@@ -70,15 +82,12 @@ const ProfileEditScreen = ({
           value={values.name}
           onChange={(e) => setValues({ ...values, name: e.target.value })}
         />
-        <Input
-          label="포지션"
-          value={values.userType}
-          onChange={(e) => setValues({ ...values, userType: e.target.value })}
-        />
-        <Input
-          label="이메일"
-          value={values.email}
-          onChange={(e) => setValues({ ...values, email: e.target.value })}
+        <DropDown
+          borderRadius={8}
+          color="lightBlue"
+          itemList={itemList}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
         />
       </InputArea>
       <ActionArea>

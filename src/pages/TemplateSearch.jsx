@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import * as StompJs from '@stomp/stompjs';
-import styled from 'styled-components';
 
+import PurpleButton from '../components/Common/Button/PurpleButton';
 import Alert from '../components/Modal/Alert';
 import Search from '../components/Search/Search';
 import Axios from '../libs/api';
@@ -15,19 +15,6 @@ import Modal from '../components/Modal/Modal';
 import ModalDropDown from '../components/Common/DropDown/ModalDropDown';
 import '../styles/github-markdown-light.css';
 import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
-
-const PurpleButton = styled.button`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 12px;
-  background-color: #dfe1fa;
-  padding: 0.625rem 1.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #8689e2;
-`;
 
 const TemplateSearch = () => {
   // =======================Socket=======================
@@ -316,7 +303,10 @@ const TemplateSearch = () => {
           {isClickDetail && (
             <div className="flex w-[48%] flex-col gap-6 rounded-[30px] bg-white p-8">
               <div className="flex items-center justify-between">
-                <PurpleButton onClick={() => setIsTemplateEditModal(true)}>
+                <PurpleButton
+                  textSize="0.75rem"
+                  onClick={() => setIsTemplateEditModal(true)}
+                >
                   <img src="/icons/edit-icon-purple.svg" alt="수정 아이콘" />
                   <span>수정하기</span>
                 </PurpleButton>
@@ -329,7 +319,9 @@ const TemplateSearch = () => {
                       // className="bg-[#ECEEF8]"
                     />
                   </div>
-                  <PurpleButton onClick={onClickOption}>배정하기</PurpleButton>
+                  <PurpleButton textSize="0.75rem" onClick={onClickOption}>
+                    배정하기
+                  </PurpleButton>
                 </div>
               </div>
               <div
