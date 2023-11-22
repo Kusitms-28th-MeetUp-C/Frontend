@@ -6,6 +6,7 @@ import PageHeading from '../components/PageHeading';
 import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import Process from '../components/SearchDetail/Process';
+import { typeFilter } from '../libs/utils/filter';
 
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);

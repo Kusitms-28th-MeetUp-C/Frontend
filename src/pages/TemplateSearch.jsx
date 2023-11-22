@@ -30,7 +30,7 @@ const TemplateSearch = () => {
 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: 'wss://panpeun.shop/ws',
+      brokerURL: 'wss://gachonmail.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
         sessionId: loginState.sessionId,
@@ -74,7 +74,14 @@ const TemplateSearch = () => {
         console.log(response);
         setTemplateList([...response.data.searchResult]);
         setIsLoading(false);
-        if (response.data.searchResult.length === 0) setIsNothing(true);
+
+        if (response.data.searchResult.length === 0) {
+          setIsNothing(true);
+        } else {
+          setIsNothing(false);
+          setIsClickDetail(false);
+          setTemplateData({});
+        }
       },
       headers,
     );
@@ -145,18 +152,24 @@ const TemplateSearch = () => {
       });
   };
 
-  const onClickList = async (templateId) => {
-    setIsClickDetail(true);
-    setTempalteId(templateId);
+  const onClickList = async (id) => {
+    if (templateId === id) {
+      setIsClickDetail(false);
+      setTemplateData({});
+      setTempalteId(0);
+    } else {
+      setIsClickDetail(true);
+      setTempalteId(id);
 
-    await Axios.get(`/manage/template/${templateId}`)
-      .then((res) => {
-        console.log(res);
-        setTemplateData({ ...res.data.data });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      await Axios.get(`/manage/template/${id}`)
+        .then((res) => {
+          console.log(res);
+          setTemplateData({ ...res.data.data });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   const onClickOption = async () => {

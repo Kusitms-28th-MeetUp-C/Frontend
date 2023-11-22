@@ -104,7 +104,7 @@ const ChatRoom = () => {
 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: 'wss://panpeun.shop/ws',
+      brokerURL: 'wss://gachonmail.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${myToken}`,
         sessionId: loginState.sessionId,
