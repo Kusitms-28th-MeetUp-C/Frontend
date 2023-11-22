@@ -1,18 +1,18 @@
 import { useEffect, useState, useRef } from 'react';
-import { IoIosArrowDown } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import * as StompJs from '@stomp/stompjs';
 
 import Alert from '../components/Modal/Alert';
 import Search from '../components/Search/Search';
 import Axios from '../libs/api';
 import Title from '../components/Common/Title';
-import { useRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
 import { tagColorFilter, typeFilter } from '../libs/utils/filter';
 import GrayDropDown from '../components/Common/DropDown/GrayDropDown';
 import Modal from '../components/Modal/Modal';
 import ModalDropDown from '../components/Common/DropDown/ModalDropDown';
-import { useNavigate } from 'react-router-dom';
+import '../styles/github-markdown-light.css';
 
 const TemplateSearch = () => {
   // =======================Socket=======================
@@ -198,12 +198,12 @@ const TemplateSearch = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex flex-1 flex-col h-full items-center justify-center gap-[10px]">
+        <div className="flex h-full flex-1 flex-col items-center justify-center gap-[10px]">
           <img src="/icons/loading.svg" className="h-[50px] w-[50px]" />
           <div className="text-2xl font-semibold text-black">Loading...</div>
         </div>
       ) : isNothing ? (
-        <div className="flex flex-1 h-full items-center justify-center">
+        <div className="flex h-full flex-1 items-center justify-center">
           <div className="text-2xl font-semibold text-gray1">
             진행중인 채팅이 없어요
           </div>
@@ -274,7 +274,12 @@ const TemplateSearch = () => {
                   배정하기
                 </button>
               </div>
-              <div>{templateData?.content || '내용 없음'}</div>
+              <div
+                className="markdown-body"
+                dangerouslySetInnerHTML={{
+                  __html: templateData?.content || '내용 없음',
+                }}
+              />
             </div>
           )}
         </div>

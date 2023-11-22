@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
-import TurndownService from 'turndown';
 import styled from 'styled-components';
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import Axios from '../libs/api';
-import { typeList, typeReverseFilter } from '../libs/utils/filter';
+import { typeList } from '../libs/utils/filter';
 import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import { useNavigate } from 'react-router-dom';
 
@@ -127,8 +125,7 @@ const TemplateEditor = () => {
     if (
       values.title === '' ||
       values.content === '' ||
-      values.introduction === '' ||
-      values.templateType === 'it'
+      values.introduction === ''
     ) {
       console.log('모든 항목을 입력해주세요.');
       setErrorMessage('모든 항목을 입력해주세요.');
@@ -136,6 +133,7 @@ const TemplateEditor = () => {
     }
     const newData = {
       ...values,
+      templateType: selectedItem.title,
       estimatedTime: Number(estimatedTime.title.slice(0, 2)),
     };
 
@@ -153,9 +151,6 @@ const TemplateEditor = () => {
   };
 
   useEffect(() => {
-    // const turndownService = new TurndownService();
-    // const markdown = turndownService.turndown(rawContent);
-    // console.log(markdown);
     setValues({ ...values, content: rawContent });
     console.log(rawContent);
   }, [rawContent]);
