@@ -79,7 +79,7 @@ const Modal = ({
         {children}
         <div className="flex items-center gap-4 ">
           <button
-            className={`flex h-[40px] w-[110px] items-center justify-center rounded-[10px] bg-blue5 text-xs font-semibold text-gray2 duration-300 ${
+            className={`flex h-[40px] w-[110px] items-center justify-center rounded-[10px] bg-blue5 text-sm font-semibold text-gray2 duration-300 ${
               isCreate && 'hover:bg-blue1 hover:font-bold hover:text-white'
             }`}
             onClick={isCreate ? onCancel : () => setIsOpen(false)}
@@ -88,7 +88,7 @@ const Modal = ({
           </button>
           <button
             type="submit"
-            className={`h-[40px] w-[110px] rounded-[10px] text-xs duration-300 ${
+            className={`h-[40px] w-[110px] rounded-[10px] text-sm duration-300 ${
               isCreate
                 ? 'bg-blue5 font-semibold text-gray2 hover:bg-blue1 hover:font-bold hover:text-white'
                 : 'bg-blue1 font-bold text-white'
