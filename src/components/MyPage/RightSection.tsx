@@ -27,6 +27,7 @@ const RightSectionBlock = styled.section`
   border-radius: 1rem;
   background-color: white;
   padding: 2rem;
+  box-shadow: 4px 4px 20px 0px rgba(82, 87, 214, 0.05);
 `;
 
 const SectionHeading = styled.h2`

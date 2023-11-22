@@ -81,7 +81,7 @@ const Modal = ({
           className={`flex items-center ${isMobile ? 'gap-[18px]' : 'gap-4'}`}
         >
           <button
-            className={`flex  items-center justify-center rounded-[10px] bg-blue5 font-semibold text-gray2 duration-300 ${
+            className={`flex items-center justify-center rounded-[10px] bg-blue5 font-semibold text-gray2 duration-300 ${
               isCreate && 'hover:bg-blue1 hover:font-bold hover:text-white'
             } ${
               isMobile

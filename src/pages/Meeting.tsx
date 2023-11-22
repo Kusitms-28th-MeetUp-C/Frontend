@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import Axios from '../libs/api';
 import PageHeading from '../components/PageHeading';
-import Roadmap from '../components/Roadmap';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
@@ -13,6 +12,7 @@ import Title from '../components/Common/Title';
 
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);
+
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [teamEditValues, setTeamEditValues] = useState<any>({
@@ -54,6 +54,7 @@ const Meeting = () => {
       {teamList?.map((team: any) => (
         <div key={team.teamInfo.teamId}>
           {/* 헤딩 섹션 */}
+
           <div className="mb-6 mt-10 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent

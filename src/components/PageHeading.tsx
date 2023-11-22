@@ -50,10 +50,12 @@ const PageHeading = ({
       {/* 팀 생성 모달 */}
       {isModalOpen && (
         <TeamEditorModal
-          teamName="새로운"
           setIsOpen={() => setIsModalOpen(false)}
           values={teamEditValues}
           setValues={setTeamEditValues}
+          title="팀 생성하기"
+          submitText="작성 완료"
+          cancelText="취소"
         />
       )}
     </>

@@ -27,9 +27,7 @@ const ScoreItem = ({
       {isPoint ? (
         <>
           <span className="flex cursor-pointer items-center">
-            <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full border-[0.1px] border-black">
-              P
-            </div>
+            <img src="/icons/point-coin.svg" alt="포인트" className="mr-1" />
             <ScoreItem.Name>{label}</ScoreItem.Name>
             <i className="text-xl">
               <IoIosArrowForward />
