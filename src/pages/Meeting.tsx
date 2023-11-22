@@ -54,7 +54,9 @@ const Meeting = () => {
             <div className="flex justify-between">
               <SectionHeadingContent
                 title={team.teamInfo.title}
-                subtitle={team.teamInfo.teamType}
+                subtitle={
+                  typeFilter(team?.teamInfo?.teamType?.toLowerCase()) || '기타'
+                }
               />
               {team.teamRoadmap && (
                 <Link
