@@ -28,7 +28,6 @@ import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import TurndownService from 'turndown';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 
-
 interface HeadingButtonProps {
   children: React.ReactNode;
 }
@@ -361,11 +360,8 @@ const Management = () => {
   return (
     <div className="flex">
       {/* 왼쪽 영역 */}
-      <div className="flex-1 flex-col space-y-6 px-14 py-12">
+      <div className="flex-1 flex-col space-y-6 px-12 py-[45px]">
         {/* 페이지 제목 */}
-
-        <PageHeading title={data?.templateName} previous="관리" />
-
         <BackBtn />
         <Title>{data?.templateName}</Title>
         {/* 헤딩 섹션 */}
@@ -456,6 +452,7 @@ const Management = () => {
           </div>
         </section>
       </div>
+      
       {/* 오른쪽 영역 */}
       <div className="w-80 bg-gray8 px-8 py-6">
         {/* 진행률 차트 */}
