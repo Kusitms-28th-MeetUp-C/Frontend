@@ -109,17 +109,18 @@ const Main = () => {
         >
           쉽고 빠른 회의 설계, 밋플
         </div>
-        <div className="relative mb-20 flex h-0 max-h-[200px] w-full max-w-[800px] items-center justify-center overflow-hidden bg-slate-400 pb-[45%]">
-          <iframe
-            className="absolute left-0 top-0 h-full w-full"
-            src="https://www.youtube.com/embed/BZ11122M0GI?si=l5ac0sfmdqt4mgEe&autoplay=1&mute=0"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            // muted="false"
-            frameBorder="0"
-          ></iframe>
-        </div>
+        {/* <div className="relative mb-20 flex h-0 max-h-[200px] w-full max-w-[800px] items-center justify-center overflow-hidden bg-slate-400 pb-[45%]"> */}
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/1Xi6IxP0Q5s?si=BozEaayzOhQFLgj3"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="h-[450px] w-full max-w-[800px]"
+        ></iframe>
+        {/* </div> */}
       </div>
       <ColAnimatedImg
         ref={imgRefs[0]}
