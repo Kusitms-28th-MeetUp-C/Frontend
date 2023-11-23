@@ -67,6 +67,7 @@ const OtherUser = () => {
         setPage={setPage}
         containerRef={containerRef}
         totalPages={totalPages}
+        filter={filter}
       />
     </div>
   );

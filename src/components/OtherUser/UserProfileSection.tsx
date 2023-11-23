@@ -15,7 +15,7 @@ const UserProfileSection = ({ user }: UserProfileSectionProps) => {
               <MyInfo.Name userType={user.userType} name={user.name} />
               <MyInfo.Email email={user.email} />
             </div>
-            <MyInfo.ChatButton />
+            <MyInfo.ChatButton name={user?.name} sessionId={user?.sessionId} />
           </div>
           <div className="flex gap-10">
             <MyInfo.ScoreItem
