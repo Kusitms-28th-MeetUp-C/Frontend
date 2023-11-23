@@ -27,6 +27,7 @@ import PurpleButton from '../components/Common/Button/PurpleButton';
 import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import TurndownService from 'turndown';
 import SectionHeadingContent from '../components/SectionHeadingContent';
+import TeamEditorModal from '../components/TeamEditorModal';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -216,6 +217,15 @@ const Management = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
+  const [isTeamEditorOpen, setIsTeamEditorOpen] = useState<boolean>(false);
+  const [teamEditValues, setTeamEditValues] = useState<any>({
+    teamName: '',
+    teamCategory: '',
+    teamGoal: '',
+    teamSpace1: '',
+    teamSpace2: '',
+    teamSpace3: '',
+  });
   const [values, setValues] = useState<any>({
     teamId: 1,
     content: '',
@@ -284,6 +294,26 @@ const Management = () => {
         });
         setData(res.data.data);
         console.log(res.data.data);
+        setTeamEditValues({
+          teamName: res.data.data.teamInfo.title
+            ? res.data.data.teamInfo.title
+            : '',
+          teamCategory: res.data.data.teamInfo.teamType
+            ? res.data.data.teamInfo.teamType
+            : '',
+          teamGoal: res.data.data.teamInfo.introduction
+            ? res.data.data.teamInfo.introduction
+            : '',
+          teamSpace1: res.data.data.teamInfo.spaceList[0]
+            ? res.data.data.teamInfo.spaceList[0].url
+            : '',
+          teamSpace2: res.data.data.teamInfo.spaceList[1]
+            ? res.data.data.teamInfo.spaceList[1].url
+            : '',
+          teamSpace3: res.data.data.teamInfo.spaceList[2]
+            ? res.data.data.teamInfo.spaceList[2].url
+            : '',
+        });
         const processingNum = res.data.data.roadmapInfo.processingNum;
         const roadmapListLength = res.data.data.roadmapInfo.roadmapList.length;
         setProgress((processingNum / roadmapListLength) * 100);
@@ -301,6 +331,15 @@ const Management = () => {
     };
     fetchRoadmap();
   }, [params, searchParams]);
+
+  // const [teamEditValues, setTeamEditValues] = useState<any>({
+  //   teamName: '',
+  //   teamCategory: '',
+  //   teamGoal: '',
+  //   teamSpace1: '',
+  //   teamSpace2: '',
+  //   teamSpace3: '',
+  // });
 
   useEffect(() => {
     if (data) {
@@ -346,6 +385,7 @@ const Management = () => {
       try {
         await Axios.post('/manage/template/update', reqData);
         setData({ ...data, content: content });
+        console.log(data);
         setIsEditorOpen(false);
       } catch (err) {
         console.error(err);
@@ -379,7 +419,13 @@ const Management = () => {
               }
             />
             <div className="flex gap-5">
-              <PurpleButton>원본 데이터 보기</PurpleButton>
+              <PurpleButton
+                onClick={() =>
+                  navigate(`/template/${data?.originalTemplateId}`)
+                }
+              >
+                원본 데이터 보기
+              </PurpleButton>
             </div>
           </div>
         </section>
@@ -477,7 +523,10 @@ const Management = () => {
         <h1 className="mt-5 flex w-full justify-center">
           <div className="flex items-center gap-1 text-xl font-bold">
             <span>{data?.teamInfo.title}</span>
-            <i className="h-7 w-7">
+            <i
+              className="h-7 w-7 cursor-pointer"
+              onClick={() => setIsTeamEditorOpen(true)}
+            >
               <img
                 src="/icons/edit-icon-black.svg"
                 alt="수정 아이콘"
@@ -492,7 +541,9 @@ const Management = () => {
             <i className="text-tagPurple1">
               <FaSchool />
             </i>
-            <span className="text-gray-600">{data?.teamInfo.teamType}</span>
+            <span className="text-gray-600">
+              {typeFilter(data?.teamInfo.teamType)}
+            </span>
           </div>
         </div>
         {/* 팀 스페이스 링크 */}
@@ -518,7 +569,7 @@ const Management = () => {
             {data?.roadmapInfo.roadmapList.map((roadmap: any) =>
               roadmap.templateList.map((template: any) => (
                 <RightSectionListItem
-                  to={`/meeting/2/roadmap/${data?.roadmapInfo.roadmapId}/template/${template.templateId}?team=${data?.teamInfo.title}`}
+                  to={`/meeting/${data?.teamInfo.teamId}/roadmap/${data?.roadmapInfo.roadmapId}/template/${template.templateId}?team=${data?.teamInfo.title}`}
                   step={roadmap.title}
                 >
                   {template.title}
@@ -561,6 +612,25 @@ const Management = () => {
             content={content}
             setContent={setContent}
             mode="edit"
+          />
+        )}
+        {/* 팀 수정 모달 */}
+        {isTeamEditorOpen && (
+          <TeamEditorModal
+            teamId={data?.teamInfo.teamId}
+            values={teamEditValues}
+            setValues={setTeamEditValues}
+            setIsOpen={() => setIsTeamEditorOpen(false)}
+            apiMode="edit"
+            initialTeamCategory={data?.teamInfo.teamType?.toLowerCase()}
+            redirectInfo={{
+              teamId: params.teamId,
+              roadmapId: params.roadmapId,
+              templateID: params.templateId,
+            }}
+            title="팀 수정하기"
+            submitText="수정 완료"
+            cancelText="취소"
           />
         )}
       </div>
