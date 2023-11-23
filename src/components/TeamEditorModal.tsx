@@ -3,6 +3,7 @@ import Modal from '../components/Modal/Modal';
 import DropDown, { selectedItem } from './Common/DropDown/DropDown';
 import { useEffect, useRef, useState } from 'react';
 import { typeList } from '../libs/utils/filter';
+import { useNavigate } from 'react-router-dom';
 
 interface TeamEditorModalProps {
   teamId?: number;
@@ -14,6 +15,7 @@ interface TeamEditorModalProps {
   title: string;
   submitText: string;
   cancelText: string;
+  redirectInfo?: any;
 }
 
 interface InputLabelProps {
@@ -65,7 +67,9 @@ const TeamEditorModal = ({
   title,
   submitText,
   cancelText,
+  redirectInfo,
 }: TeamEditorModalProps) => {
+  const navigate = useNavigate();
   const itemListRef = useRef<selectedItem[]>(typeList);
   const [selectedItem, setSelectedItem] = useState<selectedItem>({
     id: 0,
@@ -151,7 +155,13 @@ const TeamEditorModal = ({
     })
       .then(() => {
         setIsOpen();
-        window.location.reload();
+        if (redirectInfo) {
+          navigate(
+            `/meeting/${redirectInfo.teamId}/roadmap/${redirectInfo.roadmapId}/template/${redirectInfo.templateID}?team=${values.teamName}`,
+          );
+        } else {
+          window.location.reload();
+        }
       })
       .catch((err) => console.error(err));
   };
