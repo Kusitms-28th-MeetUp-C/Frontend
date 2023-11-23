@@ -81,11 +81,11 @@ const Meeting = () => {
       {/* 모달 */}
       {isModalOpen && (
         <TeamEditorModal
-          title="새로운"
-          setIsOpen={() => setIsModalOpen(false)}
+          title="팀 생성하기"
           values={teamEditValues}
           setValues={setTeamEditValues}
-          submitText="완성"
+          setIsOpen={() => setIsModalOpen(false)}
+          submitText="작성 완료"
           cancelText="취소"
         />
       )}
