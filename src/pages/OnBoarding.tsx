@@ -109,6 +109,7 @@ const OnBoarding = () => {
           <InputWrapper>
             <InputTitle>포지션</InputTitle>
             <DropDown
+              borderRadius={15}
               itemList={itemList}
               selectedItem={userType}
               setSelectedItem={setUserType}

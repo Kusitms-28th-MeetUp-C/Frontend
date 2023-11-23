@@ -10,7 +10,7 @@ export const typeList = [
   { id: 9, title: 'video' },
 ];
 
-export const typeFilter = (type: string) => {
+export const typeFilter = (type: string, defaultValue: string = '기타') => {
   const formatType = type?.toLowerCase();
 
   switch (formatType) {
@@ -35,7 +35,7 @@ export const typeFilter = (type: string) => {
     case 'video':
       return '영상 프로젝트';
     default:
-      return '기타';
+      return defaultValue;
   }
 };
 

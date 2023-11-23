@@ -61,7 +61,9 @@ interface RightTitleSectionProps {
 }
 
 interface RightSectionListItemProps {
+  step?: string;
   children: React.ReactNode;
+  to: string;
 }
 
 interface ReviewModalProps {
@@ -127,12 +129,16 @@ const RightSectionListItemBlock = styled.li`
   }
 `;
 
-const RightSectionListItem = ({ children }: RightSectionListItemProps) => {
+const RightSectionListItem = ({
+  step,
+  children,
+  to,
+}: RightSectionListItemProps) => {
   return (
     <RightSectionListItemBlock>
-      <Link to="#" className="flex items-center justify-between py-3">
+      <Link to={to} className="flex items-center justify-between py-3">
         <span className="text-sm">{children}&nbsp;&gt;</span>
-        <span className="text-sm text-gray3">연결된 스텝</span>
+        <span className="text-sm text-gray3">{step || '연결된 스텝'}</span>
       </Link>
     </RightSectionListItemBlock>
   );
@@ -267,17 +273,20 @@ const Management = () => {
           params: data,
         });
         setData(res.data.data);
-        setProgress(res.data.roadmapInfo.progressingNum);
+        console.log(res.data.data);
+        const processingNum = res.data.data.roadmapInfo.processingNum;
+        const roadmapListLength = res.data.data.roadmapInfo.roadmapList.length;
+        setProgress((processingNum / roadmapListLength) * 100);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
       try {
         const res = await Axios.get(`/team/${params.teamId}`);
         setRoadmap(res.data.data.roadmap);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchRoadmap();
@@ -333,20 +342,6 @@ const Management = () => {
       }
     };
     fetchTemplateEdit();
-  };
-
-  const handleDownloadTemplate = () => {
-    const htmlText = data?.content;
-
-    const blob = new Blob([htmlText], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${data?.teamInfo.title}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   if (loading) {
@@ -454,7 +449,7 @@ const Management = () => {
           </div>
         </section>
       </div>
-      
+
       {/* 오른쪽 영역 */}
       <div className="w-80 bg-gray8 px-8 py-6">
         {/* 진행률 차트 */}
@@ -520,11 +515,16 @@ const Management = () => {
         <section>
           <RightSectionTitle>회의록 리스트</RightSectionTitle>
           <ul className="mt-3 flex w-full flex-col rounded-2xl bg-white px-7 py-2">
-            <RightSectionListItem>역할분배 회의</RightSectionListItem>
-            <RightSectionListItem>아이데이션 회의</RightSectionListItem>
-            <RightSectionListItem>1차 회의</RightSectionListItem>
-            <RightSectionListItem>2차 회의</RightSectionListItem>
-            <RightSectionListItem>최종 기획서 회의</RightSectionListItem>
+            {data?.roadmapInfo.roadmapList.map((roadmap: any) =>
+              roadmap.templateList.map((template: any) => (
+                <RightSectionListItem
+                  to={`/meeting/2/roadmap/${data?.roadmapInfo.roadmapId}/template/${template.templateId}?team=${data?.teamInfo.title}`}
+                  step={roadmap.title}
+                >
+                  {template.title}
+                </RightSectionListItem>
+              )),
+            )}
           </ul>
         </section>
         {/* 리뷰 작성 버튼 */}
