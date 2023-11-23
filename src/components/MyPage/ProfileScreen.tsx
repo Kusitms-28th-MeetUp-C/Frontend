@@ -42,7 +42,7 @@ const ProfileScreen = ({ user, setIsEditScreen }: ProfileScreenProps) => {
         <ProfileDetailInfo>
           <MyInfo.Name userType={user?.userType} name={user?.name} />
           <MyInfo.Email email={user?.email} />
-          <MyInfo.ChatButton />
+          <MyInfo.ChatButton isMyPage />
         </ProfileDetailInfo>
       </ProfileInfo>
       <ScoreArea>

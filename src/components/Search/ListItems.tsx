@@ -34,7 +34,7 @@ const ListItems = ({ data, isRoadmap, isMobile }: ListItemsProps) => {
 
   const onClickList = (id: number) => {
     if (loginState.isLogin) {
-      navigate(`${currentPath}/${id}`);
+      navigate(isRoadmap ? `/roadmap/${id}` : `/template/${id}`);
     } else {
       alert('로그인이 필요한 서비스입니다');
       navigate('/login');

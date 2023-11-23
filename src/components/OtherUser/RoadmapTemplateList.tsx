@@ -7,6 +7,7 @@ interface RoadmapTemplateListProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
   containerRef: React.RefObject<HTMLDivElement>;
+  filter: string;
 }
 
 const RoadmapTemplateList = ({
@@ -15,6 +16,7 @@ const RoadmapTemplateList = ({
   setPage,
   totalPages,
   containerRef,
+  filter,
 }: RoadmapTemplateListProps) => {
   const MoveToTop = () => {
     containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -22,7 +24,7 @@ const RoadmapTemplateList = ({
 
   return (
     <div>
-      <ListItems data={contentData} />
+      <ListItems data={contentData} isRoadmap={filter === 'roadmap'} />
       <Pagination
         page={page}
         setPage={setPage}
