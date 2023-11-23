@@ -424,6 +424,8 @@ const Management = () => {
             <div className="flex items-center gap-2">
               <DropDown
                 width={150}
+                paddingY={5}
+                borderRadius={15}
                 color="lightBlue"
                 itemList={itemListRef.current}
                 selectedItem={selectedItem}
