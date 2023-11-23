@@ -16,7 +16,6 @@ const GoogleLogin = () => {
 
   useEffect(() => {
     if (accessToken) {
-      console.log(accessToken);
       setIsSecondCallback(true);
     }
   }, []);
