@@ -7,35 +7,56 @@ import SectionHeadingContent from '../components/SectionHeadingContent';
 import TeamEditorModal from '../components/TeamEditorModal';
 import Axios from '../libs/api';
 import { typeFilter } from '../libs/utils/filter';
+import Title from '../components/Common/Title';
+import BackBtn from '../components/SearchDetail/BackBtn';
+import { meetingDateFilter } from '../libs/utils/filter';
 
 interface StepSectionProps {
   stepData: any;
   team: any;
+  onClickComplete: (stepId: number, isCompleted: boolean) => Promise<void>;
+  processingNum: number;
 }
 
-const StepSection = ({ stepData, team }: StepSectionProps) => {
+const StepSection = ({
+  stepData,
+  team,
+  onClickComplete,
+  processingNum,
+}: StepSectionProps) => {
   return (
-    <section className="rounded-2xl bg-white px-6 py-4">
+    <section className="rounded-[20px] bg-white px-6 py-4">
       {/* Step 상단 제목 */}
       <div className="flex justify-between gap-3">
-        <div className="flex flex-1 justify-between rounded-2xl bg-[#E0E1FC] px-3 py-2">
+        <div className="flex flex-1 justify-between rounded-[15px] bg-[#E0E1FC] px-3 py-2">
           <span className="text-xl font-semibold">
             <b className="font-bold">Step {stepData.step}.</b>&nbsp;
             {stepData.title}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span className="font-semibold">
-              {stepData.startTime} - {stepData.endTime}
+              {meetingDateFilter(stepData.startTime)} -{' '}
+              {meetingDateFilter(stepData.endTime)}
             </span>
             <button>
               <img src="/icons/edit-icon.svg" alt="수정 버튼" />
             </button>
           </div>
         </div>
-        <button className="rounded-full bg-indigo-600 px-6 font-semibold text-white">
+        <button
+          className={`rounded-[10px] px-6 text-base font-bold ${
+            processingNum > stepData?.step
+              ? 'pointer-events-none bg-gray7 text-gray3'
+              : 'bg-blue1 text-white'
+          }`}
+          onClick={() => {
+            onClickComplete(stepData?.stepId, processingNum === stepData?.step);
+          }}
+        >
           완료
         </button>
       </div>
+
       {/* Step의 템플릿 리스트 */}
       <ul>
         {stepData.templateList.map((template: any) => (
@@ -57,10 +78,7 @@ const StepSection = ({ stepData, team }: StepSectionProps) => {
 
 const MeetingDetail = () => {
   const params = useParams<{ teamId: string }>();
-  const [teamId, setTeamId] = useState<number>();
-  const [team, setTeam] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState(null);
+  const [teamData, setTeamData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [teamEditValues, setTeamEditValues] = useState<any>({
     teamName: '',
@@ -72,84 +90,86 @@ const MeetingDetail = () => {
   });
   const [teamList, setTeamList] = useState<any>([]);
 
-  useEffect(() => {
-    Axios.get('/team')
+  const onClickComplete = async (stepId: number, isCompleted: boolean) => {
+    await Axios.patch(
+      `/custom/roadmap/space?stepId=${stepId}&isCompleted=${isCompleted}`,
+    )
       .then((res) => {
-        setTeamList(res.data.data.teamList);
+        console.log(res);
+        alert('완료되었습니다');
+        fetchData();
       })
       .catch((err) => {
         console.error(err);
-        setError(err);
+        alert('현재 진행중인 스텝만 완료가 가능합니다');
+      });
+  };
+
+  const fetchData = () => {
+    Axios.get(`/team/${params.teamId}`)
+      .then((res) => {
+        console.log(res);
+        setTeamData(res.data.data);
       })
-      .finally(() => setLoading(false));
+      .catch((err) => console.error(err));
+  };
+
+  // useEffect(() => {
+  //   Axios.get('/team')
+  //     .then((res) => {
+  //       setTeamList(res.data.data.teamList);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   useEffect(() => {
-    if (params.teamId) {
-      setTeamId(parseInt(params.teamId));
-    }
-  }, [params]);
-
-  useEffect(() => {
-    if (!teamId) return;
-    setLoading(true);
-    Axios.get(`/team/${teamId}`)
-      .then((res) => {
-        console.log(res);
-        setTeam(res.data.data);
-      })
-      .catch((err: any) => setError(err))
-      .finally(() => setLoading(false));
-  }, [teamId]);
-
-  useEffect(() => {
-    if (team) {
+    if (teamData) {
       setTeamEditValues({
-        teamName: team.title,
-        teamCategory: team.teamType,
-        teamGoal: team.introduction,
-        teamSpace1: team.teamSpaceList[0] ? team.teamSpaceList[0].url : '',
-        teamSpace2: team.teamSpaceList[1] ? team.teamSpaceList[1].url : '',
-        teamSpace3: team.teamSpaceList[2] ? team.teamSpaceList[2].url : '',
+        teamName: teamData.title,
+        teamCategory: teamData.teamType,
+        teamGoal: teamData.introduction,
+        teamSpace1: teamData.teamSpaceList[0]
+          ? teamData.teamSpaceList[0].url
+          : '',
+        teamSpace2: teamData.teamSpaceList[1]
+          ? teamData.teamSpaceList[1].url
+          : '',
+        teamSpace3: teamData.teamSpaceList[2]
+          ? teamData.teamSpaceList[2].url
+          : '',
       });
-      console.log(team);
+      // console.log(teamData);
     }
-  }, [team]);
-
-  if (loading) {
-    return (
-      <div className="px-14 py-12">
-        <div>로딩 중...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="px-14 py-12">
-        <div>에러 발생</div>
-      </div>
-    );
-  }
+  }, [teamData]);
 
   return (
     <>
       {/* 회의 관리 상세 */}
-      <div className="px-14 py-12">
+      <div className="px-12 py-[45px]">
         {/* 제목 섹션 */}
-        <PageHeading
+        <BackBtn />
+        <Title>팀 회의관리</Title>
+        {/* <PageHeading
           title="나의 회의 관리"
           previous="관리"
           teamList={teamList}
           hasFilter
-        />
+        /> */}
         <div className="flex flex-col space-y-5">
           {/* 헤딩 섹션 */}
           <section className="mt-6 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
-                title={team?.title}
-                subtitle={typeFilter(team?.teamType?.toLowerCase()) || '기타'}
+                title={teamData?.title}
+                subtitle={
+                  typeFilter(teamData?.teamType?.toLowerCase()) || '기타'
+                }
               />
               <button onClick={() => setIsModalOpen(true)}>
                 <img src="/icons/edit-icon.svg" alt="수정 버튼" />
@@ -158,34 +178,39 @@ const MeetingDetail = () => {
             <div className="mt-4 flex justify-between rounded-md bg-[#E0E1FC] px-4 py-2">
               <span className="font-semibold">
                 프로젝트 목표 :&nbsp;
-                <span className="font-medium">{team?.introduction}</span>
+                <span className="font-medium">{teamData?.introduction}</span>
               </span>
               <span>
-                {team?.roadmap.startTime} - {team?.roadmap.endTime}
+                {meetingDateFilter(teamData?.roadmap.startTime)} -{' '}
+                {meetingDateFilter(teamData?.roadmap.endTime)}
               </span>
             </div>
           </section>
           {/* 로드맵 섹션 */}
-          <Process data={team?.roadmap} isShowTitle />
+          <Process data={teamData?.roadmap} isShowTitle />
+
           {/* Step 섹션 모음 */}
-          {team?.roadmap.roadmapList.map((stepData: any) => (
+          {teamData?.roadmap.roadmapList.map((stepData: any) => (
             <StepSection
               key={stepData.stepId}
               stepData={stepData}
-              team={team}
+              team={teamData}
+              onClickComplete={onClickComplete}
+              processingNum={teamData?.roadmap?.processingNum}
             />
           ))}
         </div>
       </div>
+
       {/* 팀 수정 모달 */}
       {isModalOpen && (
         <TeamEditorModal
-          teamId={team?.teamId}
+          teamId={teamData?.teamId}
           values={teamEditValues}
           setValues={setTeamEditValues}
           setIsOpen={() => setIsModalOpen(false)}
           apiMode="edit"
-          initialTeamCategory={team?.teamType?.toLowerCase()}
+          initialTeamCategory={teamData?.teamType?.toLowerCase()}
           title="팀 수정하기"
           submitText="수정 완료"
           cancelText="취소"

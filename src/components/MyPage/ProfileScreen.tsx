@@ -42,17 +42,17 @@ const ProfileScreen = ({ user, setIsEditScreen }: ProfileScreenProps) => {
         <ProfileDetailInfo>
           <MyInfo.Name userType={user?.userType} name={user?.name} />
           <MyInfo.Email email={user?.email} />
-          <MyInfo.ChatButton />
+          <MyInfo.ChatButton isMyPage />
         </ProfileDetailInfo>
       </ProfileInfo>
       <ScoreArea>
         <MyInfo.ScoreItem
-          label="회의록 로드맵 가이드"
+          label="공유한 회의록 수"
           count={user?.templateNum}
           countLabel="개"
         />
         <MyInfo.ScoreItem
-          label="로드맵 템플릿 기여도"
+          label="공유한 로드맵 수"
           count={user?.roadmapNum}
           countLabel="개"
         />

@@ -18,9 +18,9 @@ const Footer = ({ isMobile }: FooterProps) => {
           isMobile ? 'text-[6px] leading-[9px]' : 'text-xs leading-4'
         } font-[400] text-white`}
       >
-        효율적 회의를 위한 솔루션,
+        효율적인 회의를 위한 당신의 회의 가이드
         <br />
-        우리 팀 회의의 개선점을 찾고 솔루션을 제공하는 서비스, 밋플
+        쉽고 빠른 회의 설계, 밋플
       </div>
       <div
         className={`flex items-center ${

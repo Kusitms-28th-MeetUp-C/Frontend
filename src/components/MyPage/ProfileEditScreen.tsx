@@ -16,6 +16,7 @@ interface ProfileEditScreenProps {
   selectedItem: selectedItem;
   setSelectedItem: Dispatch<SetStateAction<selectedItem>>;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setIsEditScreen: (isEditScreen: boolean) => void;
 }
 
 const ProfileArea = styled.div`
@@ -65,6 +66,7 @@ const ProfileEditScreen = ({
   selectedItem,
   setSelectedItem,
   handleImageUpload,
+  setIsEditScreen,
 }: ProfileEditScreenProps) => {
   return (
     <>
@@ -90,8 +92,19 @@ const ProfileEditScreen = ({
           setSelectedItem={setSelectedItem}
         />
       </InputArea>
-      <ActionArea>
-        <SaveButton onClick={handleProfileEdit}>변경사항 저장</SaveButton>
+      <ActionArea className="flex items-center gap-3">
+        <button
+          className="rounded-[10px] bg-gray7 px-6 py-2 font-semibold text-gray3"
+          onClick={() => setIsEditScreen(false)}
+        >
+          취소
+        </button>
+        <button
+          className="rounded-[10px] bg-blue1 px-6 py-2 font-semibold text-white"
+          onClick={handleProfileEdit}
+        >
+          변경사항 저장
+        </button>
       </ActionArea>
       <BottomArea>
         <BottomTextButton>계정 삭제</BottomTextButton>

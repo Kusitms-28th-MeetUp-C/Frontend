@@ -10,7 +10,7 @@ export const typeList = [
   { id: 9, title: 'video' },
 ];
 
-export const typeFilter = (type: string) => {
+export const typeFilter = (type: string, defaultValue: string = '기타') => {
   const formatType = type?.toLowerCase();
 
   switch (formatType) {
@@ -35,7 +35,7 @@ export const typeFilter = (type: string) => {
     case 'video':
       return '영상 프로젝트';
     default:
-      return '기타';
+      return defaultValue;
   }
 };
 
@@ -134,5 +134,19 @@ export const chatDateFilter = (rawDate: string) => {
   } else {
     // 오늘이 아닌 경우 날짜,시간 표시
     return `${month}월 ${day}일 ${hours}:${minutes}`;
+  }
+};
+
+export const meetingDateFilter = (inputDate: string | null) => {
+  if (inputDate) {
+    const date = new Date(inputDate);
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(2);
+
+    return `${year}.${month}.${day}`;
+  } else {
+    return '진행중';
   }
 };

@@ -21,9 +21,12 @@ import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
 import '../styles/github-markdown-light.css';
 import TemplateEditorModal from '../components/Modal/TemplateEditorModal';
+import BackBtn from '../components/SearchDetail/BackBtn';
+import Title from '../components/Common/Title';
 import PurpleButton from '../components/Common/Button/PurpleButton';
 import DropDown, { selectedItem } from '../components/Common/DropDown/DropDown';
 import TurndownService from 'turndown';
+import SectionHeadingContent from '../components/SectionHeadingContent';
 
 interface HeadingButtonProps {
   children: React.ReactNode;
@@ -58,7 +61,9 @@ interface RightTitleSectionProps {
 }
 
 interface RightSectionListItemProps {
+  step?: string;
   children: React.ReactNode;
+  to: string;
 }
 
 interface ReviewModalProps {
@@ -124,12 +129,16 @@ const RightSectionListItemBlock = styled.li`
   }
 `;
 
-const RightSectionListItem = ({ children }: RightSectionListItemProps) => {
+const RightSectionListItem = ({
+  step,
+  children,
+  to,
+}: RightSectionListItemProps) => {
   return (
     <RightSectionListItemBlock>
-      <Link to="#" className="flex items-center justify-between py-3">
+      <Link to={to} className="flex items-center justify-between py-3">
         <span className="text-sm">{children}&nbsp;&gt;</span>
-        <span className="text-sm text-gray3">연결된 스텝</span>
+        <span className="text-sm text-gray3">{step || '연결된 스텝'}</span>
       </Link>
     </RightSectionListItemBlock>
   );
@@ -264,17 +273,20 @@ const Management = () => {
           params: data,
         });
         setData(res.data.data);
-        setProgress(res.data.roadmapInfo.progressingNum);
+        console.log(res.data.data);
+        const processingNum = res.data.data.roadmapInfo.processingNum;
+        const roadmapListLength = res.data.data.roadmapInfo.roadmapList.length;
+        setProgress((processingNum / roadmapListLength) * 100);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
       try {
         const res = await Axios.get(`/team/${params.teamId}`);
         setRoadmap(res.data.data.roadmap);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchRoadmap();
@@ -332,20 +344,6 @@ const Management = () => {
     fetchTemplateEdit();
   };
 
-  const handleDownloadTemplate = () => {
-    const htmlText = data?.content;
-
-    const blob = new Blob([htmlText], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${data?.teamInfo.title}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   if (loading) {
     return (
       <div className="px-14 py-12">
@@ -357,18 +355,47 @@ const Management = () => {
   return (
     <div className="flex">
       {/* 왼쪽 영역 */}
-      <div className="flex-1 flex-col space-y-6 px-14 py-12">
+      <div className="flex-1 flex-col px-12 py-[45px]">
         {/* 페이지 제목 */}
-        <PageHeading title={data?.templateName} previous="관리" />
+        <BackBtn />
+        <Title>{data?.templateName}</Title>
+        {/* 헤딩 섹션 */}
+        <section className="mt-6 flex justify-between rounded-2xl bg-white px-6 py-4">
+          <div className="flex w-full justify-between">
+            <SectionHeadingContent
+              title={data?.teamInfo.title}
+              subtitle={
+                typeFilter(data?.teamInfo?.teamType?.toLowerCase()) || '기타'
+              }
+            />
+            <div className="flex gap-5">
+              <PurpleButton>원본 데이터 보기</PurpleButton>
+              <PurpleButton>
+                <span className="flex items-center gap-1">
+                  <span>밋플에 작성하기</span>
+                  <i className="h-4 w-4">
+                    <img
+                      src="/icons/edit-icon-purple.svg"
+                      alt="수정 아이콘"
+                      className="w-full"
+                    />
+                  </i>
+                </span>
+              </PurpleButton>
+            </div>
+          </div>
+        </section>
+
         {/* 로드맵 섹션 */}
-        <section className="rounded-2xl bg-white py-8">
+        <section className="mt-6 rounded-2xl bg-white py-8">
           <h3 className="mb-5 text-center text-2xl font-bold">
             {data?.roadmapInfo.title}
           </h3>
           <Process data={roadmap} />
         </section>
+
         {/* 템플릿 수정 섹션 */}
-        <section className="rounded-2xl bg-white px-8 py-8">
+        <section className="mt-6 rounded-2xl bg-white px-8 py-8">
           {/* 템플릿 수정 헤딩 */}
           <div className="flex items-center justify-between">
             <div className="flex gap-2">
@@ -422,6 +449,7 @@ const Management = () => {
           </div>
         </section>
       </div>
+
       {/* 오른쪽 영역 */}
       <div className="w-80 bg-gray8 px-8 py-6">
         {/* 진행률 차트 */}
@@ -487,11 +515,16 @@ const Management = () => {
         <section>
           <RightSectionTitle>회의록 리스트</RightSectionTitle>
           <ul className="mt-3 flex w-full flex-col rounded-2xl bg-white px-7 py-2">
-            <RightSectionListItem>역할분배 회의</RightSectionListItem>
-            <RightSectionListItem>아이데이션 회의</RightSectionListItem>
-            <RightSectionListItem>1차 회의</RightSectionListItem>
-            <RightSectionListItem>2차 회의</RightSectionListItem>
-            <RightSectionListItem>최종 기획서 회의</RightSectionListItem>
+            {data?.roadmapInfo.roadmapList.map((roadmap: any) =>
+              roadmap.templateList.map((template: any) => (
+                <RightSectionListItem
+                  to={`/meeting/2/roadmap/${data?.roadmapInfo.roadmapId}/template/${template.templateId}?team=${data?.teamInfo.title}`}
+                  step={roadmap.title}
+                >
+                  {template.title}
+                </RightSectionListItem>
+              )),
+            )}
           </ul>
         </section>
         {/* 리뷰 작성 버튼 */}

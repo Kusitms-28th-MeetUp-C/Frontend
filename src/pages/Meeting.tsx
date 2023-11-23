@@ -2,59 +2,56 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Axios from '../libs/api';
-import PageHeading from '../components/PageHeading';
 import SectionHeadingContent from '../components/SectionHeadingContent';
 import Process from '../components/SearchDetail/Process';
 import { typeFilter } from '../libs/utils/filter';
+import TeamEditorModal from '../components/TeamEditorModal';
+import Title from '../components/Common/Title';
 
 const Meeting = () => {
   const [teamList, setTeamList] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<any>(null);
 
-  useEffect(() => {
-    setLoading(true);
-    Axios.get('/team')
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [teamEditValues, setTeamEditValues] = useState<any>({
+    teamName: '',
+    teamCategory: '',
+    teamGoal: '',
+    teamSpace1: '',
+    teamSpace2: '',
+    teamSpace3: '',
+  });
+
+  const fetchData = async () => {
+    await Axios.get('/team')
       .then((res) => {
         setTeamList(res.data.data.teamList);
       })
       .catch((err) => {
         console.error(err);
-        setError(err);
-      })
-      .finally(() => setLoading(false));
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="px-14 py-12">
-        <div>로딩 중...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="px-14 py-12">
-        <div>에러 발생</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="px-14 py-12">
-      {/* 제목 섹션 */}
-      <PageHeading
-        title="나의 회의 관리"
-        previous="관리"
-        teamList={teamList}
-        hasFilter
-      />
+    <div className="px-12 py-[45px]">
+      <div className="flex items-center justify-between">
+        <Title>나의 회의 관리</Title>
+        <button
+          className="rounded-[10px] bg-blue1 px-12 py-2.5 text-lg font-semibold text-white"
+          onClick={() => setIsModalOpen(true)}
+        >
+          팀 생성
+        </button>
+      </div>
+
       {/* 팀 선택 섹션 */}
-      {teamList.map((team: any) => (
+      {teamList?.map((team: any) => (
         <div key={team.teamInfo.teamId}>
           {/* 헤딩 섹션 */}
-          <section className="mb-6 mt-10 rounded-2xl bg-white px-6 py-4">
+          <div className="mb-6 mt-10 rounded-2xl bg-white px-6 py-4">
             <div className="flex justify-between">
               <SectionHeadingContent
                 title={team.teamInfo.title}
@@ -71,12 +68,24 @@ const Meeting = () => {
                 </Link>
               )}
             </div>
-          </section>
+          </div>
 
           {/* 로드맵 섹션 */}
           {team.teamRoadmap && <Process data={team.teamRoadmap} />}
         </div>
       ))}
+
+      {/* 모달 */}
+      {isModalOpen && (
+        <TeamEditorModal
+          title="팀 생성하기"
+          values={teamEditValues}
+          setValues={setTeamEditValues}
+          setIsOpen={() => setIsModalOpen(false)}
+          submitText="작성 완료"
+          cancelText="취소"
+        />
+      )}
     </div>
   );
 };

@@ -19,18 +19,22 @@ interface DropDownProps {
   color?: 'lightBlue' | 'white';
   borderRadius?: number;
   className?: string;
+  paddingY?: number;
+  defaultValue?: string;
 }
 
 interface DropDownBlockProps {
   width?: number;
   color?: 'lightBlue' | 'white';
   borderRadius?: number;
+  isOpenCmbBox?: boolean;
 }
 
 interface DropDownContentProps {
   color?: 'lightBlue' | 'white';
   borderRadius?: number;
   isOpenCmbBox?: boolean;
+  paddingY?: number;
 }
 
 interface DropDownMenuProps {
@@ -40,9 +44,9 @@ interface DropDownMenuProps {
 const DropDownBlock = styled.div<DropDownBlockProps>`
   ${(props) => (props.width ? `width: ${props.width}px` : 'width: 100%')};
   ${(props) =>
-    props.borderRadius
-      ? `border-radius: ${props.borderRadius}px`
-      : 'border-radius: 15px'};
+    props.isOpenCmbBox
+      ? `border-top-left-radius: ${props.borderRadius}px; border-top-right-radius: ${props.borderRadius}px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px`
+      : `border-radius: 15px`};
 `;
 
 const DropDownContent = styled.div<DropDownContentProps>`
@@ -52,8 +56,11 @@ const DropDownContent = styled.div<DropDownContentProps>`
       : props.color === 'white' && 'background-color: white'};
   ${(props) =>
     props.isOpenCmbBox
-      ? `border-radius: ${props.borderRadius}px ${props.borderRadius}px 0 0`
-      : `border-radius: ${props.borderRadius}px`};
+      ? `border-top-left-radius: ${props.borderRadius}px; border-top-right-radius: ${props.borderRadius}px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px`
+      : `border-radius: 15px`};
+  ${(props) =>
+    props.paddingY &&
+    `padding-top: ${props.paddingY}px; padding-bottom: ${props.paddingY}px`};
 `;
 
 const DropDownMenu = styled.div<DropDownMenuProps>`
@@ -72,6 +79,8 @@ const DropDown = ({
   color = 'white',
   borderRadius,
   className,
+  paddingY = 12,
+  defaultValue,
 }: DropDownProps) => {
   const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
 
@@ -80,17 +89,23 @@ const DropDown = ({
       width={width}
       color={color}
       borderRadius={borderRadius}
+      isOpenCmbBox={isOpenCmbBox}
       className="relative"
     >
       <DropDownContent
         color={color}
         borderRadius={borderRadius}
         isOpenCmbBox={isOpenCmbBox}
-        className={`flex cursor-pointer items-center justify-between px-4 py-1 ${className}`}
+        paddingY={paddingY}
+        className={`flex cursor-pointer items-center justify-between px-4 ${className}`}
         onClick={() => setIsOpenCmbBox((prev) => !prev)}
       >
         <div className="text-sm text-gray3">
-          {isCategory ? typeFilter(selectedItem.title) : selectedItem.title}
+          {selectedItem.id === 0
+            ? defaultValue
+            : isCategory
+            ? typeFilter(selectedItem.title)
+            : selectedItem.title}
         </div>
         <MdExpandMore
           className={`h-8 w-8 text-blue1 duration-300 ${
@@ -104,20 +119,23 @@ const DropDown = ({
           className="absolute z-50 flex w-full flex-col rounded-b-[15px]"
         >
           <div className="m-auto h-[1.5px] w-[95%] bg-gray6" />
-          {itemList?.map((el: any, idx: number) => (
-            <div
-              className={`cursor-pointer overflow-hidden px-7 py-3 text-sm font-medium text-gray3 duration-300 ${
-                idx === itemList.length - 1 && 'hover:rounded-b-[15px]'
-              } hover:bg-[#ECEEF8]`}
-              key={el.id}
-              onClick={() => {
-                setSelectedItem({ ...el });
-                setIsOpenCmbBox((prev) => !prev);
-              }}
-            >
-              {isCategory ? typeFilter(el.title) : el.title}
-            </div>
-          ))}
+          {itemList?.map(
+            (el: any, idx: number) =>
+              el.id !== 0 && (
+                <div
+                  className={`cursor-pointer overflow-hidden px-7 py-3 text-sm font-medium text-gray3 duration-300 ${
+                    idx === itemList.length - 1 && 'hover:rounded-b-[15px]'
+                  } hover:bg-[#ECEEF8]`}
+                  key={el.id}
+                  onClick={() => {
+                    setSelectedItem({ ...el });
+                    setIsOpenCmbBox((prev) => !prev);
+                  }}
+                >
+                  {isCategory ? typeFilter(el.title, defaultValue) : el.title}
+                </div>
+              ),
+          )}
         </DropDownMenu>
       )}
     </DropDownBlock>

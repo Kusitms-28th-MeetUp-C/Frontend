@@ -15,17 +15,17 @@ const UserProfileSection = ({ user }: UserProfileSectionProps) => {
               <MyInfo.Name userType={user.userType} name={user.name} />
               <MyInfo.Email email={user.email} />
             </div>
-            <MyInfo.ChatButton />
+            <MyInfo.ChatButton name={user?.name} sessionId={user?.sessionId} />
           </div>
           <div className="flex gap-10">
             <MyInfo.ScoreItem
-              label={'회의록 기여도'}
+              label="공유한 회의록 수"
               count={user.templateNum}
               countLabel="개"
               className="flex-1"
             />
             <MyInfo.ScoreItem
-              label={'로드맵 기여도'}
+              label="공유한 로드맵 수"
               count={user.roadmapNum}
               countLabel="개"
               className="flex-1"

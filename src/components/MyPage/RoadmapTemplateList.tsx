@@ -52,13 +52,7 @@ const RoadmapTemplateList = ({
             return content.sharedType === contentText[listType];
           })
           .map((content: any, index: number) => (
-            <ListItem
-              key={index}
-              type={content.sharedType}
-              name={content.title}
-              category={content.contentType.toLowerCase()}
-              styleMode={listStyle}
-            />
+            <ListItem key={index} styleMode={listStyle} content={content} />
           ))}
       </List>
       <Pagination

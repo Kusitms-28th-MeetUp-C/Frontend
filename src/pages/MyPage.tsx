@@ -5,6 +5,8 @@ import LeftSection from '../components/MyPage/LeftSection';
 import RightSection from '../components/MyPage/RightSection';
 import Axios from '../libs/api';
 import { selectedItem } from '../components/Common/DropDown/DropDown';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../states/LoginState';
 
 const MyPageBlock = styled.div`
   display: flex;
@@ -48,6 +50,8 @@ const MyPage = () => {
     title: '포지션을 선택해주세요',
   });
 
+  const [loginState, setLoginState] = useRecoilState(LoginState);
+
   const contentText = {
     all: '전체',
     roadmap: '로드맵',
@@ -56,6 +60,18 @@ const MyPage = () => {
 
   const MoveToTop = () => {
     containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const fetchUser = async () => {
+    try {
+      const res = await Axios.get('/mypage');
+      setUser(res.data.data.user);
+      console.log(res.data.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -79,16 +95,6 @@ const MyPage = () => {
   }, [page]);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await Axios.get('/mypage');
-        setUser(res.data.data.user);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUser();
   }, []);
 
@@ -128,35 +134,30 @@ const MyPage = () => {
   };
 
   const handleProfileEdit = async () => {
-    try {
-      const reqData = values;
-      await Axios.post('/mypage/update', reqData);
-      console.log(user);
-      setUser({
-        ...user,
-        name: values.name,
-        profile: values.profile,
-        userType: selectedItem.title,
-      });
-      setIsEditScreen(false);
-      const userPersist = JSON.parse(
-        localStorage.getItem('recoil-persist') || '',
-      );
-      if (!userPersist) return;
-      localStorage.setItem(
-        'recoil-persist',
-        JSON.stringify({
-          login: {
-            ...userPersist.login,
-            name: values.name,
-            profile: values.profile,
-          },
-        }),
-      );
-      window.location.reload();
-    } catch (err) {
-      setError(err);
-    }
+    await Axios.post('/mypage/update', {
+      profile: values.profile,
+      name: values.name,
+      userType: selectedItem.title,
+    })
+      .then((res) => {
+        console.log(res);
+        const response = res.data.data;
+        setUser({
+          ...user,
+          name: response.name,
+          profile: response.profile,
+          userType: response.userType,
+        });
+        setLoginState((prev: any) => ({
+          ...prev,
+          name: response.name,
+          profile: response.profile,
+        }));
+        alert("수정이 완료되었습니다")
+        setIsEditScreen(false);
+        fetchUser();
+      })
+      .catch((err) => setError(err));
   };
 
   if (loading) {

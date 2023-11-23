@@ -62,15 +62,13 @@ const TeamEditorModal = ({
   values,
   setValues,
   apiMode = 'create',
-  initialTeamCategory = 'it',
   title,
   submitText,
   cancelText,
 }: TeamEditorModalProps) => {
   const itemListRef = useRef<selectedItem[]>(typeList);
   const [selectedItem, setSelectedItem] = useState<selectedItem>(
-    itemListRef.current.find((item) => item.title === initialTeamCategory) ??
-      itemListRef.current[0],
+    itemListRef.current[0],
   );
 
   useEffect(() => {
@@ -169,14 +167,21 @@ const TeamEditorModal = ({
               placeholder="팀 이름을 입력하세요"
               autocomplete="off"
             />
-            <DropDown
-              width={200}
-              color="lightBlue"
-              itemList={itemListRef.current}
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-              isCategory
-            />
+            <div className="flex items-center gap-4">
+              <div className="text-base font-bold text-[#1C1A19]">
+                팀 카테고리
+              </div>
+              <DropDown
+                width={200}
+                borderRadius={15}
+                color="lightBlue"
+                itemList={itemListRef.current}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+                isCategory
+                defaultValue="팀 선택"
+              />
+            </div>
           </div>
           <div className="mt-5">
             <InputLabel
