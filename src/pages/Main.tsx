@@ -112,10 +112,11 @@ const Main = () => {
         <div className="relative mb-20 flex h-0 max-h-[200px] w-full max-w-[800px] items-center justify-center overflow-hidden bg-slate-400 pb-[45%]">
           <iframe
             className="absolute left-0 top-0 h-full w-full"
-            src="https://www.youtube.com/embed/BZ11122M0GI?si=l5ac0sfmdqt4mgEe&autoplay=1"
+            src="https://www.youtube.com/embed/BZ11122M0GI?si=l5ac0sfmdqt4mgEe&autoplay=1&mute=0"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            // muted="false"
             frameBorder="0"
           ></iframe>
         </div>
@@ -144,17 +145,17 @@ const Main = () => {
       </div>
       <RightAnimatedImg
         ref={imgRefs[4]}
-        src="/images/main5.svg"
+        src="/images/main5.png"
         className="m-auto w-full max-w-[1024px]"
       />
       <LeftAnimatedImg
         ref={imgRefs[5]}
-        src="/images/main6.svg"
+        src="/images/main6.png"
         className="m-auto w-full max-w-[1024px]"
       />
       <RightAnimatedImg
         ref={imgRefs[6]}
-        src="/images/main7.svg"
+        src="/images/main7.png"
         className="m-auto w-full max-w-[1024px]"
       />
     </div>
