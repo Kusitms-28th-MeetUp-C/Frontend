@@ -136,9 +136,13 @@ const RightSectionListItem = ({
 }: RightSectionListItemProps) => {
   return (
     <RightSectionListItemBlock>
-      <Link to={to} className="flex items-center justify-between py-3">
-        <span className="text-sm">{children}&nbsp;&gt;</span>
-        <span className="text-sm text-gray3">{step || '연결된 스텝'}</span>
+      <Link to={to} className="flex items-center justify-between gap-2 py-3">
+        <span className="w-40 overflow-hidden text-ellipsis whitespace-nowrap text-sm">
+          {children}&nbsp;&gt;
+        </span>
+        <span className="w-16 overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm text-gray3">
+          {step || '연결된 스텝'}
+        </span>
       </Link>
     </RightSectionListItemBlock>
   );
@@ -256,6 +260,12 @@ const Management = () => {
       bgColor: '#FFFFFF',
       textColor: '#1C79F7',
     },
+    CONFLUENCE: {
+      name: 'Confluence',
+      iconUrl: '/icons/confluence-blue.svg',
+      bgColor: '#FFFFFF',
+      textColor: '#1C79F7',
+    },
   };
 
   useEffect(() => {
@@ -370,18 +380,6 @@ const Management = () => {
             />
             <div className="flex gap-5">
               <PurpleButton>원본 데이터 보기</PurpleButton>
-              <PurpleButton>
-                <span className="flex items-center gap-1">
-                  <span>밋플에 작성하기</span>
-                  <i className="h-4 w-4">
-                    <img
-                      src="/icons/edit-icon-purple.svg"
-                      alt="수정 아이콘"
-                      className="w-full"
-                    />
-                  </i>
-                </span>
-              </PurpleButton>
             </div>
           </div>
         </section>
@@ -498,7 +496,7 @@ const Management = () => {
           </div>
         </div>
         {/* 팀 스페이스 링크 */}
-        {/* <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <div className="flex gap-3">
             {data.teamInfo.spaceList.map((teamSpace: any, index: number) => (
               <TeamSpaceLink
@@ -512,7 +510,7 @@ const Management = () => {
               />
             ))}
           </div>
-        </div> */}
+        </div>
         {/* 회의록 템플릿 */}
         <section>
           <RightSectionTitle>회의록 리스트</RightSectionTitle>

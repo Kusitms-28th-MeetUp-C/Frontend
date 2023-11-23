@@ -2,7 +2,7 @@ import Axios from '../libs/api';
 import Modal from '../components/Modal/Modal';
 import DropDown, { selectedItem } from './Common/DropDown/DropDown';
 import { useEffect, useRef, useState } from 'react';
-import { typeFilter, typeList } from '../libs/utils/filter';
+import { typeList } from '../libs/utils/filter';
 
 interface TeamEditorModalProps {
   teamId?: number;
@@ -100,8 +100,10 @@ const TeamEditorModal = ({
       return 'figma';
     } else if (url.includes('jira')) {
       return 'jira';
-    } else {
+    } else if (url.includes('notion')) {
       return 'notion';
+    } else {
+      return 'confluence';
     }
   };
 

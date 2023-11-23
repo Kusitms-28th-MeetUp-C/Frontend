@@ -1,5 +1,5 @@
 import DropDown from '../components/Common/DropDown/DropDown';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Axios from '../libs/api';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -90,6 +90,10 @@ const OnBoarding = () => {
     setIsOpenAlert(false);
     navigate('/template');
   };
+
+  useEffect(() => {
+    setUserType({ id: 0, title: '포지션을 선택해주세요' });
+  }, []);
 
   return (
     <div className="w-full bg-blue5 py-[115px]">
