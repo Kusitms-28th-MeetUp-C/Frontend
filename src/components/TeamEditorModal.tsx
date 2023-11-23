@@ -62,15 +62,13 @@ const TeamEditorModal = ({
   values,
   setValues,
   apiMode = 'create',
-  initialTeamCategory = 'it',
   title,
   submitText,
   cancelText,
 }: TeamEditorModalProps) => {
   const itemListRef = useRef<selectedItem[]>(typeList);
   const [selectedItem, setSelectedItem] = useState<selectedItem>(
-    itemListRef.current.find((item) => item.title === initialTeamCategory) ??
-      itemListRef.current[0],
+    itemListRef.current[0],
   );
 
   useEffect(() => {
@@ -175,11 +173,13 @@ const TeamEditorModal = ({
               </div>
               <DropDown
                 width={200}
+                borderRadius={15}
                 color="lightBlue"
                 itemList={itemListRef.current}
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
                 isCategory
+                defaultValue="팀 선택"
               />
             </div>
           </div>
