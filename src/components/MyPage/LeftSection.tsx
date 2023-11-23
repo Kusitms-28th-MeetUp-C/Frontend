@@ -53,6 +53,7 @@ const LeftSection = ({
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           handleImageUpload={handleImageUpload}
+          setIsEditScreen={setIsEditScreen}
         />
       )}
     </LeftSectionBlock>

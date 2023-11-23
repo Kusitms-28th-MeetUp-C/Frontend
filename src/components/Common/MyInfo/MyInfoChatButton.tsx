@@ -24,7 +24,7 @@ const MyInfoChatButton = ({
 
   const onClickBtn = () => {
     if (isMyPage) {
-      setOpenChatState(true);
+      setOpenChatState((prev) => !prev);
     } else {
       name && sessionId && setChatUserState({ name, sessionId });
       setOpenChatState(true);
