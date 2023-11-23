@@ -19,13 +19,13 @@ const UserProfileSection = ({ user }: UserProfileSectionProps) => {
           </div>
           <div className="flex gap-10">
             <MyInfo.ScoreItem
-              label={'회의록 기여도'}
+              label="공유한 회의록 수"
               count={user.templateNum}
               countLabel="개"
               className="flex-1"
             />
             <MyInfo.ScoreItem
-              label={'로드맵 기여도'}
+              label="공유한 로드맵 수"
               count={user.roadmapNum}
               countLabel="개"
               className="flex-1"

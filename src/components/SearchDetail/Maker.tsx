@@ -117,7 +117,7 @@ const Maker = ({ data, isMobile }: MakerProps) => {
           isMobile ? 'text-sm' : 'text-[15px]'
         }`}
       >
-        <div className="font-medium text-gray2">회의 템플릿 기여도</div>
+        <div className="font-medium text-gray2">공유한 회의록 수</div>
         <div>
           <span className="font-extrabold text-blue1">{data?.templateNum}</span>
           <span className="font-semibold text-gray2">개</span>
@@ -129,7 +129,7 @@ const Maker = ({ data, isMobile }: MakerProps) => {
           isMobile ? 'text-sm' : 'text-[15px]'
         }`}
       >
-        <div className="font-medium text-gray2">회의 로드맵 기여도</div>
+        <div className="font-medium text-gray2">공유한 로드맵 수</div>
         <div>
           <span className="font-extrabold text-blue1">{data?.roadmapNum}</span>
           <span className="font-semibold text-gray2">개</span>

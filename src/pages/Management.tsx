@@ -360,12 +360,12 @@ const Management = () => {
   return (
     <div className="flex">
       {/* 왼쪽 영역 */}
-      <div className="flex-1 flex-col space-y-6 px-12 py-[45px]">
+      <div className="flex-1 flex-col px-12 py-[45px]">
         {/* 페이지 제목 */}
         <BackBtn />
         <Title>{data?.templateName}</Title>
         {/* 헤딩 섹션 */}
-        <section className="flex justify-between rounded-2xl bg-white px-6 py-4">
+        <section className="mt-6 flex justify-between rounded-2xl bg-white px-6 py-4">
           <div className="flex w-full justify-between">
             <SectionHeadingContent
               title={data?.teamInfo.title}
@@ -390,15 +390,17 @@ const Management = () => {
             </div>
           </div>
         </section>
+
         {/* 로드맵 섹션 */}
-        <section className="rounded-2xl bg-white py-8">
+        <section className="mt-6 rounded-2xl bg-white py-8">
           <h3 className="mb-5 text-center text-2xl font-bold">
             {data?.roadmapInfo.title}
           </h3>
           <Process data={roadmap} />
         </section>
+
         {/* 템플릿 수정 섹션 */}
-        <section className="rounded-2xl bg-white px-8 py-8">
+        <section className="mt-6 rounded-2xl bg-white px-8 py-8">
           {/* 템플릿 수정 헤딩 */}
           <div className="flex items-center justify-between">
             <div className="flex gap-2">

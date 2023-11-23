@@ -153,6 +153,7 @@ const MyPage = () => {
           name: response.name,
           profile: response.profile,
         }));
+        alert("수정이 완료되었습니다")
         setIsEditScreen(false);
         fetchUser();
       })

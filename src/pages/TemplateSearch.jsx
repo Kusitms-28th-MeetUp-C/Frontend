@@ -304,6 +304,7 @@ const TemplateSearch = () => {
             <div className="flex w-[48%] flex-col gap-6 rounded-[30px] bg-white p-8">
               <div className="flex items-center justify-between">
                 <PurpleButton
+                  className="flex items-center gap-2"
                   textSize="0.75rem"
                   onClick={() => setIsTemplateEditModal(true)}
                 >

@@ -79,14 +79,14 @@ const Meeting = () => {
       ))}
 
       {/* 모달 */}
-      {/* {isModalOpen && (
+      {isModalOpen && (
         <TeamEditorModal
           title="새로운"
           setIsOpen={() => setIsModalOpen(false)}
           values={teamEditValues}
           setValues={setTeamEditValues}
         />
-      )} */}
+      )}
     </div>
   );
 };
