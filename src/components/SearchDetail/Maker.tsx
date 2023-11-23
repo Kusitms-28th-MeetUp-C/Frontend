@@ -29,7 +29,7 @@ const Maker = ({ data, isMobile }: MakerProps) => {
 
   const onClickChat = () => {
     if (loginState.userId === data?.id) {
-      setOpenChatState(true);
+      setOpenChatState((prev) => !prev);
     } else {
       setChatUserState({ name: data.name, sessionId: data.sessionId });
       setOpenChatState(true);
