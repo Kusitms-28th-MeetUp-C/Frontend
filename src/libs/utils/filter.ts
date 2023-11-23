@@ -136,3 +136,17 @@ export const chatDateFilter = (rawDate: string) => {
     return `${month}월 ${day}일 ${hours}:${minutes}`;
   }
 };
+
+export const meetingDateFilter = (inputDate: string | null) => {
+  if (inputDate) {
+    const date = new Date(inputDate);
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(2);
+
+    return `${year}.${month}.${day}`;
+  } else {
+    return '진행중';
+  }
+};

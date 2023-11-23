@@ -9,6 +9,7 @@ import Axios from '../libs/api';
 import { typeFilter } from '../libs/utils/filter';
 import Title from '../components/Common/Title';
 import BackBtn from '../components/SearchDetail/BackBtn';
+import { meetingDateFilter } from '../libs/utils/filter';
 
 interface StepSectionProps {
   stepData: any;
@@ -32,9 +33,10 @@ const StepSection = ({
             <b className="font-bold">Step {stepData.step}.</b>&nbsp;
             {stepData.title}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span className="font-semibold">
-              {stepData.startTime} - {stepData.endTime}
+              {meetingDateFilter(stepData.startTime)} -{' '}
+              {meetingDateFilter(stepData.endTime)}
             </span>
             <button>
               <img src="/icons/edit-icon.svg" alt="수정 버튼" />
@@ -179,7 +181,8 @@ const MeetingDetail = () => {
                 <span className="font-medium">{teamData?.introduction}</span>
               </span>
               <span>
-                {teamData?.roadmap.startTime} - {teamData?.roadmap.endTime}
+                {meetingDateFilter(teamData?.roadmap.startTime)} -{' '}
+                {meetingDateFilter(teamData?.roadmap.endTime)}
               </span>
             </div>
           </section>
