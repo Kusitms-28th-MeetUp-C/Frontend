@@ -85,6 +85,8 @@ const Meeting = () => {
           setIsOpen={() => setIsModalOpen(false)}
           values={teamEditValues}
           setValues={setTeamEditValues}
+          submitText="완성"
+          cancelText="취소"
         />
       )}
     </div>
