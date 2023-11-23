@@ -2,7 +2,7 @@ import Axios from '../libs/api';
 import Modal from '../components/Modal/Modal';
 import DropDown, { selectedItem } from './Common/DropDown/DropDown';
 import { useEffect, useRef, useState } from 'react';
-import { typeList } from '../libs/utils/filter';
+import { typeFilter, typeList } from '../libs/utils/filter';
 
 interface TeamEditorModalProps {
   teamId?: number;
@@ -67,9 +67,10 @@ const TeamEditorModal = ({
   cancelText,
 }: TeamEditorModalProps) => {
   const itemListRef = useRef<selectedItem[]>(typeList);
-  const [selectedItem, setSelectedItem] = useState<selectedItem>(
-    itemListRef.current[0],
-  );
+  const [selectedItem, setSelectedItem] = useState<selectedItem>({
+    id: 0,
+    title: '팀 선택',
+  });
 
   useEffect(() => {
     setValues({ ...values, teamCategory: selectedItem.title });
@@ -77,13 +78,22 @@ const TeamEditorModal = ({
 
   useEffect(() => {
     if (apiMode === 'edit') {
+      console.log(values);
       setSelectedItem(
         itemListRef.current.find(
           (item) => item.title === values?.teamCategory?.toLowerCase(),
-        ) || itemListRef.current[0],
+        ) || {
+          id: 0,
+          title: '팀 선택',
+        },
       );
+    } else {
+      setSelectedItem({
+        id: 0,
+        title: '팀 선택',
+      });
     }
-  }, [values.teamCategory]);
+  }, []);
 
   const parseLabelFromUrl = (url: string) => {
     if (url.includes('figma')) {
