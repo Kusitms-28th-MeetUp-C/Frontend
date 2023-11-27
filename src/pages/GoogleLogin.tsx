@@ -47,6 +47,7 @@ const GoogleLogin = () => {
           Axios.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${data.accessToken}`;
+          console.log(urlSearchParams);
           navigate(`${data.isFirst ? '/signUp' : '/template'}`);
         })
         .catch((err) => console.error(err));
@@ -57,3 +58,5 @@ const GoogleLogin = () => {
 };
 
 export default GoogleLogin;
+
+// http://localhost:3000/oauth/google#access_token=ya29.a0AfB_byBck61_nmzEth8xp5UhPOhJw-9OPaG1BasaZ1c1w09egijxUMZt-TTbHef5h8-rP211glD3JGYhYe-I7HxK9Qa0hnxrKHRG1UWHqAwCRACitf1cL8clhvxCLSiiaqEUuGKn6CC7WY8gqckWg21WOy0-9NfUViQaCgYKAYgSARMSFQHGX2Mi75ZWGpUGPBShlfxWWrTyIQ0170&token_type=Bearer&expires_in=3599&scope=email%20profile%20https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile%20openid&authuser=0&prompt=none

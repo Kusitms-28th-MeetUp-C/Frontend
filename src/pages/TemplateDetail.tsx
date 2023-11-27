@@ -22,6 +22,7 @@ const TemplateDetail = () => {
   const [templateData, setTemplateData] = useState<any>([]);
   const [roadmapData, setRoadmapData] = useState({});
   const [userData, setUserData] = useState<any>({});
+  const [data, setData] = useState<any>({});
 
   const onSubmitAlertModal = () => {
     setIsOpenAlertModal(false);
@@ -43,6 +44,7 @@ const TemplateDetail = () => {
         setAgendaData(response.templateContent);
         setRoadmapData({ ...response.roadmapIdAndConnectRoadmap });
         setUserData({ ...response.user });
+        setData(response);
       })
       .catch((err) => console.error(err));
   };
@@ -96,7 +98,11 @@ const TemplateDetail = () => {
           <Agenda isMobile={isMobile} data={agendaData} />
           <LinkedRoadmap isMobile={isMobile} data={roadmapData} />
           <Maker isMobile={isMobile} data={userData} />
-          <MoreItems isMobile={isMobile} data={templateData} />
+          <MoreItems
+            isMobile={isMobile}
+            data={templateData}
+            type={data?.templateType}
+          />
         </div>
       ) : (
         <div className="mt-9 flex justify-between">
@@ -105,7 +111,7 @@ const TemplateDetail = () => {
           </div>
           <div className="w-[49%]">
             <Agenda data={agendaData} />
-            <MoreItems data={templateData} />
+            <MoreItems data={templateData} type={data?.templateType} />
           </div>
           <div className="w-[22%]">
             <UseBtn onClickBtn={onClickUseBtn}>템플릿 사용하기</UseBtn>

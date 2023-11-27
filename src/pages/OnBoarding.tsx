@@ -2,7 +2,7 @@ import DropDown from '../components/Common/DropDown/DropDown';
 import { useEffect, useState } from 'react';
 import Axios from '../libs/api';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
 import Alert from '../components/Modal/Alert';
 
@@ -55,7 +55,7 @@ const OnBoarding = () => {
     title: '포지션을 선택해주세요',
   });
 
-  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const setLoginState = useSetRecoilState(LoginState);
 
   const onClickBtn = async () => {
     if (userName && teamName && userType.id !== 0) {
@@ -101,7 +101,6 @@ const OnBoarding = () => {
         <div className="mb-4 text-base font-medium text-gray1">반가워요</div>
         <div
           className="mb-20 text-2xl font-bold text-gray1"
-          onClick={() => console.log(userName, userType, teamName)}
         >
           프로필을 입력해주세요
         </div>

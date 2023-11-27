@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import * as StompJs from '@stomp/stompjs';
 import { chatDateFilter } from '../../libs/utils/filter';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { OpenChatRoomState, ChatUserState } from '../../states/ChatState';
 
@@ -82,10 +82,9 @@ const ChatBubble = ({ el, idx, name }) => {
 };
 
 const ChatRoom = () => {
-  const [loginState, setLoginState] = useRecoilState(LoginState);
-  const [openChatRoomState, setOpenChatRoomState] =
-    useRecoilState(OpenChatRoomState);
-  const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
+  const [loginState] = useRecoilState(LoginState);
+  const setOpenChatRoomState = useSetRecoilState(OpenChatRoomState);
+  const [chatUserState] = useRecoilState(ChatUserState);
 
   const [msgList, setMsgList] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -170,7 +169,10 @@ const ChatRoom = () => {
           setIsLoading(false);
           if (response.data.chatMessageList.length === 0) setIsNothing(true);
         }
+
         if (response.messageType === 'received') {
+          setIsNothing(false);
+
           if (response.data.message.userName === loginState.name) {
             setMsgList((prev) => [...prev, response.data.message]);
             setMsg('');
@@ -193,7 +195,7 @@ const ChatRoom = () => {
         client.current.deactivate();
       }
     };
-  }, []);
+  });
 
   useEffect(() => {
     MoveToBottom();
@@ -226,7 +228,7 @@ const ChatRoom = () => {
         </button>
         <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray6">
           {userData?.profile && userData?.profile !== 'Unknown' ? (
-            <img src={userData.profile} />
+            <img src={userData.profile} alt="profile" />
           ) : (
             <BsFillPersonFill className="text-3xl text-gray3" />
           )}
@@ -248,7 +250,7 @@ const ChatRoom = () => {
 
       {isLoading ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
-          <img src="/icons/loading.svg" />
+          <img src="/icons/loading.svg" alt="loading" />
           <div className="text-xs font-semibold text-black">Loading...</div>
         </div>
       ) : isNothing ? (

@@ -5,7 +5,7 @@ import {
   ChatUserState,
   OpenChatRoomState,
 } from '../../states/ChatState';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { LoginState } from '../../states/LoginState';
 
@@ -21,11 +21,10 @@ const EmailContainer = styled.div`
 `;
 
 const Maker = ({ data, isMobile }: MakerProps) => {
-  const [openChatState, setOpenChatState] = useRecoilState(OpenChatState);
-  const [openChatRoomState, setOpenChatRoomState] =
-    useRecoilState(OpenChatRoomState);
-  const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
-  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const setOpenChatState = useSetRecoilState(OpenChatState);
+  const setOpenChatRoomState = useSetRecoilState(OpenChatRoomState);
+  const setChatUserState = useSetRecoilState(ChatUserState);
+  const [loginState] = useRecoilState(LoginState);
 
   const onClickChat = () => {
     if (loginState.userId === data?.id) {
@@ -57,7 +56,11 @@ const Maker = ({ data, isMobile }: MakerProps) => {
           } shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray6`}
         >
           {data?.profile && data?.profile !== 'Unknown' ? (
-            <img src={data?.profile} className="h-full w-full object-cover" />
+            <img
+              src={data?.profile}
+              alt="profile"
+              className="h-full w-full object-cover"
+            />
           ) : (
             <BsFillPersonFill className="h-14 w-14 text-gray3" />
           )}

@@ -27,7 +27,7 @@ const SectionTitle = ({ children, isSearch }: SectionTitleProps) => {
             style={{ color: 'white', width: '20px', height: '20px' }}
           />
         ) : (
-          <img src="/icons/folder.svg" />
+          <img src="/icons/folder.svg" alt='folder'/>
         )}
         <h3 className="text-base font-extrabold text-white">{children}</h3>
       </div>
@@ -45,7 +45,7 @@ const ListItem = ({ to, children }: ListItemProps) => {
   const pathname = location.pathname;
 
   const navigate = useNavigate();
-  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [loginState] = useRecoilState(LoginState);
 
   const onClickCategory = (to: string) => {
     if (

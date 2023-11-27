@@ -3,14 +3,16 @@ import { BiTimeFive } from 'react-icons/bi';
 import { GrNext } from 'react-icons/gr';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { typeFilter } from '../../libs/utils/filter';
 
 interface MoreItemsProps {
   isRoadmap?: boolean;
   data: any;
   isMobile?: boolean;
+  type: string;
 }
 
-const MoreItems = ({ isRoadmap, data, isMobile }: MoreItemsProps) => {
+const MoreItems = ({ isRoadmap, data, isMobile, type }: MoreItemsProps) => {
   return (
     <div className="rounded-[20px] bg-white px-6 py-7">
       <div
@@ -19,8 +21,8 @@ const MoreItems = ({ isRoadmap, data, isMobile }: MoreItemsProps) => {
         } font-bold text-black`}
       >
         {isRoadmap
-          ? 'IT프로젝트 다른 로드맵 모아보기'
-          : 'IT프로젝트 다른 템플릿 모아보기'}
+          ? `${typeFilter(type)} 다른 로드맵 모아보기`
+          : `${typeFilter(type)} 다른 템플릿 모아보기`}
       </div>
       <div
         className={`flex ${
@@ -67,7 +69,7 @@ const MoreItems = ({ isRoadmap, data, isMobile }: MoreItemsProps) => {
 
               {isRoadmap ? (
                 <div className="flex items-center gap-1">
-                  <img src="/icons/stair-purple.svg" />
+                  <img src="/icons/stair-purple.svg" alt="stair-purple" />
                   <div className="text-xs font-semibold text-gray3">
                     {el.step} steps
                   </div>
@@ -84,7 +86,7 @@ const MoreItems = ({ isRoadmap, data, isMobile }: MoreItemsProps) => {
 
             {!isRoadmap && (
               <div className="mt-5 flex items-center gap-1 rounded-full bg-white px-[11px] py-[3px]">
-                <img src="/icons/category-green.svg" />
+                <img src="/icons/category-green.svg" alt="category-green" />
                 <div className="text-[10px] font-semibold text-gray3">
                   {el?.connectedRoadmap}
                 </div>

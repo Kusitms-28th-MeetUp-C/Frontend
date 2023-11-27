@@ -17,6 +17,7 @@ interface TemplateProps {
   MoveToTop: () => void;
 }
 
+
 const Template = ({ MoveToTop }: TemplateProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
