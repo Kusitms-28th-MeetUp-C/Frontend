@@ -72,8 +72,6 @@ const Main = () => {
     };
   }, [imgRefs, observer]);
 
-  // 비디오
-
   // 반응형
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth <= 500;
@@ -109,18 +107,16 @@ const Main = () => {
         >
           쉽고 빠른 회의 설계, 밋플
         </div>
-        {/* <div className="relative mb-20 flex h-0 max-h-[200px] w-full max-w-[800px] items-center justify-center overflow-hidden bg-slate-400 pb-[45%]"> */}
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/1Xi6IxP0Q5s?si=BozEaayzOhQFLgj3"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          className="h-[450px] w-full max-w-[800px]"
-        ></iframe>
-        {/* </div> */}
+        <div className="relative mb-20 flex h-0 max-h-[200px] w-full max-w-[800px] items-center justify-center overflow-hidden pb-[45%]">
+          <iframe
+            src="https://www.youtube.com/embed/1Xi6IxP0Q5s?si=BozEaayzOhQFLgj3"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="absolute left-0 top-0 h-full w-full"
+          ></iframe>
+        </div>
       </div>
       <ColAnimatedImg
         ref={imgRefs[0]}

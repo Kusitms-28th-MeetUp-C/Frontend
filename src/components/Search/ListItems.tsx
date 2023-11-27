@@ -30,7 +30,7 @@ const ListItems = ({ data, isRoadmap, isMobile }: ListItemsProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
-  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [loginState] = useRecoilState(LoginState);
 
   const onClickList = (id: number) => {
     if (loginState.isLogin) {
@@ -75,7 +75,7 @@ const ListItems = ({ data, isRoadmap, isMobile }: ListItemsProps) => {
 
           {!isRoadmap && (
             <div className="flex w-fit items-center gap-1">
-              <img src="/icons/roadmap.svg" />
+              <img alt='' src="/icons/roadmap.svg" />
               <div className="text-xs font-semibold text-gray3">
                 {el?.connectedRoadmap}
               </div>
@@ -105,6 +105,7 @@ const ListItems = ({ data, isRoadmap, isMobile }: ListItemsProps) => {
                 <>
                   <img
                     src="/icons/stair.svg"
+                    alt=''
                     className={`${
                       isMobile ? 'h-2.5 w-2.5' : 'h-5 w-5'
                     } text-tagSkyblue1`}

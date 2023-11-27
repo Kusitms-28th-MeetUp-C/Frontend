@@ -11,7 +11,7 @@ import { MdNavigateNext } from 'react-icons/md';
 import { FaCompass } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { OpenChatState, OpenChatRoomState } from '../../states/ChatState';
 import { LoginState } from '../../states/LoginState';
 
@@ -21,36 +21,15 @@ interface Props {
   moveToTop: () => void;
 }
 
-interface SectionTitleProps {
-  children: React.ReactNode;
-  isSearch?: boolean;
-}
-
 interface ListItemProps {
   to: string;
   children: React.ReactNode;
 }
 
-const SectionTitle = ({ children, isSearch }: SectionTitleProps) => {
-  return (
-    <div>
-      <div className="flex items-center gap-2">
-        {isSearch ? (
-          <FaCompass className="text-base text-white" />
-        ) : (
-          <img src="/icons/folder.svg" className="h-4 w-4" />
-        )}
-        <div className="text-xs font-bold text-white">{children}</div>
-      </div>
-      <div className="my-[8.5px] h-[1px] w-full rounded-[42px] bg-blue2" />
-    </div>
-  );
-};
-
 const ListItem = ({ to, children }: ListItemProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [loginState] = useRecoilState(LoginState);
 
   const onClickCategory = (to: string) => {
     if (
@@ -111,9 +90,8 @@ const Layout = ({ children, containerRef, moveToTop }: Props) => {
   const isFullScreen = includedFooter.includes(currentPath);
 
   // 채팅 데이터 사라지기
-  const [openChatState, setOpenChatState] = useRecoilState(OpenChatState);
-  const [openChatRoomState, setOpenChatRoomState] =
-    useRecoilState(OpenChatRoomState);
+  const setOpenChatState = useSetRecoilState(OpenChatState);
+  const setOpenChatRoomState = useSetRecoilState(OpenChatRoomState);
 
   // 페이지 이동시 스크롤 상단으로 이동
   const screenMoveToTop = () => {
@@ -214,7 +192,7 @@ const Layout = ({ children, containerRef, moveToTop }: Props) => {
           <div>
             <div>
               <div className="flex items-center gap-2">
-                <img src="/icons/folder.svg" className="h-4 w-4" />
+                <img src="/icons/folder.svg" alt="folder" className="h-4 w-4" />
                 <div className="text-xs font-bold text-white">관리</div>
               </div>
               <div className="my-[8.5px] h-[1px] w-full rounded-[42px] bg-blue2" />

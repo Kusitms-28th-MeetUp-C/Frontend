@@ -97,6 +97,7 @@ const TopNavBar = () => {
               />
               <img
                 src="/logo/logo-typo-black.svg"
+                alt='logo-typo-black'
                 className={isMobile ? 'h-3' : ''}
               />
             </Link>
@@ -170,6 +171,7 @@ const TopNavBar = () => {
                   {loginState.profile && loginState.profile !== 'Unknown' ? (
                     <img
                       src={loginState.profile}
+                      alt='profile'
                       className="h-full w-full object-cover"
                     />
                   ) : (

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import * as StompJs from '@stomp/stompjs';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { chatDateFilter } from '../../libs/utils/filter';
 import { OpenChatRoomState, ChatUserState } from '../../states/ChatState';
@@ -46,10 +46,9 @@ const ListContainer = styled.div`
 `;
 
 const ChatList = () => {
-  const [loginState, setLoginState] = useRecoilState(LoginState);
-  const [openChatRoomState, setOpenChatRoomState] =
-    useRecoilState(OpenChatRoomState);
-  const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
+  const [loginState] = useRecoilState(LoginState);
+  const setOpenChatRoomState = useSetRecoilState(OpenChatRoomState);
+  const setChatUserState = useSetRecoilState(ChatUserState);
 
   const [chatList, setChatList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -122,18 +121,18 @@ const ChatList = () => {
         client.current.deactivate();
       }
     };
-  }, []);
+  });
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden py-7 pl-6 pr-3">
-      <div className="mb-9 flex items-center gap-2" onClick={() => publish()}>
+      <div className="mb-9 flex items-center gap-2">
         <BsFillChatFill className="text-2xl text-blue1" />
         <div className="text-2xl font-bold text-black">커피챗 목록</div>
       </div>
 
       {isLoading ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
-          <img src="/icons/loading.svg" />
+          <img src="/icons/loading.svg" alt="loading" />
           <div className="text-xs font-semibold text-black">Loading...</div>
         </div>
       ) : isNothing ? (
@@ -158,7 +157,11 @@ const ChatList = () => {
             >
               <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray6">
                 {el?.profile && el?.profile !== 'Unknown' ? (
-                  <img src={el.profile} className="object-cover" />
+                  <img
+                    src={el.profile}
+                    alt="profile"
+                    className="object-cover"
+                  />
                 ) : (
                   <BsFillPersonFill className="text-3xl text-gray3" />
                 )}

@@ -1,14 +1,15 @@
-import Filter from '../components/Search/Filter';
-import Axios from '../libs/api';
-import { useState, useEffect } from 'react';
-import Search from '../components/Search/Search';
-import Pagination from '../components/Search/Pagination';
-import { FaQuestion } from 'react-icons/fa6';
-import ListItems from '../components/Search/ListItems';
-import InfoBox from '../components/Search/InfoBox';
-import { typeFilter } from '../libs/utils/filter';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import Title from '../components/Common/Title';
+import InfoBox from '../components/Search/InfoBox';
+import Search from '../components/Search/Search';
+import Filter from '../components/Search/Filter';
+import ListItems from '../components/Search/ListItems';
+import Pagination from '../components/Search/Pagination';
+
+import { useState, useEffect } from 'react';
+import Axios from '../libs/api';
+import { typeFilter } from '../libs/utils/filter';
+import { FaQuestion } from 'react-icons/fa6';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface RoadmapProps {
   MoveToTop: () => void;
@@ -40,7 +41,12 @@ const Roadmap = ({ MoveToTop }: RoadmapProps) => {
         setListData([...res.data.data.content]);
         setTotalPages(res.data.data.totalPages);
         setTotalCnt(res.data.data.totalElements);
-        navigate(`/roadmap?type=${roadmapType}&search=${title}&page=${page}`);
+        // navigate(`/roadmap?type=${roadmapType}&search=${title}&page=${page}`);
+        setSearchParams({
+          type: roadmapType,
+          search: title,
+          page: page.toString(),
+        });
       })
       .catch((err) => console.error(err));
   };

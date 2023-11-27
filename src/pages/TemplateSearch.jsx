@@ -20,7 +20,7 @@ const TemplateSearch = () => {
   // =======================Socket=======================
   const client = useRef({});
   const myToken = localStorage.getItem('access-token');
-  const [loginState, setLoginState] = useRecoilState(LoginState);
+  const [loginState] = useRecoilState(LoginState);
   const [templateList, setTemplateList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNothing, setIsNothing] = useState(false);
@@ -243,7 +243,11 @@ const TemplateSearch = () => {
 
       {isLoading ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
-          <img src="/icons/loading.svg" className="h-[30px] w-[30px]" />
+          <img
+            src="/icons/loading.svg"
+            alt="loading"
+            className="h-[30px] w-[30px]"
+          />
           <div className="text-xl font-semibold text-black">Loading...</div>
         </div>
       ) : isNothing ? (

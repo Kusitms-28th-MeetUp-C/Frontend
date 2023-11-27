@@ -20,6 +20,7 @@ const RoadmapDetail = () => {
   const [roadmapData, setRoadmapData] = useState<any>([]);
   const [userData, setUserData] = useState<any>({});
   const [teamList, setTeamList] = useState<any>([]);
+  const [data, setData] = useState<any>({});
 
   const fetchData = async () => {
     await Axios.get('roadmap/detail', {
@@ -35,6 +36,7 @@ const RoadmapDetail = () => {
         setProcessData({ ...response.roadmapData });
         setRoadmapData([...response.relatedRoadmap]);
         setUserData({ ...response.user });
+        setData(response);
       })
       .catch((err) => console.error(err));
   };
@@ -59,7 +61,6 @@ const RoadmapDetail = () => {
 
   const [isOpenTeamModal, setIsOpenTeamModal] = useState(false);
   const [isOpenAlertModal, setIsOpenAlertModal] = useState(false);
-  const [isOpenCmbBox, setIsOpenCmbBox] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState({
     id: 0,
     title: '선택',
@@ -102,7 +103,11 @@ const RoadmapDetail = () => {
               <Info isRoadmap data={infoData} />
             </div>
             <div className="w-[65.77%]">
-              <MoreItems isRoadmap data={roadmapData} />
+              <MoreItems
+                isRoadmap
+                data={roadmapData}
+                type={data?.roadmapType}
+              />
             </div>
           </div>
         </div>

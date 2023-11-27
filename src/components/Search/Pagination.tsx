@@ -51,7 +51,7 @@ const Pagination = ({
     if (page < totalPages - 1) {
       MoveToTop();
       setPage(totalPages - 1);
-      setStartPage((totalPages / pageCnt - 1) * 5);
+      setStartPage(Math.floor(totalPages / pageCnt) * 5);
     }
   };
 
@@ -63,6 +63,7 @@ const Pagination = ({
     >
       <img
         src="/icons/firstPage.svg"
+        alt='firstPage'
         className={`${
           isMobile ? 'h-[10px] w-[10px]' : 'h-5 w-5'
         } cursor-pointer text-gray3`}
@@ -99,6 +100,7 @@ const Pagination = ({
       />
       <img
         src="/icons/lastPage.svg"
+        alt='lastPage'
         className={`${
           isMobile ? 'h-[10px] w-[10px]' : 'h-5 w-5'
         } cursor-pointer text-gray3`}

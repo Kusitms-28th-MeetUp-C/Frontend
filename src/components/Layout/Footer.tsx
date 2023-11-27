@@ -11,6 +11,7 @@ const Footer = ({ isMobile }: FooterProps) => {
     >
       <img
         src="/logo/logo-white.svg"
+        alt='logo-white'
         className={isMobile ? 'mb-[10px] h-[10px] w-3' : `mb-[19px]`}
       />
       <div
