@@ -26,7 +26,6 @@ const Router = () => {
 
   const MoveToTop = () => {
     containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log('실행');
   };
 
   return (

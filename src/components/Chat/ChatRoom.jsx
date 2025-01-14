@@ -1,50 +1,13 @@
 import { BsFillPersonFill, BsSend } from 'react-icons/bs';
 import styled from 'styled-components';
-import { useEffect, useState, useRef } from 'react';
-import * as StompJs from '@stomp/stompjs';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { chatDateFilter } from '../../libs/utils/filter';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
 import { OpenChatRoomState, ChatUserState } from '../../states/ChatState';
-
-const BubbleContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex: 1;
-  flex-direction: column;
-  gap: 12px;
-  overflow: hidden;
-  overflow-y: auto;
-  padding-right: 4px;
-
-  &::-webkit-scrollbar {
-    width: 6px; /* 스크롤바 너비 설정 */
-    transition-duration: 300ms;
-  }
-
-  &:hover::-webkit-scrollbar {
-    opacity: 1;
-    transition: opacity 0.7s ease-in-out;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: #cacef0;
-    border-radius: 4px;
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border-radius: 4px;
-    transition-duration: 300ms;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-    border-radius: 4px;
-  }
-`;
+import { HeaderState } from '../../states/SocketState';
+import { SocketContext } from './Socket';
 
 const ChatBubble = ({ el, idx, name }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -82,10 +45,12 @@ const ChatBubble = ({ el, idx, name }) => {
 };
 
 const ChatRoom = () => {
-  const [loginState, setLoginState] = useRecoilState(LoginState);
-  const [openChatRoomState, setOpenChatRoomState] =
-    useRecoilState(OpenChatRoomState);
-  const [chatUserState, setChatUserState] = useRecoilState(ChatUserState);
+  const headers = useRecoilValue(HeaderState);
+  const client = useContext(SocketContext);
+
+  const loginState = useRecoilValue(LoginState);
+  const chatUserState = useRecoilValue(ChatUserState);
+  const setOpenChatRoomState = useSetRecoilState(OpenChatRoomState);
 
   const [msgList, setMsgList] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -93,33 +58,6 @@ const ChatRoom = () => {
   const [msg, setMsg] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isNothing, setIsNothing] = useState(false);
-
-  // Socket
-  const client = useRef({});
-  const myToken = localStorage.getItem('access-token');
-  const headers = {
-    Authorization: `Bearer ${myToken}`,
-    sessionId: loginState.sessionId,
-  };
-
-  const connect = () => {
-    client.current = new StompJs.Client({
-      brokerURL: 'wss://gachonmail.shop/ws',
-      connectHeaders: {
-        Authorization: `Bearer ${myToken}`,
-        sessionId: loginState.sessionId,
-        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-      },
-
-      onConnect: () => {
-        console.log('chatRoom success');
-        subscribe();
-        publish('detail');
-      },
-    });
-
-    client.current.activate();
-  };
 
   const publish = (option) => {
     if (!client.current.connected) {
@@ -159,7 +97,7 @@ const ChatRoom = () => {
     console.log('subscribe 실행');
 
     client.current.subscribe(
-      `/sub/chat/${loginState.sessionId}`,
+      `/sub/chat/1`,
       (body) => {
         const response = JSON.parse(body.body);
         console.log(response);
@@ -186,12 +124,12 @@ const ChatRoom = () => {
   };
 
   useEffect(() => {
-    console.log(chatUserState);
-    connect();
+    publish('detail');
+    subscribe();
+
     return () => {
-      if (client.current) {
-        client.current.deactivate();
-      }
+      console.log('unmount chatroom');
+      client.current.unsubscribe('/sub/chat/1');
     };
   }, []);
 
@@ -212,15 +150,11 @@ const ChatRoom = () => {
       top: containerRef.current.scrollHeight,
       behavior: 'smooth',
     });
-    console.log('실행');
   };
 
   return (
     <div className={`flex h-full w-full flex-col gap-4 p-6 `}>
-      <div
-        className="flex items-center gap-3 "
-        onClick={() => publish('detail')}
-      >
+      <div className="flex items-center gap-3 " onClick={() => {}}>
         <button className="text-xl" onClick={() => setOpenChatRoomState(false)}>
           {'<'}
         </button>
@@ -246,7 +180,7 @@ const ChatRoom = () => {
       </div>
       <div className="h-[1.5px] w-full bg-gray6"></div>
 
-      {isLoading ? (
+      {!isLoading ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-[10px]">
           <img src="/icons/loading.svg" />
           <div className="text-xs font-semibold text-black">Loading...</div>
@@ -283,3 +217,41 @@ const ChatRoom = () => {
 };
 
 export default ChatRoom;
+
+const BubbleContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 너비 설정 */
+    transition-duration: 300ms;
+  }
+
+  &:hover::-webkit-scrollbar {
+    opacity: 1;
+    transition: opacity 0.7s ease-in-out;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: #cacef0;
+    border-radius: 4px;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 4px;
+    transition-duration: 300ms;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 4px;
+  }
+`;

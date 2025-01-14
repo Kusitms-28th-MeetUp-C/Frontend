@@ -1,34 +1,43 @@
-import * as StompJs from '@stomp/stompjs';
-import { useRef, useState } from 'react';
+import { Client } from '@stomp/stompjs';
+import { useRef, useEffect, createContext } from 'react';
+import { useRecoilValue } from 'recoil';
+import { HeaderState } from '../../states/SocketState';
 
-const Socket = () => {
-  const client = useRef({});
-  const myToken = localStorage.getItem('access-token');
-  const sessionId = 11;
+export const SocketContext = createContext(null);
 
-  client.current = new StompJs.Client({
-    brokerURL: 'wss://panpeun.shop/ws',
-    connectHeaders: {
-      Authorization: `Bearer ${myToken}`,
-      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-    },
-
-    onConnect: () => {
-      console.log('success');
-    },
-  });
+const Socket = ({ children }) => {
+  const headers = useRecoilValue(HeaderState);
+  const client = useRef(null);
 
   const connect = () => {
-    console.log('connect 실행');
+    client.current = new Client({
+      brokerURL: 'ws://3.35.186.14:8080/ws',
+      connectHeaders: {
+        ...headers,
+        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+      },
+
+      onConnect: () => {
+        console.log('socket success');
+      },
+    });
+
     client.current.activate();
   };
 
-  const disconnect = () => {
-    console.log('disconnect 실행');
-    client.current.deactivate();
-  };
+  useEffect(() => {
+    connect();
+    return () => {
+      if (client) {
+        console.log('deactivate');
+        client.current.deactivate();
+      }
+    };
+  }, []);
 
-  return { connect, disconnect };
+  return (
+    <SocketContext.Provider value={client}>{children}</SocketContext.Provider>
+  );
 };
 
 export default Socket;

@@ -118,7 +118,6 @@ const Layout = ({ children, containerRef, moveToTop }: Props) => {
   // 페이지 이동시 스크롤 상단으로 이동
   const screenMoveToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log('실행');
   };
 
   useEffect(() => {
